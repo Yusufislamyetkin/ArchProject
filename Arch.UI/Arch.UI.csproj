@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Arch.DataAccessLayer\Arch.DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
+
 </Project>

@@ -1,123 +1,249 @@
-﻿using Arch.EntityLayer.Entities;
-using Arch.UI.Models;
-using Microsoft.AspNetCore.Authentication;
+﻿using Arch.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using System.Net;
+using System.Net.Mail;
+using System.Web;
+using static Arch.EntityLayer.Entities.Auth.Authorization;
 
 namespace Arch.UI.Controllers
 {
-    public class UserController : Controller
+    public class AccountController : Controller
     {
-        UserManager<AppUser> _userManager;
-        SignInManager<AppUser> _signInManager;
-        public UserController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        readonly UserManager<AppUser> _userManager;
+        readonly SignInManager<AppUser> _signInManager;
+        readonly RoleManager<AppRole> _roleManager;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
-        public async Task<IActionResult> Logout()
+        public async Task Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+        }
+        public async Task<IActionResult> Profile()
+        {
+            var value = await _userManager.FindByNameAsync(User.Identity.Name);
+            return View(value);
+        }
+        public IActionResult EditPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditPassword(EditPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                if (await _userManager.CheckPasswordAsync(user, model.OldPassword))
+                {
+                    IdentityResult result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (!result.Succeeded)
+                    {
+                        result.Errors.ToList().ForEach(e => ModelState.AddModelError(e.Code, e.Description));
+                        return View(model);
+                    }
+                    await _userManager.UpdateSecurityStampAsync(user);
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.SignInAsync(user, true);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> EditProfile()
+        {
+            var userDetail = await _userManager.FindByNameAsync(User.Identity.Name);
+            return View(userDetail);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UserDetailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                user.PhoneNumber = model.PhoneNumber;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    result.Errors.ToList().ForEach(e => ModelState.AddModelError(e.Code, e.Description));
+                    return View(model);
+                }
+                await _userManager.UpdateSecurityStampAsync(user);
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, true);
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult UpdatePassword(string userId, string token)
+        {
+            ViewBag.userId = userId;
+            ViewBag.token = token;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model, string userId, string token)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, HttpUtility.UrlDecode(token), model.Password);
+            if (result.Succeeded)
+            {
+                ViewBag.State = true;
+                await _userManager.UpdateSecurityStampAsync(user);
+            }
+            else
+                ViewBag.State = false;
+            return View();
+        }
+        public IActionResult PasswordReset()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> PasswordReset(ResetPasswordViewModel model)  // Mail gönderiminde Controller seçiminde ve ssl sertifikasında hata
+        {
+            AppUser user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+                MailMessage mail = new MailMessage();
+                mail.IsBodyHtml = true;
+                mail.To.Add(user.Email);
+                mail.From = new MailAddress("google_support@gmail.com", "Şifre Güncelleme", System.Text.Encoding.UTF8);
+                mail.Subject = "Şifre Güncelleme Talebi";
+
+                mail.Body = $"<a target=\"_blank\" href=\"http://localhost:5137{Url.Action("UpdatePassword", "Account", new { userId = user.Id, token = HttpUtility.UrlEncode(resetToken) })}\">Yeni şifre talebi için tıklayınız</a>";
+                mail.IsBodyHtml = true;
+                SmtpClient smp = new SmtpClient();
+                smp.Credentials = new NetworkCredential("yusufislamyetkin131@gmail.com", "gxuixazodcckpszz");
+                smp.Port = 587;
+                smp.Host = "smtp.gmail.com";
+                smp.EnableSsl = true;
+                smp.Send(mail);
+
+                ViewBag.State = true;
+            }
+            else
+                ViewBag.State = false;
+
+            return View();
         }
         public IActionResult Login(string ReturnUrl)
         {
+
+            TempData["returnUrl"] = ReturnUrl;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(string ReturnUrl, LoginUserVM loginUserVM)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            AppUser user = await _userManager.FindByNameAsync(loginUserVM.Username);
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, loginUserVM.Password, true, true);
-                if (result.Succeeded)
-                    return Redirect(ReturnUrl != null ? ReturnUrl : Url.Action("Index", "Home"));
-                else
-                    ModelState.AddModelError("Hatalı Giriş", "Yaptığınız giriş talebi geçersizdir.");
-            }
-            else
-                ModelState.AddModelError("Olmayan Kullanıcı", "Kullanıcı adı veya şifre yanlış.");
-            return View();
-        }
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserVM createUserVM)
-        {
-            AppUser user = createUserVM;
-            IdentityResult result = await _userManager.CreateAsync(user, createUserVM.Password);
-            if (result.Succeeded)
-                return RedirectToAction("Login");
-            else
-                ModelState.AddModelError("Kayıt Hatası", "Kayıt olurken beklenmedik bir hatayla karşılaşıldı.");
-            return View();
-        }
-        public IActionResult FacebookLogin(string ReturnUrl)
-        {
-            string redirectUrl = Url.Action("ExternalResponse", "User", new { ReturnUrl = ReturnUrl });
-            //Facebook'a yapılan Login talebi neticesinde kullanıcıyı yönlendirmesini istediğimiz url'i oluşturuyoruz.
-            AuthenticationProperties properties = _signInManager.ConfigureExternalAuthenticationProperties("Facebook", redirectUrl);
-            //Bağlantı kurulacak harici platformun hangisi olduğunu belirtiyor ve bağlantı özelliklerini elde ediyoruz.
-            return new ChallengeResult("Facebook", properties);
-            //ChallengeResult; kimlik doğrulamak için gerekli olan tüm özellikleri kapsayan AuthenticationProperties nesnesini alır ve ayarlar.
-        }
-        public IActionResult GoogleLogin(string ReturnUrl)
-        {
-            string redirectUrl = Url.Action("ExternalResponse", "User", new { ReturnUrl = ReturnUrl });
-            //Google'a yapılan Login talebi neticesinde kullanıcıyı yönlendirmesini istediğimiz url'i oluşturuyoruz.
-            AuthenticationProperties properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
-            //Bağlantı kurulacak harici platformun hangisi olduğunu belirtiyor ve bağlantı özelliklerini elde ediyoruz.
-            return new ChallengeResult("Google", properties);
-            //ChallengeResult; kimlik doğrulamak için gerekli olan tüm özellikleri kapsayan AuthenticationProperties nesnesini alır ve ayarlar.
-        }
-        public async Task<IActionResult> ExternalResponse(string ReturnUrl = "/")
-        {
-            ExternalLoginInfo loginInfo = await _signInManager.GetExternalLoginInfoAsync();
-            //Kullanıcıyla ilgili dış kaynaktan gelen tüm bilgileri taşıyan nesnedir.
-            //Bu nesnesnin 'LoginProvider' propertysinin değerine göz atarsanız eğer hangi dış kaynaktan geliniyorsa onun bilgisinin yazdığını göreceksiniz.
-            if (loginInfo == null)
-                return RedirectToAction("Login");
-            else
-            {
-                Microsoft.AspNetCore.Identity.SignInResult loginResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
-                //Giriş yapıyoruz.
-                if (loginResult.Succeeded)
-                    return Redirect(ReturnUrl);
+                AppUser user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    //İlgili kullanıcıya dair önceden oluşturulmuş bir Cookie varsa siliyoruz.
+                    await _signInManager.SignOutAsync();  // Logout çalışmıyor.
+
+                    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
+
+
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.ResetAccessFailedCountAsync(user); //Önceki hataları girişler neticesinde +1 arttırılmış tüm değerleri 0(sıfır)a çekiyoruz.
+
+
+                        return RedirectToAction("Profile", "MyProfile");
+                    }
+                    else
+                    {
+                        await _userManager.AccessFailedAsync(user); //Eğer ki başarısız bir account girişi söz konusu ise AccessFailedCount kolonundaki değer +1 arttırılacaktır. 
+
+                        int failcount = await _userManager.GetAccessFailedCountAsync(user); //Kullanıcının yapmış olduğu başarısız giriş deneme adedini alıyoruz.
+                        if (failcount == 3)
+                        {
+                            await _userManager.SetLockoutEndDateAsync(user, new DateTimeOffset(DateTime.Now.AddMinutes(1))); //Eğer ki başarısız giriş denemesi 3'ü bulduysa ilgili kullanıcının hesabını kitliyoruz.
+                            ModelState.AddModelError("Locked", "Art arda 3 başarısız giriş denemesi yaptığınızdan dolayı hesabınız 1 dk kitlenmiştir.");
+                        }
+                        else
+                        {
+                            if (result.IsLockedOut)
+                                ModelState.AddModelError("Locked", "Art arda 3 başarısız giriş denemesi yaptığınızdan dolayı hesabınız 1 dk kitlenmiştir.");
+                            else
+                                ModelState.AddModelError("NotUser2", "E-posta veya şifre yanlış.");
+                        }
+
+                    }
+                }
                 else
                 {
-                    //Eğer ki akış bu bloğa girerse ilgili kullanıcı uygulamamıza kayıt olmadığından dolayı girişi başarısız demektir.
-                    //O halde kayıt işlemini yapıp, ardından giriş yaptırmamız gerekmektedir.
-                    AppUser user = new AppUser
-                    {
-                        Email = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value,
-                        UserName = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value
-                    };
-                    //Dış kaynaktan gelen Claimleri uygun eşlendikleri propertylere atıyoruz.
-                    IdentityResult createResult = await _userManager.CreateAsync(user);
-                    //Kullanıcı kaydını yapıyoruz.
-                    if (createResult.Succeeded)
-                    {
-                        //Eğer kayıt başarılıysa ilgili kullanıcı bilgilerini AspNetUserLogins tablosuna kaydetmemiz gerekmektedir ki
-                        //bir sonraki dış kaynak login talebinde Identity mimarisi ilgili kullanıcının hangi dış kaynaktan geldiğini anlayabilsin.
-                        IdentityResult addLoginResult = await _userManager.AddLoginAsync(user, loginInfo);
-                        //Kullanıcı bilgileri dış kaynaktan gelen bilgileriyle AspNetUserLogins tablosunda eşleştirilmek suretiyle kaydedilmiştir.
-                        if (addLoginResult.Succeeded)
-                        {
-                            await _signInManager.SignInAsync(user, true);
-                            //await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
-                            return Redirect(ReturnUrl);
-                        }
-                    }
-
+                    ModelState.AddModelError("NotUser", "Böyle bir kullanıcı bulunmamaktadır.");
+                    ModelState.AddModelError("NotUser2", "E-posta veya şifre yanlış.");
                 }
             }
-            return Redirect(ReturnUrl);
+            return View(model);
+        }
+        [Authorize]
+        public IActionResult Index()
+        {
+            return View(_userManager.Users);
+        }
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+        [HttpPost]
+
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(AppUserViewModel appUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var appUser = new AppUser
+                {
+                    UserName = appUserViewModel.UserName,
+                    Email = appUserViewModel.Email
+                };
+
+                appUser.Id = Guid.NewGuid().ToString();
+
+                IdentityResult result = await _userManager.CreateAsync(appUser, appUserViewModel.Sifre);
+
+                if (result.Succeeded)
+                {
+             
+                    if (appUserViewModel.Role == "Designer")
+                    {
+                        await _userManager.AddToRoleAsync(appUser, "Designer");
+                    }
+                    else if (appUserViewModel.Role == "Admin")
+                    {
+                        await _userManager.AddToRoleAsync(appUser, AppRole.Admin);
+                    }
+                    else if (appUserViewModel.Role == "Customer")
+                    {
+                        await _userManager.AddToRoleAsync(appUser, AppRole.Customer);
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    result.Errors.ToList().ForEach(e => ModelState.AddModelError(e.Code, e.Description));
+                }
+            }
+
+            return View();
         }
     }
 }
-

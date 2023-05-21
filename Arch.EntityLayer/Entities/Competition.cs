@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Arch.EntityLayer.Entities.Auth.Authorization;
 
 namespace Arch.EntityLayer.Entities
 {
@@ -20,10 +21,17 @@ namespace Arch.EntityLayer.Entities
         public DateTime EndDate { get; set; }
         public int Status { get; set; }
 
-        public int CustomerId { get; set; } // Müşteriye referans için CustomerId özelliği
-        public Customer Customer { get; set; } // Müşteriye referans için Customer özelliği
+        public string CustomerId { get; set; } // Customer referansı için CustomerId
+        public AppUser Customer { get; set; } // Customer referansı
+
+        public ICollection<AppUser> Designers { get; set; } // Designer'ların referansı için Designers koleksiyonu
 
         public ICollection<File> Files { get; set; } // Dosyalara referans için Files koleksiyonu
-        public ICollection<Designer> Designers { get; set; } // Tasarımcılara referans için Designers koleksiyonu
+
+        public Competition()
+        {
+            Designers = new List<AppUser>();
+        }
     }
+
 }
