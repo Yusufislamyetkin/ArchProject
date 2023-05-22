@@ -1,3 +1,6 @@
+using Arch.BussinessLayer.Abstract;
+using Arch.BussinessLayer.Concrete;
+using Arch.DataAccessLayer.Abstract;
 using Arch.DataAccessLayer.Concrete.Repositories;
 using Arch.UI.CustomValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,6 +15,10 @@ IWebHostEnvironment Environment = builder.Environment;
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ArchDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<ICompetitonService, CompetitonService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 
 
 
@@ -75,6 +82,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

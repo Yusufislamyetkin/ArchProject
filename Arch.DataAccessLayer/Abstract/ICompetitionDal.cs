@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Arch.DataAccessLayer.Abstract
 {
-    internal interface ICompetitionDal : IRepository<Competition>
+    public interface ICompetitionDal : IRepository<Competition>
     {
     }
 }

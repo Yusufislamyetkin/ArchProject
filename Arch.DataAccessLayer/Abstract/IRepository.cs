@@ -9,12 +9,15 @@ namespace Arch.DataAccessLayer.Abstract
 {
     public interface IRepository<T> where T : class
     {
-        T Get(Expression<Func<T, bool>> filter);
-        List<T> List();
-        List<T> WhrList(Expression<Func<T, bool>> filter);
-        void Insert(T entity);
+        Task<T> GetByIdAsync(int id);
+        IQueryable<T> GetAll();
+        IQueryable<T> Where(Expression<Func<T, bool>> expression);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
+        Task AddAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
+        void NoTrackingUpdate(T entity, int id);
         void Update(T entity);
-        void UpdateNew(T entity, int id);
-        void Delete(T entity);
+        void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
     }
 }

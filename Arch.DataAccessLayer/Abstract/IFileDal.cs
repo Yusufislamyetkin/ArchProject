@@ -8,7 +8,7 @@ using File = Arch.EntityLayer.Entities.File;
 
 namespace Arch.DataAccessLayer.Abstract
 {
-    internal interface IFileDal : IRepository<File>
+    public interface IFileDal : IRepository<File>
     {
     }
 }

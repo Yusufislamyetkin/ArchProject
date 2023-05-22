@@ -9,7 +9,7 @@ using File = Arch.EntityLayer.Entities.File;
 
 namespace Arch.DataAccessLayer.EntityFramework
 {
-    internal class EFFileDal : GenericRepository<File>, IFileDal
+    internal class EFFileDal : Repository<File>, IFileDal
     {
         public EFFileDal(ArchDbContext context) : base(context)
         {
