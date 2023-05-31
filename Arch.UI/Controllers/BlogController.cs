@@ -20,14 +20,14 @@ namespace Arch.UI.Controllers
             _competitonService = competitonService;
             _userManager = userManager;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetBlogWithCompetitionId(int id)
         {
-            var blogCommets = await _blogService.Where(x => x.CompetitionId == id).Include(x => x.Author).ToListAsync();
-            blogCommets.Reverse();
+            var blogComments = await _blogService.Where(x => x.CompetitionId == id).Include(x => x.Author).ToListAsync();
+            blogComments.Reverse();
             ViewBag.competition = await _competitonService.GetByIdAsync(id);
-            return View(blogCommets);
+
+            return View(blogComments);
         }
 
         [HttpPost]
@@ -37,8 +37,13 @@ namespace Arch.UI.Controllers
             blogPost.AuthorId = user.Id;
             blogPost.Title = "Yarışma Yorum";
             blogPost.CreatedDate = DateTime.Now;
+
             await _blogService.AddAsync(blogPost);
-            return View();
+
+            var userName = user.UserName;
+            var timeAgo = Arch.EntityLayer.StaticClass.TimeAgo.GetTimeAgo(blogPost.CreatedDate);
+
+            return Json(new { success = true, userName, timeAgo, commentText = blogPost.Content });
         }
 
 
