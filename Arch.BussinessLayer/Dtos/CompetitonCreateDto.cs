@@ -11,15 +11,11 @@ namespace Arch.BussinessLayer.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
         public int ProjectType { get; set; }
-        public int ProjectShape { get; set; }
         public int Field { get; set; }
         public string Description { get; set; }
         public int Price { get; set; }
-        public string Destinition { get; set; }
-        public string Insteresting { get; set; }
         public DateTime EndDate { get; set; }
-        public string CustomerId { get; set; } // Customer referansı için CustomerId
-
-
+        public string? FilePath { get; set; }
+        public string? CustomerId { get; set; } // Customer referansı için CustomerId
     }
 }

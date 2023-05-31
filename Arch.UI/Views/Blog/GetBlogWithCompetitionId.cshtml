@@ -1,0 +1,273 @@
+﻿@model List<Arch.EntityLayer.Entities.BlogPost>
+
+@{
+    ViewBag.Title = "ContentArena";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | User Profile</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+
+
+                        <!-- Profile Image -->
+                        <div class="card card-primary ">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid "
+                                         src="~/Extra/logo.png"
+                                         alt="User profile picture">
+                                </div>
+                                <br />
+
+
+
+                                <p class="text-muted text-center"></p>
+
+
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                        <!-- About Me Box -->
+                        <br />
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Yarışma Bilgi Alanı</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <br />
+
+                                <strong><i class="fas fa-book mr-1"></i> İçerikler</strong>
+                                <br />
+
+                                <br />
+                                <p>
+                                    @ViewBag.competition.Description
+                                </p>
+
+
+                                <br />
+
+
+
+                                <strong><i class="fas fa-book mr-1"></i> Bitiş Tarihi</strong>
+                                <br />
+
+                                <br />
+
+                                <p>@ViewBag.competition.EndDate</p>
+
+
+
+                                <br />
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-9">
+                        <div class="card">
+
+
+                            <div class="card-body">
+
+
+                                <div class="container mt-5 mb-5">
+
+                                    <div class="row height d-flex justify-content-center align-items-center">
+                                        <div class="col-md-7">
+                                            <div class="card">
+                                                <div class="card p-3 text-center">
+                                                    <h6 class="font-weight-bold display-4" style="color:#0066CC">@ViewBag.competition.Name Projenizin Yorumları</h6>
+                                                </div>
+
+                                                <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
+                                                    <img src="https://i.imgur.com/zQZSWrt.jpg" width="50" class="rounded-circle mr-2">
+                                                    <form action="/Blog/Add" method="post" class="d-flex flex-grow-1">
+                                                        <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
+                                                        <textarea name="Content" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
+                                                        <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color: #00FFCC;">Gönder</button>
+                                                    </form>
+                                                </div>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <div class="d-flex flex-row p-3">
+                                                        <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                        <div class="w-100">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div class="d-flex flex-row align-items-center">
+                                                                    <span class="mr-2">@item.Author.UserName</span>
+                                                                    <small class="c-badge">Top Comment</small>
+                                                                </div>
+                                                                <small> @item.TimeAgo</small>
+                                                            </div>
+                                                            <p class="text-justify comment-text mb-0"> @item.Content</p>
+                                                            @*       <div class="d-flex flex-row user-feed">
+                                                        <span class="wish"><i class="fa fa-heartbeat mr-2"></i>54</span>
+                                                        <span class="ml-3"><i class="fa fa-comments-o mr-2"></i>Reply</span>
+                                                        </div>*@
+                                                        </div>
+                                                    </div>
+
+                                                }
+
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                    <!-- /.nav-tabs-custom -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+</body>
+</html>
+
+<style>
+    body {
+        background-color: #eee;
+    }
+
+    .card {
+        background-color: #fff;
+        border: none;
+    }
+
+    .form-color {
+        background-color: #fafafa;
+    }
+
+    .form-control {
+        height: 48px;
+        border-radius: 25px;
+    }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #35b69f;
+            outline: 0;
+            box-shadow: none;
+            text-indent: 10px;
+        }
+
+    .c-badge {
+        background-color: #35b69f;
+        color: white;
+        height: 20px;
+        font-size: 11px;
+        width: 92px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2px;
+    }
+
+    .comment-text {
+        font-size: 13px;
+    }
+
+    .wish {
+        color: #35b69f;
+    }
+
+
+    .user-feed {
+        font-size: 14px;
+        margin-top: 12px;
+    }
+</style>
+
+
+
+<!-- JavaScript kodu -->
+<script>
+    // Geçen süreyi hesaplamak için fonksiyon
+    function calculateElapsedTime(element) {
+        var createdDate = new Date(element.getAttribute("data-created-date"));
+        var now = new Date();
+        var elapsed = now - createdDate; // Geçen süre milisaniye cinsinden
+
+        var days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+        var timeAgo = "";
+
+        if (days > 0) {
+            timeAgo += days + "d ";
+        }
+        if (hours > 0) {
+            timeAgo += hours + "h ";
+        }
+        if (minutes > 0) {
+            timeAgo += minutes + "m ";
+        }
+        if (seconds > 0) {
+            timeAgo += seconds + "s";
+        }
+
+        element.innerText = timeAgo + " ago";
+    }
+
+    // Sayfa yüklendiğinde tüm 'comment-time' elemanlarını işleyin
+    document.addEventListener("DOMContentLoaded", function() {
+        var commentTimes = document.getElementsByClassName("comment-time");
+        for (var i = 0; i < commentTimes.length; i++) {
+            calculateElapsedTime(commentTimes[i]);
+        }
+    });
+</script>

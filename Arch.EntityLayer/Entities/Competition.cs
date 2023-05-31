@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Arch.EntityLayer.Entities.Auth;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,12 +23,12 @@ namespace Arch.EntityLayer.Entities
         public string CustomerId { get; set; } // Customer referansı için CustomerId
         public AppUser Customer { get; set; } // Customer referansı
 
-        public string? DesignerId { get; set; } // Customer referansı için CustomerId
-        public ICollection<AppUser> Designers { get; set; } // Designer'ların referansı için Designers koleksiyonu
+        public string? DesignerId { get; set; }
+        public ICollection<Authorization.AppUser> Designers { get; set; }
 
-        public string? FileId { get; set; } // Customer referansı için CustomerId
-        public ICollection<File> Files { get; set; } // Dosyalara referans için Files koleksiyonu
+        public string FilePath { get; set; }
 
+        public int? BlogPostId { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; }
 
 

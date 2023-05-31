@@ -131,12 +131,15 @@ namespace Arch.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CompetitionId")
+                    b.Property<int>("CompetitionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -148,7 +151,7 @@ namespace Arch.DataAccessLayer.Migrations
 
                     b.HasIndex("CompetitionId");
 
-                    b.ToTable("BlogPost");
+                    b.ToTable("BlogPosts");
                 });
 
             modelBuilder.Entity("Arch.EntityLayer.Entities.Competition", b =>
@@ -158,6 +161,9 @@ namespace Arch.DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BlogPostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
@@ -176,7 +182,8 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Property<int>("Field")
                         .HasColumnType("int");
 
-                    b.Property<string>("FileId")
+                    b.Property<string>("FilePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -197,36 +204,6 @@ namespace Arch.DataAccessLayer.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Competitions");
-                });
-
-            modelBuilder.Entity("Arch.EntityLayer.Entities.File", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CompetitionsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompetitionsId");
-
-                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -355,11 +332,15 @@ namespace Arch.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Arch.EntityLayer.Entities.Competition", null)
+                    b.HasOne("Arch.EntityLayer.Entities.Competition", "Competition")
                         .WithMany("BlogPosts")
-                        .HasForeignKey("CompetitionId");
+                        .HasForeignKey("CompetitionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("Competition");
                 });
 
             modelBuilder.Entity("Arch.EntityLayer.Entities.Competition", b =>
@@ -371,17 +352,6 @@ namespace Arch.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Arch.EntityLayer.Entities.File", b =>
-                {
-                    b.HasOne("Arch.EntityLayer.Entities.Competition", "Competitions")
-                        .WithMany("Files")
-                        .HasForeignKey("CompetitionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Competitions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -449,8 +419,6 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Navigation("BlogPosts");
 
                     b.Navigation("Designers");
-
-                    b.Navigation("Files");
                 });
 #pragma warning restore 612, 618
         }

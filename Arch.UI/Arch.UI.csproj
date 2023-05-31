@@ -300,7 +300,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\" />
+    <Folder Include="wwwroot\UserFiles\" />
   </ItemGroup>
 
 </Project>

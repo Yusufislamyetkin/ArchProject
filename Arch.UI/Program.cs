@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ArchDbContext>(options => options.UseSqlServer(Con
 // AutoMapper'ý yapýlandýrýn
 builder.Services.AddAutoMapper(typeof(DtoMapper));
 builder.Services.AddScoped<ICompetitonService, CompetitonService>();
+builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));

@@ -138,6 +138,18 @@ namespace Arch.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+            //var role = new AppRole { Name = "Customer" }; // AppRole kullanarak rol oluşturun
+            //role.Id = "1";
+
+            //var result = await _roleManager.CreateAsync(role);
+            //var role2 = new AppRole { Name = "Designer" }; // AppRole kullanarak rol oluşturun
+
+            //role2.Id = "2";
+            //var result2 = await _roleManager.CreateAsync(role2);
+  
+            //var role3 = new AppRole { Name = "Admin" }; // AppRole kullanarak rol oluşturun
+            //role3.Id = "3";
+            //var result3 = await _roleManager.CreateAsync(role3);
             return View();
         }
         [HttpPost]
@@ -244,7 +256,7 @@ namespace Arch.UI.Controllers
                         await _userManager.AddToRoleAsync(appUser, AppRole.Customer);
                     }
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Login");
                 }
                 else
                 {
