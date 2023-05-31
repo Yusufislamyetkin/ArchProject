@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using static Arch.EntityLayer.Entities.Auth.Authorization;
+using Arch.BussinessLayer.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager Configuration = builder.Configuration;
@@ -15,10 +16,13 @@ IWebHostEnvironment Environment = builder.Environment;
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ArchDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+// AutoMapper'ý yapýlandýrýn
+builder.Services.AddAutoMapper(typeof(DtoMapper));
 builder.Services.AddScoped<ICompetitonService, CompetitonService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+
 
 
 
@@ -36,6 +40,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(_ =>
 }).AddPasswordValidator<CustomPasswordValidation>()
   .AddUserValidator<CustomUserValidation>()
   .AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<ArchDbContext>()
+  //.AddRoles<IdentityRole>()
   .AddDefaultTokenProviders(); ;
 
 //builder.Services.ConfigureApplicationCookie(_ =>
@@ -53,7 +58,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(_ =>
 //    /* _.ExpireTimeSpan = TimeSpan.FromMinutes(120);*/ //CookieBuilder nesnesinde tanýmlanan Expiration deðerinin varsayýlan deðerlerle ezilme ihtimaline karþýn tekrardan Cookie vadesi burada da belirtiliyor.
 
 //});
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie
               (CookieAuthenticationDefaults.AuthenticationScheme, opts =>
@@ -61,12 +66,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                   opts.LoginPath = "/Account/Login";
                   opts.ExpireTimeSpan = TimeSpan.FromDays(60);
                   opts.SlidingExpiration = true;
-                  opts.Cookie.Name = "TestEWallet";
+                  opts.Cookie.Name = "LoginCookie";
               });
 
 
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,8 +1,10 @@
-﻿using Arch.EntityLayer.Entities;
+﻿using Arch.BussinessLayer.Dtos;
+using Arch.EntityLayer.Entities;
 
 namespace Arch.BussinessLayer.Abstract
 {
     public interface ICompetitonService : IService<Competition>
     {
+        void CreateCompetition(CompetitonCreateDto competitionCreateDto);
     }
 }

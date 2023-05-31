@@ -1,39 +1,155 @@
-﻿@model Arch.UI.Models.ViewModels.AppUserViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@model Arch.UI.Models.ViewModels.LoginViewModel
+@{
+    Layout = null;
+}
 
-<h3>Üye Ol</h3>
+<!DOCTYPE html>
 
-<hr />
-<form asp-action="SignIn">
-    <table>
-        <tr>
-            <td colspan="3"><div asp-validation-summary="All"></div></td>
-        </tr>
-        <tr>
-            <td><label asp-for="UserName"></label></td>
-            <td><input asp-for="UserName" /></td>
-            <td><span asp-validation-for="UserName"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Email"></label></td>
-            <td><input asp-for="Email" /></td>
-            <td><span asp-validation-for="Email"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Sifre"></label></td>
-            <td><input asp-for="Sifre" /></td>
-            <td><span asp-validation-for="Sifre"></span></td>
-        </tr>
+<html lang="tr"
+      class="light-style customizer-hide"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="../assets/"
+      data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-         <tr>
-            
-            <td><input asp-for="Role"  type="hidden" value="Designer"/></td>
-      
-        </tr>
+    <title>Kayıt Ol</title>
+    <link rel="icon" href="~/logo.png">
 
-        <tr>
-            <td colspan="3"><input type="submit" value="Üye Ol" /></td>
-        </tr>
-    </table>
-</form>
+    <meta name="description" content="" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/Web2/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/Web2/assets/css/demo.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/pages/page-auth.css" />
+    <script src="/Web2/assets/vendor/js/helpers.js"></script>
+    <script src="/Web2/assets/js/config.js"></script>
+</head>
+
+<body>
+
+    <div class="container-xxl">
+        <div class="authentication-wrapper authentication-basic container-p-y">
+            <div class="authentication-inner">
+                <!-- Register Card -->
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="mb-2">Şimdi Kayıt Ol 🚀</h4>
+                        <p class="mb-4">Hesabınızı oluşturun! ArchUI ayrıcalıklarından yararlanın</p>
+
+
+
+                        @using (Html.BeginForm("SignIn", "Account", FormMethod.Post))
+                        {
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Kullanıcı Adı" name="UserName">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <span class="fas fa-envelope"></span>
+                                    </span>
+                                </div>
+                                <input type="email" class="form-control" placeholder="Email" name="Email">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Şifre" name="Sifre">
+                            </div>
+
+                            <br />
+                            <div class="input-group mb-4">
+                                <label for="role">Kayıt Olmak İstediğiniz Rol:</label>
+                            </div>
+                            <select id="role" name="Role">
+                                <option value="Customer">Müşteri</option>
+                                <option value="Designer">Tasarımcı</option>
+                            </select>
+
+                            <br />
+                            <br />
+
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="icheck-primary">
+                                        <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                                        <label for="agreeTerms">
+                                            Sözleşmeyi <a href="#">kabul ediyorum</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary btn-block">Kayıt</button>
+                                </div>
+                            </div>
+                        }
+
+
+
+                        <BR />
+                        <BR />
+                        @if (TempData["AlertMessage"] != null)
+                        {
+                            <div class="alert alert-success ">
+                                <strong style="margin-left:750px"> *Başarılı ! </strong>@TempData["AlertMessage"]
+                                <br />
+                            </div>
+
+                        }@if (TempData["AlertMessage2"] != null)
+                        {
+                            <div class="alert alert-danger ">
+                                <strong style="margin-left:750px"> *Başarısız ! </strong>@TempData["AlertMessage2"]
+                                <br />
+                            </div>
+
+                        }
+                        <p class="text-center">
+                            <span>Hesabın var mı?</span>
+                            <a href="/StudentLogin/Index/">
+                                <span>Giriş Yap</span>
+                            </a>
+                        </p>
+
+                        <p class="text-center">
+                            <span>Ya da</span>
+                            <a href="/Homepage1/Index/">
+                                <span>Anasayfaya Dön</span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Web2/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/Web2/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/Web2/assets/vendor/js/bootstrap.js"></script>
+    <script src="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/Web2/assets/vendor/js/menu.js"></script>
+    <script src="/Web2/assets/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>
 

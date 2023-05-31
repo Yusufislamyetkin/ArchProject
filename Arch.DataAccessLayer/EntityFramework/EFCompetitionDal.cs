@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Arch.DataAccessLayer.EntityFramework
 {
-    internal class EFCompetitionDal : Repository<Competition>, ICompetitionDal
+    internal class EFCompetitionDal : Repository<Competition>, ICompetitionRepository
     {
         public EFCompetitionDal(ArchDbContext context) : base(context)
         {

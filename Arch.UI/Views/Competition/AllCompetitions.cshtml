@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Arch.EntityLayer.Entities.Competition>
+
+<h1>All Competitions</h1>
+
+<table>
+    <tr>
+        <th>Competition Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <!-- Diğer sütunlar eklenebilir -->
+    </tr>
+    @foreach (var competition in ViewBag.Competitions)
+    {
+        <tr>
+            <td>@competition.Name</td>
+            <td>@competition.StartDate.ToShortDateString()</td>
+            <td>@competition.EndDate.ToShortDateString()</td>
+            <!-- Diğer sütunlar eklenebilir -->
+        </tr>
+    }
+</table>
+
+<!-- Sayfalama kontrolleri -->
+<div>
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <a href="@Url.Action("AllCompetitions", new { page = ViewBag.CurrentPage - 1 })">Previous</a>
+    }
+
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        <a href="@Url.Action("AllCompetitions", new { page = i })">@i</a>
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <a href="@Url.Action("AllCompetitions", new { page = ViewBag.CurrentPage + 1 })">Next</a>
+    }
+</div>

@@ -1,35 +1,126 @@
-﻿@model Arch.UI.Models.ViewModels.LoginViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿
+@model Arch.UI.Models.ViewModels.LoginViewModel
 
-<h4>Giriş Yap</h4>
+@{
+    Layout = null;
+}
 
-<hr />
-<form asp-action="Login">
-    <table>
-        <tr>
-            <td colspan="3"><div asp-validation-summary="All"></div></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Email"></label></td>
-            <td><input asp-for="Email" /></td>
-            <td><span asp-validation-for="Email"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Password"></label></td>
-            <td><input asp-for="Password" /></td>
-            <td><span asp-validation-for="Password"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Persistent"></label></td>
-            <td><input asp-for="Persistent" /></td>
-            <td><span asp-validation-for="Persistent"></span></td>
-        </tr>
-        <tr>
-            <td colspan="3"><input type="submit" value="Giriş Yap" /></td>
-        </tr>
-        <tr>
-            <td colspan="3"><a asp-action="PasswordReset">Şifremi Unuttum</a></td>
-        </tr>
-    </table>
-</form>
 
+
+<!DOCTYPE html>
+
+<html lang="tr"
+      class="light-style customizer-hide"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="../assets/"
+      data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Giriş Yap</title>
+
+    <meta name="description" content="" />
+    <link rel="icon" href="~/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet" href="/Web2/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/Web2/assets/css/demo.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/pages/page-auth.css" />
+    <script src="~/Web2/assets/vendor/js/helpers.js"></script>
+    <script src="~/Web2/assets/js/config.js"></script>
+</head>
+
+<body>
+
+
+
+    <div class="container-xxl">
+        <div class="authentication-wrapper authentication-basic container-p-y">
+            <div class="authentication-inner">
+                <!-- Content -->
+                @if (TempData["AlertMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        <strong> Başarılı ! </strong>@TempData["AlertMessage"]
+                    </div>
+
+                }
+                <!-- Register -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-2">ArchUI'a Hoşgeldin 👋</h4>
+                        <p class="mb-4">Lütfen giriş yap ve ayrıcalıklardan sende yararlan</p>
+
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                        {
+                            <div class="mb-3">
+                                @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Kullanıcı Mailini Giriniz", autofocus = "autofocus" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                            <div class="mb-3 form-password-toggle">
+                                <div class="d-flex justify-content-between">
+                                    @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                                </div>
+                                <div class="input-group input-group-merge">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "*****************", aria_describedby = "password" })
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary d-grid w-100" type="submit">Giriş Yap</button>
+                            </div>
+                        }
+
+
+
+                        <p class="text-center">
+                            <span>Sitede Yeni misiniz?</span>
+                            <a href="/Account/SignIn/">
+                                <span>Hesap Oluştur</span>
+                            </a>
+                        </p>
+
+                        <p class="text-center">
+                            <span>Ya da</span>
+                            <a href="/Home/Index/">
+                                <span>Anasayfaya Dön</span>
+                            </a>
+                        </p>
+
+
+
+                        @if (TempData["AlertMessageStudent"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <strong style="margin-left:750px"> *Hatalı kullanıcı mail ya da şifre ! </strong>@TempData["AlertMessageStudent"]
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*makebyyy*@
+    </div>
+
+
+    <script src="/Web2/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/Web2/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/Web2/assets/vendor/js/bootstrap.js"></script>
+    <script src="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/Web2/assets/vendor/js/menu.js"></script>
+    <script src="/Web2/assets/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>

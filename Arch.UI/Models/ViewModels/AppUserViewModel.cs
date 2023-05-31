@@ -20,7 +20,6 @@ namespace Arch.UI.Models.ViewModels
         [DataType(DataType.Password, ErrorMessage = "Lütfen şifreyi tüm kuralları göz önüne alarak giriniz...")]
         [Display(Name = "Şifre")]
         public string Sifre { get; set; }
-
         public string Role { get; set; }
     }
 }

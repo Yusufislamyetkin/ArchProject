@@ -17,10 +17,10 @@ namespace Arch.DataAccessLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Arch.EntityLayer.Entities.Auth.Authorization+AppRole", b =>
                 {
@@ -119,13 +119,45 @@ namespace Arch.DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Arch.EntityLayer.Entities.BlogPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CompetitionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CompetitionId");
+
+                    b.ToTable("BlogPost");
+                });
+
             modelBuilder.Entity("Arch.EntityLayer.Entities.Competition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
@@ -135,8 +167,7 @@ namespace Arch.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Destinition")
-                        .IsRequired()
+                    b.Property<string>("DesignerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
@@ -145,8 +176,7 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Property<int>("Field")
                         .HasColumnType("int");
 
-                    b.Property<string>("Insteresting")
-                        .IsRequired()
+                    b.Property<string>("FileId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -154,9 +184,6 @@ namespace Arch.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectShape")
                         .HasColumnType("int");
 
                     b.Property<int>("ProjectType")
@@ -178,7 +205,7 @@ namespace Arch.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CompetitionsId")
                         .HasColumnType("int");
@@ -208,7 +235,7 @@ namespace Arch.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -233,7 +260,7 @@ namespace Arch.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -320,6 +347,21 @@ namespace Arch.DataAccessLayer.Migrations
                         .HasForeignKey("CompetitionId");
                 });
 
+            modelBuilder.Entity("Arch.EntityLayer.Entities.BlogPost", b =>
+                {
+                    b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Arch.EntityLayer.Entities.Competition", null)
+                        .WithMany("BlogPosts")
+                        .HasForeignKey("CompetitionId");
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("Arch.EntityLayer.Entities.Competition", b =>
                 {
                     b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Customer")
@@ -404,6 +446,8 @@ namespace Arch.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Arch.EntityLayer.Entities.Competition", b =>
                 {
+                    b.Navigation("BlogPosts");
+
                     b.Navigation("Designers");
 
                     b.Navigation("Files");

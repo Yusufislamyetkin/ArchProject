@@ -135,15 +135,16 @@ namespace Arch.UI.Controllers
 
             return View();
         }
-        public IActionResult Login(string ReturnUrl)
+        [HttpGet]
+        public async Task<IActionResult> Login()
         {
-
-            TempData["returnUrl"] = ReturnUrl;
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+
+
             if (ModelState.IsValid)
             {
                 AppUser user = await _userManager.FindByEmailAsync(model.Email);
@@ -161,6 +162,15 @@ namespace Arch.UI.Controllers
                         await _userManager.ResetAccessFailedCountAsync(user); //Önceki hataları girişler neticesinde +1 arttırılmış tüm değerleri 0(sıfır)a çekiyoruz.
 
 
+
+                        if (user != null)
+                        {
+                            var roles = await _userManager.GetRolesAsync(user);
+                            if (roles.Contains("Customer"))
+                            {
+                                return RedirectToAction("Index", "Competition");
+                            }
+                        }
                         return RedirectToAction("Profile", "MyProfile");
                     }
                     else
@@ -201,7 +211,6 @@ namespace Arch.UI.Controllers
         {
             return View();
         }
-        [HttpPost]
 
 
         [HttpPost]
@@ -221,10 +230,10 @@ namespace Arch.UI.Controllers
 
                 if (result.Succeeded)
                 {
-             
+
                     if (appUserViewModel.Role == "Designer")
                     {
-                        await _userManager.AddToRoleAsync(appUser, "Designer");
+                        await _userManager.AddToRoleAsync(appUser, AppRole.Designer);
                     }
                     else if (appUserViewModel.Role == "Admin")
                     {
