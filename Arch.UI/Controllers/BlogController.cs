@@ -25,7 +25,9 @@ namespace Arch.UI.Controllers
         {
             var blogComments = await _blogService.Where(x => x.CompetitionId == id).Include(x => x.Author).ToListAsync();
             blogComments.Reverse();
-            ViewBag.competition = await _competitonService.GetByIdAsync(id);
+            var Data = await _competitonService.GetByIdAsync(id);
+            ViewBag.competition = Data;
+            ViewBag.EndDate = Data.EndDate.ToString("yyyy-MM-dd HH:mm:ss");
 
             return View(blogComments);
         }
@@ -46,6 +48,10 @@ namespace Arch.UI.Controllers
             return Json(new { success = true, userName, timeAgo, commentText = blogPost.Content });
         }
 
-
+        
+        public async Task<IActionResult> CountDown( )
+        {
+            return View();
+        }
     }
 }

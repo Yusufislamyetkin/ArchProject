@@ -1,0 +1,75 @@
+﻿<div class="container">
+    <div>Days<span class="days"></span></div>
+    <div>Hours<span class="hours"></span></div>
+    <div>Min<span class="minutes"></span></div>
+    <div>Sec<span class="seconds"></span></div>
+</div>
+
+<style>
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 30px;
+        color: blueviolet;
+        display: flex;
+        justify-content: center;
+    }
+
+        .container div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .container div:not(:last-child) {
+                margin-right: 15px;
+            }
+
+        .container span {
+            border: 2px solid;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+            .container span:not(:last-child) {
+                margin-right: 10px;
+            }
+
+</style>
+
+<script>
+    // The End Of Year Date To Countdown To
+
+    let countDownDate = new Date("Dec 31, 2023 23:59:59").getTime();
+
+    let counter = setInterval(() => {
+        // Get Date Now
+        let dateNow = new Date().getTime();
+
+        // Find The Difference Between The Time Now And The Countdown Date
+        let dateDiff = countDownDate - dateNow;
+
+        let days = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+
+        let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+        let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+        let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
+
+        document.querySelector(".days").innerHTML =
+            days < 100 && days > 10 ? `0${days}` : days < 10 ? `00${days}` : days;
+        document.querySelector(".hours").innerHTML = hours < 10 ? `0${hours}` : hours;
+        document.querySelector(".minutes").innerHTML =
+            minutes < 10 ? `0${minutes}` : minutes;
+        document.querySelector(".seconds").innerHTML =
+            seconds < 10 ? `0${seconds}` : seconds;
+
+        if (dateDiff <= 0) {
+            clearInterval(counter);
+        }
+    }, 1000);
+
+</script>

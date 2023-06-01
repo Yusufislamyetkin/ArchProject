@@ -50,25 +50,35 @@
 
 
                         <!-- Profile Image -->
-                        <div class="card card-primary ">
-                            <div class="card-body box-profile">
-                                <div class="text-center">
-                                    <img class="profile-user-img img-fluid "
-                                         src="~/Extra/logo.png"
-                                         alt="User profile picture">
-                                </div>
+                        <div class="card card-primary">
+                            <div class="card-body box-profile text-center">
                                 <br />
 
+                                <strong class="text-muted"><span style="color: #00FFCC; font-weight: bold;"><span class="countdown-label">Yarışmanın Bitmesi İçin Kalan Süre</span></span></strong>
+                                <br />
+                                <br />
 
+                                <div class="container2">
+                                    <div>Gün<span class="days"></span></div>
+                                    <div>Saat<span class="hours"></span></div>
+                                    <div>Dak<span class="minutes"></span></div>
+                                    <div>San<span class="seconds"></span></div>
+                                </div>
 
-                                <p class="text-muted text-center"></p>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
 
-
-
-
+                                @if (User.IsInRole("Designer"))
+                                {
+                                    <button class="btn btn-warning">Katıl</button>
+                                }
                             </div>
                             <!-- /.card-body -->
                         </div>
+
                         <!-- /.card -->
                         <!-- About Me Box -->
                         <br />
@@ -221,35 +231,94 @@
         font-size: 14px;
         margin-top: 12px;
     }
+
+    .container2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 30px;
+        color: blueviolet;
+        display: flex;
+        justify-content: center;
+    }
+
+        .container2 div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .container2 div:not(:last-child) {
+                margin-right: 15px;
+            }
+
+        .container2 span {
+            border: 2px solid;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+            .container2 span:not(:last-child) {
+                margin-right: 10px;
+            }
 </style>
 
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    $(function () {
-        $('#commentForm').submit(function (e) {
+       let endDate = new Date("@ViewBag.EndDate").getTime();
+
+    let counter = setInterval(() => {
+        // Get Date Now
+        let dateNow = new Date().getTime();
+        // Find The Difference Between The Time Now And The Countdown Date
+        let dateDiff = endDate - dateNow;
+
+        if (dateDiff <= 0) {
+            clearInterval(counter);
+            document.querySelector(".countdown-label").innerHTML = 'Yarışma Bitti';
+            document.querySelector(".days").innerHTML = '0';
+            document.querySelector(".hours").innerHTML = '0';
+            document.querySelector(".minutes").innerHTML = '0';
+            document.querySelector(".seconds").innerHTML = '0';
+            document.querySelector("button").style.display = "none";
+        } else {
+            let days = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
+            document.querySelector(".days").innerHTML =
+                days < 100 && days > 10 ? `0${days}` : days < 10 ? `00${days}` : days;
+            document.querySelector(".hours").innerHTML = hours < 10 ? `0${hours}` : hours;
+            document.querySelector(".minutes").innerHTML =
+                minutes < 10 ? `0${minutes}` : minutes;
+            document.querySelector(".seconds").innerHTML =
+                seconds < 10 ? `0${seconds}` : seconds;
+        }
+    }, 1000);
+
+    $(function() {
+        $('#commentForm').submit(function(e) {
             e.preventDefault();
-
             var commentText = $('#commentInput').val();
-
             $.ajax({
                 url: '/Blog/Add',
                 method: 'POST',
                 data: { CompetitionId: $('[name="CompetitionId"]').val(), Content: commentText },
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         var commentHtml = '<div class="d-flex flex-row p-3"><img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3"><div class="w-100"><div class="d-flex justify-content-between align-items-center"><div class="d-flex flex-row align-items-center"><span class="mr-2">' + response.userName + '</span><small class="c-badge">Top Comment</small></div><small>' + response.timeAgo + '</small></div><p class="text-justify comment-text mb-0">' + response.commentText + '</p></div></div>';
                         $('#commentSection').prepend(commentHtml);
                         $('#commentInput').val(''); // Yorum giriş alanını temizle
-
                         alert('Yorumunuz gönderildi.'); // Kullanıcıya bildirim göster
-
                     } else {
                         alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
                     }
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error(error);
                     alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
                 }
