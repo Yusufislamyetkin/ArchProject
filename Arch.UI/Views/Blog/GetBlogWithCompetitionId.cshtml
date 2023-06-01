@@ -57,6 +57,8 @@
                                 <strong class="text-muted"><span style="color: #00FFCC; font-weight: bold;"><span class="countdown-label">Yarışmanın Bitmesi İçin Kalan Süre</span></span></strong>
                                 <br />
                                 <br />
+                                <br />
+                                <br />
 
                                 <div class="container2">
                                     <div>Gün<span class="days"></span></div>
@@ -128,10 +130,44 @@
 
                                 <div class="container mt-5 mb-5">
                                     <div class="row height d-flex justify-content-center align-items-center">
-                                        <div class="col-md-7">
+
+                                        <div class="col-md-10">
+
+                                            <br />
+                                            <br />
+
+                                            <div class="card p-3 text-center shadow" style="border-radius: 10px;">
+                                                <h6 class="font-weight-bold display-4" style="color:#0066CC">Yarışma Ödülü</h6>
+                                                <h1>@ViewBag.competition.Price &#x1f451; TL</h1>
+                                            </div>
+
+                                            <div class="wrapper">
+                                                <br />
+                                                <div class="product-img">
+                                                    <img src="/images/mimari.jpg" height="420" width="327">
+                                                </div>
+                                                <br />
+                                                <div class="product-info">
+                                                    <div class="product-text">
+                                                        <h1>@ViewBag.competition.Name</h1>
+                                                        @*<h2>by studio and friends</h2>*@
+                                                        <p>@ViewBag.competition.Description </p>
+                                                    </div>
+                                                    <div class="product-price-btn">
+
+                                                        <button type="button"> Dosyaları İndir</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br />
+                                            <br />
+
+
                                             <div class="card">
+
                                                 <div class="card p-3 text-center">
-                                                    <h6 class="font-weight-bold display-4" style="color:#0066CC">@ViewBag.competition.Name Projenizin Yorumları</h6>
+                                                    <h6 class="font-weight-bold display-4" style="color:#0066CC">@ViewBag.competition.Name Projesi Yorumları</h6>
                                                 </div>
 
                                                 <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
@@ -170,6 +206,7 @@
                             </div>
                             <!-- /.row -->
                         </div><!-- /.container-fluid -->
+                    </div>
         </section>
         <!-- /.content -->
     </div>
@@ -178,90 +215,179 @@
 </html>
 
 <style>
-    body {
-        background-color: #eee;
-    }
+                                    body {
+                                        background-color: #eee;
+                                    }
 
-    .card {
-        background-color: #fff;
-        border: none;
-    }
+                                    .card {
+                                        background-color: #fff;
+                                        border: none;
+                                    }
 
-    .form-color {
-        background-color: #fafafa;
-    }
+                                    .form-color {
+                                        background-color: #fafafa;
+                                    }
 
-    .form-control {
-        height: 48px;
-        border-radius: 25px;
-    }
+                                    .form-control {
+                                        height: 48px;
+                                        border-radius: 25px;
+                                    }
 
-        .form-control:focus {
-            color: #495057;
-            background-color: #fff;
-            border-color: #35b69f;
-            outline: 0;
-            box-shadow: none;
-            text-indent: 10px;
-        }
+                                        .form-control:focus {
+                                            color: #495057;
+                                            background-color: #fff;
+                                            border-color: #35b69f;
+                                            outline: 0;
+                                            box-shadow: none;
+                                            text-indent: 10px;
+                                        }
 
-    .c-badge {
-        background-color: #35b69f;
-        color: white;
-        height: 20px;
-        font-size: 11px;
-        width: 92px;
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 2px;
-    }
+                                    .c-badge {
+                                        background-color: #35b69f;
+                                        color: white;
+                                        height: 20px;
+                                        font-size: 11px;
+                                        width: 92px;
+                                        border-radius: 5px;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        margin-top: 2px;
+                                    }
 
-    .comment-text {
-        font-size: 13px;
-    }
+                                    .comment-text {
+                                        font-size: 13px;
+                                    }
 
-    .wish {
-        color: #35b69f;
-    }
+                                    .wish {
+                                        color: #35b69f;
+                                    }
 
 
-    .user-feed {
-        font-size: 14px;
-        margin-top: 12px;
-    }
+                                    .user-feed {
+                                        font-size: 14px;
+                                        margin-top: 12px;
+                                    }
 
-    .container2 {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 30px;
-        color: blueviolet;
-        display: flex;
-        justify-content: center;
-    }
+                                    .container2 {
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        font-size: 30px;
+                                        color: blueviolet;
+                                        display: flex;
+                                        justify-content: center;
+                                    }
 
-        .container2 div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+                                        .container2 div {
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: center;
+                                        }
 
-            .container2 div:not(:last-child) {
-                margin-right: 15px;
+                                            .container2 div:not(:last-child) {
+                                                margin-right: 15px;
+                                            }
+
+                                        .container2 span {
+                                            border: 2px solid;
+                                            padding: 10px 20px;
+                                            border-radius: 6px;
+                                        }
+
+                                            .container2 span:not(:last-child) {
+                                                margin-right: 10px;
+                                            }
+
+
+                               .wrapper {
+                              height: auto; /* veya içerik boyutuna uygun bir değer */
+                              width: auto; /* veya içerik boyutuna uygun bir değer */
+                              margin: 50px auto;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              border-radius: 7px;
+                              /* VIA CSS MATIC https://goo.gl/cIbnS */
+                              -webkit-box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+                              -moz-box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+                              box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+                            }
+
+                   .product-img {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 420px;
+              width: 327px;
+              padding: 20px 0; /* Üst ve alt boşluk */
             }
 
-        .container2 span {
-            border: 2px solid;
-            padding: 10px 20px;
-            border-radius: 6px;
+            .product-img img {
+              max-height: calc(100% - 40px); /* Üst ve alt boşlukları çıkar */
+              max-width: 100%;
+              object-fit: contain;
+              border-radius: 7px 0 0 7px;
+            }
+
+                  .product-info {
+          flex: 0 0 327px;
+          padding: 20px;
         }
 
-            .container2 span:not(:last-child) {
-                margin-right: 10px;
-            }
+                    .product-text {
+                      margin-top: 20px;
+                    }
+
+                    .product-text h1 {
+                      margin: 0;
+                      font-size: 34px;
+                      color: #474747;
+                    }
+
+                    .product-text h2 {
+                      margin-bottom: 10px;
+                      font-size: 13px;
+                      font-family: 'Raleway', sans-serif;
+                      font-weight: 400;
+                      text-transform: uppercase;
+                      color: #d2d2d2;
+                      letter-spacing: 0.2em;
+                    }
+
+                    .product-text p {
+                      margin-bottom: 10px;
+                      font-size: 15px;
+                      color: #8d8d8d;
+                      line-height: 1.7em;
+                      font-weight: lighter;
+                    }
+
+                    .product-price-btn button {
+                  float: right;
+                  display: inline-block;
+                  height: 50px;
+                  width: 176px;
+                  margin: 0 16px 0 40px;
+                  box-sizing: border-box;
+                  border: transparent;
+                  border-radius: 60px;
+                  font-family: 'Raleway', sans-serif;
+                  font-size: 14px;
+                  font-weight: 500;
+                  text-transform: uppercase;
+                  letter-spacing: 0.2em;
+                  color: #ffffff;
+                  background-color: #00FFCC;
+                  cursor: pointer;
+                  outline: none;
+                }
+
+    .product-price-btn button:hover {
+        background-color: #00FFCC;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
 </style>
 
 
@@ -269,7 +395,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-       let endDate = new Date("@ViewBag.EndDate").getTime();
+    let endDate = new Date("@ViewBag.EndDate").getTime();
 
     let counter = setInterval(() => {
         // Get Date Now
