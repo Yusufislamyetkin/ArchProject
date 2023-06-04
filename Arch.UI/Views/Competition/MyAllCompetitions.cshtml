@@ -32,102 +32,219 @@
     <div class="wrapper">
 
         <section class="content">
-
-            <div class="tab-pane" id="timeline">
-
-
-
-
-                <div class="timeline timeline-inverse">
-
-                    @foreach (var item in Model)
-                    {
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h2>Yarışmalarım</h2>
+                        </div>
+                    </div>
+                </div>
 
 
+                <br />
+                <hr />
 
-                        <div>
-                            <i class="fas fa-comments bg-purple"></i>
+                <br />
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
 
-                            <div class="timeline-item">
+                                <br />
+
+                                @if (@item.ProjectType == 1)
+                                {
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;" >Peyzaj Projesi  / @item.Name        Katılımcı Sayısı : @item.DesignerUsers.Count()</h5>
 
 
-                                <h3 class="timeline-header">   @item.Name </h3>
+                                }
+                                @if (@item.ProjectType == 2)
+                                {
 
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Tadilat Projesi / @item.Name</h5>
 
-                                <div class="timeline-body">
+                                }
+                                @if (@item.ProjectType == 3)
+                                {
 
-                                    <table>
-                                    
-                                        <tr>
-                                            <td>
-                                                <div class="timeline-body">
-                                                    <h4 class="timeline-header">Yarışma Açıklaması:</h4>
-                                                    <p>@item.Description</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="timeline-body">
-                                                    <h4 class="timeline-header">Yarışma Bitiş Tarihi:</h4>
-                                                    <p>@item.EndDate</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="timeline-body">
-                                                    <h5 class="timeline-header">Yarışma İçin Belirlenen Tutar:</h5>
-                                                    <p>@item.Price TL</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">İç Mimari Projesi / @item.Name</h5>
 
+                                }
+                                @if (@item.ProjectType == 4)
+                                {
+
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Yeni Konut Projesi / @item.Name</h5>
+
+                                }
+
+                                <br>
+                                <hr>
+
+                                @*                  <br />
+                            <h6 class="card-text">Yarışma Açıklaması:</h6>
+                            <br>
+                            <p class="card-text">@item.Description</p>*@
+                            </div>
+                            <img class="img-fluid" src="/images/mimari.jpg" Card image cap" />
+                            <div class="card-body">
+
+                                <h6 class="card-title">Yarışma İçin Belirlenen Tutar:</h6>
+                                <br>
+
+                                <strong class="card-text">@item.Price TL</strong>
+                                <br>
+                                <br>
+                                <br>
+
+                                <p class="card-text-endDate">@item.EndDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+                                <div class="container2">
+                                    <div>Gün<span class="days"></span></div>
+                                    <div>Saat<span class="hours"></span></div>
+                                    <div>Dak<span class="minutes"></span></div>
+                                    <div>San<span class="seconds"></span></div>
                                 </div>
-
-
+                                <br>
                                 <div class="timeline-footer">
-
-
                                     @if (item.Status == 0)
                                     {
                                         <span class="btn btn-success btn-flat btn-sm rounded-pill">Onaylanması bekleniyor.</span>
-
                                     }
 
                                     @if (item.Status == 1)
                                     {
-                                       
-                                         <span class="btn btn-success btn-flat btn-sm rounded-pill">Ödeme yapmanız bekleniyor.</span>
-                                          <a href="/Competition/Pay/@item.Id" class="btn btn-success btn-flat btn-sm">Ödeme yap.</a>
+                                        <div class="d-flex align-items-center">
+                                            <span class="btn btn-success btn-flat btn-sm rounded-pill">Ödeme yapmanız bekleniyor.</span>
+                                            <a href="/Competition/Pay/@item.Id" class="btn btn-success btn-flat btn-sm rounded-pill ml-2">Ödeme yap.</a>
+                                        </div>
                                     }
 
                                     @if (item.Status == 2)
                                     {
-                                        <span class="btn btn-success btn-flat btn-sm rounded-pill">Yarışma devam ediyor.</span>
-                                        <a href="/Blog/GetBlogWithCompetitionId/@item.Id" class="btn btn-warning btn-flat btn-sm">Yarışmaya git</a>
+                                        <div class="d-flex align-items-center">
+                                            <span class="btn btn-success btn-flat btn-sm rounded-pill">Yarışma devam ediyor.</span>
+                                            <a href="/Blog/GetBlogWithCompetitionId/@item.Id" class="btn btn-warning btn-flat btn-sm rounded-pill ml-2">Yarışmaya git</a>
+                                        </div>
                                     }
+
                                     @if (item.Status == 3)
                                     {
-                                        <span class="btn btn-success btn-flat btn-sm rounded-pill">Yarışma süresi bitti, yarışma kapandı.</span>
-                                        <a href="/Blog/GetBlogWithCompetitionId/@item.Id" class="btn btn-warning btn-flat btn-sm">Yarışmaya git</a>
+                                        <div class="d-flex align-items-center">
+                                            <span class="btn btn-success btn-flat btn-sm rounded-pill">Yarışma süresi bitti, yarışma kapandı.</span>
+                                            <a href="/Blog/GetBlogWithCompetitionId/@item.Id" class="btn btn-warning btn-flat btn-sm rounded-pill ml-2">Yarışmaya git</a>
+                                        </div>
                                     }
-
                                 </div>
                             </div>
-
                         </div>
-                    }
-                    <!-- END timeline item -->
-                    <div>
-                        <i class="far fa-clock bg-gray"></i>
                     </div>
-                </div>
-
+                }
             </div>
         </section>
         <!-- /.content -->
     </div>
 </body>
 </html>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let countdownContainers = document.querySelectorAll(".container2");
+
+    countdownContainers.forEach(function(container) {
+        let previousElement = container.previousElementSibling;
+        //let endDateElement = previousElement ? previousElement.querySelector(".card-text-endDate") : null;
+        //let endDate = endDateElement ? new Date(endDateElement.textContent).getTime() : null;
+        let endDate = new Date(previousElement.innerHTML).getTime();
+        let daysElement = container.querySelector(".days");
+        let hoursElement = container.querySelector(".hours");
+        let minutesElement = container.querySelector(".minutes");
+        let secondsElement = container.querySelector(".seconds");
+
+        if (endDate === null) {
+            daysElement.innerHTML = '0';
+            hoursElement.innerHTML = '0';
+            minutesElement.innerHTML = '0';
+            secondsElement.innerHTML = '0';
+            return;
+        }
+
+        let counter = setInterval(() => {
+            let dateNow = new Date().getTime();
+            let dateDiff = endDate - dateNow;
+
+            if (dateDiff <= 0) {
+                clearInterval(counter);
+                daysElement.innerHTML = '0';
+                hoursElement.innerHTML = '0';
+                minutesElement.innerHTML = '0';
+                secondsElement.innerHTML = '0';
+            } else {
+                let days = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
+
+                daysElement.innerHTML = days;
+                hoursElement.innerHTML = hours;
+                minutesElement.innerHTML = minutes;
+                secondsElement.innerHTML = seconds;
+            }
+        }, 1000);
+    });
+</script>
+
+
+
+<style>
+
+
+            .container2 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                color: black;
+            }
+
+                .container2 div {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                    .container2 div:not(:last-child) {
+                        margin-right: 15px;
+                    }
+
+                .container2 span {
+                    border: 2px solid;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                }
+
+                    .container2 span:not(:last-child) {
+                        margin-right: 10px;
+                    }
+
+            .timeline-footer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .card-text-endDate {
+          display: none;
+        }
+
+        .timeline-footer a:not(:last-child) {
+        margin-right: 10px;
+    }
+</style>

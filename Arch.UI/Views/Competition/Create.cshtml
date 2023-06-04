@@ -5,94 +5,139 @@
 }
 
 
-    <br />
-  
-        <!-- Register Card -->
-        <div class="card">
-            <div class="card-body">
-                <h4 class="mb-2">Şimdi Yarışmanı Başlat  🚀</h4>
-                <p class="mb-4">Yarışmanızı başlatın! Tasarımcıların sizin için ürettiği mimari çizimlere yarışma sonunda ulaşın.</p>
+<br />
 
-                @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.Name, new { @class = "form-label" })
-                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "E-posta Girin" })
-                        @Html.ValidationMessageFor(x => x.Name)
-                    </div>
+<!-- Register Card -->
+<div class="card">
+    <div class="card-body">
+        <h4 class="mb-2">Şimdi Yarışmanı Başlat </h4>
+        <p class="mb-4">Yarışmanızı başlatın! Tasarımcıların sizin için ürettiği mimari çizimlere yarışma sonunda ulaşın.</p>
 
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.ProjectType, new { @class = "form-label" })
-                        @Html.DropDownListFor(x => x.ProjectType, new List<SelectListItem>
-                    {
-                    new SelectListItem { Text = "Peyzaj", Value = "1" },
-                    new SelectListItem { Text = "Tadilat", Value = "2" },
-                    new SelectListItem { Text = "İç Mimari", Value = "3" },
-                    new SelectListItem { Text = "Yeni Konut", Value = "4" }
-                    }, "Seçiniz", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(x => x.ProjectType)
-                    </div>
-
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.Field, new { @class = "form-label" })
-                        @Html.DropDownListFor(x => x.Field, new List<SelectListItem>
-                    {
-                    new SelectListItem { Text = "0-60 m2", Value = "1" },
-                    new SelectListItem { Text = "60-120 m2", Value = "2" },
-                    new SelectListItem { Text = "120-360 m2", Value = "3" }
-                    }, "Seçiniz", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(x => x.Field)
-                    </div>
-
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.Description, new { @class = "form-label" })
-                        @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = "4", placeholder = "Açıklama Girin" })
-                        @Html.ValidationMessageFor(x => x.Description)
-                    </div>
-
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.Price, new { @class = "form-label" })
-                        @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Girin" })
-                        @Html.ValidationMessageFor(x => x.Price)
-                    </div>
-
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.EndDate, new { @class = "form-label" })
-                        @Html.TextBoxFor(x => x.EndDate, new { @class = "form-control", type = "date" })
-                        @Html.ValidationMessageFor(x => x.EndDate)
-                    </div>
-
-                    <div class="mb-3">
-                        @Html.LabelFor(x => x.FilePath, new { @class = "form-label" })
-                        <input type="file" name="File" class="form-control" />
-                        @Html.ValidationMessageFor(x => x.FilePath)
-                    </div>
-
-                    <input type="hidden" name="Id" value="0" />
-
-                    <button class="btn btn-primary d-grid w-100" type="submit">Gönder</button>
-                }
+        @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Name, new { @class = "form-label" })
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Proje İsmi Giriniz" })
+                    @Html.ValidationMessageFor(x => x.Name)
+                </div>
             </div>
+            <br />
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.ProjectType, new { @class = "form-label" })
+                    @Html.DropDownListFor(x => x.ProjectType, new List<SelectListItem>
+                {
+                new SelectListItem { Text = "Peyzaj", Value = "1" },
+                new SelectListItem { Text = "Tadilat", Value = "2" },
+                new SelectListItem { Text = "İç Mimari", Value = "3" },
+                new SelectListItem { Text = "Yeni Konut", Value = "4" }
+                }, "Seçiniz", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ProjectType)
+                </div>
+            </div>
+            <br />
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Field, new { @class = "form-label" })
+                    @Html.DropDownListFor(x => x.Field, new List<SelectListItem>
+                {
+                new SelectListItem { Text = "0-60 m2", Value = "1" },
+                new SelectListItem { Text = "60-120 m2", Value = "2" },
+                new SelectListItem { Text = "120-360 m2", Value = "3" }
+                }, "Seçiniz", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Field)
+                </div>
+            </div>
+            <br />
 
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.FilePath, new { @class = "form-label" })
+                    <input type="file" name="File" class="form-control" />
+                    @Html.ValidationMessageFor(x => x.FilePath)
+                </div>
+            </div>
+            <br />
+
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Description, new { @class = "form-label" })
+                       @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8" })
+                    @Html.ValidationMessageFor(x => x.Description)
+                </div>
+            </div>
             <br />
             <br />
-            @if (TempData["AlertMessage"] != null)
-            {
-                <div class="alert alert-success">
-                    <strong style="margin-left: 750px"> *Başarılı ! </strong>@TempData["AlertMessage"]
-                    <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.EndDate, new { @class = "form-label" })
+                    <input type="date" name="EndDate" class="form-control" />
+                    @Html.ValidationMessageFor(x => x.EndDate)
                 </div>
+            </div>
+            <br />
+            <div class="card mb-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Price, new { @class = "form-label" })
+                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz" })
+                    @Html.ValidationMessageFor(x => x.Price)
+                </div>
+            </div>
+            <br />
+            <input type="hidden" name="Id" value="0" />
+
+            <button class="btn btn-primary d-grid w-100" type="submit">Gönder</button>
+        }
+
+        <br />
+        <br />
+
+        @if (TempData["AlertMessage"] != null)
+        {
+            <div class="alert alert-success">
+                <strong style="margin-left: 750px"> *Başarılı ! </strong>@TempData["AlertMessage"]
+                <br />
+            </div>
+        }
+
+        @if (TempData["AlertMessage2"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong style="margin-left: 750px"> *Başarısız ! </strong>@TempData["AlertMessage2"]
+                <br />
+            </div>
+        }
+    </div>
+
+    <style>
+        .card {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+            .card.mb-3 {
+                margin-bottom: 30px; /* Boşluk ayarı */
+                height: 80px; /* Yükseklik ayarı */
             }
 
-            @if (TempData["AlertMessage2"] != null)
-            {
-                <div class="alert alert-danger">
-                    <strong style="margin-left: 750px"> *Başarısız ! </strong>@TempData["AlertMessage2"]
-                    <br />
-                </div>
+        .form-group {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+            .form-group label {
+                font-weight: bold;
             }
-        </div>
-  
 
-
-
+    </style>

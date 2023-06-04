@@ -57,9 +57,6 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CompetitionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -105,8 +102,6 @@ namespace Arch.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompetitionId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -173,8 +168,8 @@ namespace Arch.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DesignerId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DesignerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -204,6 +199,30 @@ namespace Arch.DataAccessLayer.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Competitions");
+                });
+
+            modelBuilder.Entity("Arch.EntityLayer.Entities.DesignerUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CompetitionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DesignerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetitionId");
+
+                    b.HasIndex("DesignerId");
+
+                    b.ToTable("DesignerUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -317,13 +336,6 @@ namespace Arch.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", b =>
-                {
-                    b.HasOne("Arch.EntityLayer.Entities.Competition", null)
-                        .WithMany("Designers")
-                        .HasForeignKey("CompetitionId");
-                });
-
             modelBuilder.Entity("Arch.EntityLayer.Entities.BlogPost", b =>
                 {
                     b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Author")
@@ -352,6 +364,25 @@ namespace Arch.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Arch.EntityLayer.Entities.DesignerUser", b =>
+                {
+                    b.HasOne("Arch.EntityLayer.Entities.Competition", "Competition")
+                        .WithMany("DesignerUsers")
+                        .HasForeignKey("CompetitionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Designer")
+                        .WithMany()
+                        .HasForeignKey("DesignerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competition");
+
+                    b.Navigation("Designer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -418,7 +449,7 @@ namespace Arch.DataAccessLayer.Migrations
                 {
                     b.Navigation("BlogPosts");
 
-                    b.Navigation("Designers");
+                    b.Navigation("DesignerUsers");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,6 +17,7 @@ namespace Arch.DataAccessLayer.Concrete.Repositories
 
         public DbSet<Competition> Competitions { get; set; }
         public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<DesignerUser> DesignerUsers { get; set; }
 
 
 
@@ -29,11 +30,19 @@ namespace Arch.DataAccessLayer.Concrete.Repositories
             .HasForeignKey(b => b.CompetitionId)
             .OnDelete(DeleteBehavior.NoAction); // Kısıtlamayı ekleyin
 
-            //modelBuilder.Entity<Competition>()
-            //    .HasOne(c => c.Designers)
-            //    .WithMany()
-            //    .HasForeignKey(c => c.DesignerId)
-            //    .OnDelete(DeleteBehavior.Restrict); // Kısıtlamayı ekleyin
+            modelBuilder.Entity<DesignerUser>()
+            .HasOne(b => b.Competition)
+            .WithMany(c => c.DesignerUsers)
+            .HasForeignKey(b => b.CompetitionId)
+            .OnDelete(DeleteBehavior.NoAction); // Kısıtlamayı ekleyin
+
+            //modelBuilder.Entity<ContestEntry>()
+            //.HasOne(e => e.Competition)
+            //.WithMany(c => c.ContestEntries)
+            //.HasForeignKey(e => e.CompetitionId)
+            //.OnDelete(DeleteBehavior.Cascade); // Yarışma silindiğinde katılımcılar da silinecek
+
+
 
             base.OnModelCreating(modelBuilder);
 

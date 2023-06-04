@@ -23,13 +23,16 @@ namespace Arch.EntityLayer.Entities
         public string CustomerId { get; set; } // Customer referansı için CustomerId
         public AppUser Customer { get; set; } // Customer referansı
 
-        public string? DesignerId { get; set; }
-        public ICollection<Authorization.AppUser> Designers { get; set; }
+        public int? DesignerId { get; set; } // Customer referansı için CustomerId
+        public ICollection<DesignerUser> DesignerUsers { get; set; } // Customer referansı
 
         public string FilePath { get; set; }
 
         public int? BlogPostId { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; }
+
+        //public int? ContestEntryId { get; set; }
+        //public ICollection<ContestEntry> ContestEntries { get; set; }
 
 
     }

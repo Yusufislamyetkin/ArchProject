@@ -146,7 +146,7 @@ namespace Arch.UI.Controllers
 
             //role2.Id = "2";
             //var result2 = await _roleManager.CreateAsync(role2);
-  
+
             //var role3 = new AppRole { Name = "Admin" }; // AppRole kullanarak rol oluşturun
             //role3.Id = "3";
             //var result3 = await _roleManager.CreateAsync(role3);
@@ -183,7 +183,7 @@ namespace Arch.UI.Controllers
                                 return RedirectToAction("Index", "Competition");
                             }
                         }
-                        return RedirectToAction("Profile", "MyProfile");
+                        return RedirectToAction("AllCompetitions", "Competition");
                     }
                     else
                     {

@@ -1,39 +1,320 @@
-﻿@model IEnumerable<Arch.EntityLayer.Entities.Competition>
+﻿@model List<Arch.EntityLayer.Entities.Competition>
 
-<h1>All Competitions</h1>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<!DOCTYPE html>
 
-<table>
-    <tr>
-        <th>Competition Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <!-- Diğer sütunlar eklenebilir -->
-    </tr>
-    @foreach (var competition in ViewBag.Competitions)
-    {
-        <tr>
-            <td>@competition.Name</td>
-            <td>@competition.StartDate.ToShortDateString()</td>
-            <td>@competition.EndDate.ToShortDateString()</td>
-            <!-- Diğer sütunlar eklenebilir -->
-        </tr>
+
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | User Profile</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+    <section class="content-header">
+    </section>
+
+    <div class="wrapper">
+
+        <section class="content">
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h2>Devam Eden Yarışmalar</h2>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br />
+                <hr />
+
+                <br />
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+
+                                <br />
+
+                                @if (@item.ProjectType == 1)
+                                {
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Peyzaj Projesi  / @item.Name</h5>
+                                    <br />
+
+                                    <h6>Katılımcı Sayısı: <span id="participantCount-@item.Id">@item.DesignerUsers.Count()</span></h6>
+
+                                }
+                                @if (@item.ProjectType == 2)
+                                {
+
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Tadilat Projesi / @item.Name</h5>
+                                    <br />
+                                    <h6>Katılımcı Sayısı: <span id="participantCount-@item.Id">@item.DesignerUsers.Count()</span></h6>
+
+                                }
+                                @if (@item.ProjectType == 3)
+                                {
+
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">İç Mimari Projesi / @item.Name</h5>
+                                    <br />
+                                    <h6>Katılımcı Sayısı: <span id="participantCount-@item.Id">@item.DesignerUsers.Count()</span></h6>
+
+                                }
+                                @if (@item.ProjectType == 4)
+                                {
+
+                                    <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Yeni Konut Projesi / @item.Name</h5>
+                                    <br />
+                                    <h6>Katılımcı Sayısı: <span id="participantCount-@item.Id">@item.DesignerUsers.Count()</span></h6>
+
+                                }
+
+                                <br>
+                                <hr>
+
+                                @*                  <br />
+                            <h6 class="card-text">Yarışma Açıklaması:</h6>
+                            <br>
+                            <p class="card-text">@item.Description</p>*@
+                            </div>
+                            <img class="img-fluid" src="/images/mimari.jpg" Card image cap" />
+                            <div class="card-body">
+
+                                <h6 class="card-title">Yarışma İçin Belirlenen Tutar:</h6>
+                                <br>
+
+                                <strong style="color: #2ECC71; font-size: 20px;" class="card-text">@item.Price.ToString("N0", new System.Globalization.CultureInfo("tr-TR")) TL</strong>
+                                <br>
+                                <br>
+                                <br>
+
+                                <p class="card-text-endDate">@item.EndDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+                                <div class="container2">
+                                    <div>Gün<span class="days"></span></div>
+                                    <div>Saat<span class="hours"></span></div>
+                                    <div>Dak<span class="minutes"></span></div>
+                                    <div>San<span class="seconds"></span></div>
+                                </div>
+                                <br>
+                                <div class="timeline-footer">
+                                    @if (item.Status == 2)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <a href="/Blog/GetBlogWithCompetitionId/@item.Id" class="btn btn-warning btn-flat btn-sm rounded-pill ml-2">Yarışmaya git</a>
+
+                                            @if (User.Identity != null && User.IsInRole("Designer"))
+                                            {
+                                                var isUserInCompetition = item.DesignerUsers?.Any(d => d.Designer.UserName == User.Identity.Name) ?? false;
+
+                                                if (isUserInCompetition)
+                                                {
+                                                    <button id="joinButton-@item.Id" class="btn btn-danger btn-flat btn-sm rounded-pill ml-2" onclick="leaveCompetition(@item.Id)">Katılmaktan Vazgeç</button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="joinButton-@item.Id" class="btn btn-success btn-flat btn-sm rounded-pill ml-2" onclick="joinCompetition(@item.Id)">Katıl</button>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+</body>
+</html>
+
+<script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let countdownContainers = document.querySelectorAll(".container2");
+
+    countdownContainers.forEach(function(container) {
+        let previousElement = container.previousElementSibling;
+        //let endDateElement = previousElement ? previousElement.querySelector(".card-text-endDate") : null;
+        //let endDate = endDateElement ? new Date(endDateElement.textContent).getTime() : null;
+        let endDate = new Date(previousElement.innerHTML).getTime();
+        let daysElement = container.querySelector(".days");
+        let hoursElement = container.querySelector(".hours");
+        let minutesElement = container.querySelector(".minutes");
+        let secondsElement = container.querySelector(".seconds");
+
+        if (endDate === null) {
+            daysElement.innerHTML = '0';
+            hoursElement.innerHTML = '0';
+            minutesElement.innerHTML = '0';
+            secondsElement.innerHTML = '0';
+            return;
+        }
+
+        let counter = setInterval(() => {
+            let dateNow = new Date().getTime();
+            let dateDiff = endDate - dateNow;
+
+            if (dateDiff <= 0) {
+                clearInterval(counter);
+                daysElement.innerHTML = '0';
+                hoursElement.innerHTML = '0';
+                minutesElement.innerHTML = '0';
+                secondsElement.innerHTML = '0';
+            } else {
+                let days = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
+
+                daysElement.innerHTML = days;
+                hoursElement.innerHTML = hours;
+                minutesElement.innerHTML = minutes;
+                secondsElement.innerHTML = seconds;
+            }
+        }, 1000);
+    });
+
+
+    function joinCompetition(itemId) {
+        $.ajax({
+            url: "/Designer/JoinCompetition",
+            type: "POST",
+            data: { id: itemId },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire('Başarılı', 'Yarışmaya katıldınız.', 'success');
+                    updateButtonUI(true, itemId); // Butonu güncelle
+                    updateParticipantCount(itemId, true); // Katılımcı sayısını artır
+                } else {
+                    Swal.fire('Hata', 'Yarışmaya katılamadınız.', 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('Hata', 'Yarışmaya katılamadınız.', 'error');
+            }
+        });
     }
-</table>
 
-<!-- Sayfalama kontrolleri -->
-<div>
-    @if (ViewBag.CurrentPage > 1)
-    {
-        <a href="@Url.Action("AllCompetitions", new { page = ViewBag.CurrentPage - 1 })">Previous</a>
+    function leaveCompetition(itemId) {
+        if (confirm("Bu yarışmadan ayrılmak istediğinize emin misiniz?")) {
+            $.ajax({
+                url: "/Designer/LeaveCompetition",
+                type: "POST",
+                data: { id: itemId },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Başarılı', 'Yarışmadan ayrıldınız.', 'success');
+                        updateButtonUI(false, itemId); // Butonu güncelle
+                        updateParticipantCount(itemId, false); // Katılımcı sayısını azalt
+                    } else {
+                        Swal.fire('Hata', 'Yarışmadan ayrılamadınız.', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Hata', 'Yarışmadan ayrılamadınız.', 'error');
+                }
+            });
+        }
     }
 
-    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-    {
-        <a href="@Url.Action("AllCompetitions", new { page = i })">@i</a>
+    function updateButtonUI(isJoined, itemId) {
+        var joinButton = $('#joinButton-' + itemId);
+        if (isJoined) {
+            joinButton.text('Katılmaktan Vazgeç');
+            joinButton.attr('onclick', 'leaveCompetition(' + itemId + ')');
+            joinButton.removeClass('btn-success').addClass('btn-danger');
+        } else {
+            joinButton.text('Katıl');
+            joinButton.attr('onclick', 'joinCompetition(' + itemId + ')');
+            joinButton.removeClass('btn-danger').addClass('btn-success');
+        }
     }
 
-    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-    {
-        <a href="@Url.Action("AllCompetitions", new { page = ViewBag.CurrentPage + 1 })">Next</a>
+    function updateParticipantCount(itemId, isJoined) {
+        var participantCount = $('#participantCount-' + itemId);
+        var count = parseInt(participantCount.text());
+        if (isJoined) {
+            count += 1;
+        } else {
+            count -= 1;
+        }
+        participantCount.text(count);
     }
-</div>
+
+</script>
+
+
+
+<style>
+
+
+    .container2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        color: black;
+    }
+
+        .container2 div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .container2 div:not(:last-child) {
+                margin-right: 15px;
+            }
+
+        .container2 span {
+            border: 2px solid;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+            .container2 span:not(:last-child) {
+                margin-right: 10px;
+            }
+
+    .timeline-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .card-text-endDate {
+        display: none;
+    }
+
+    .timeline-footer a:not(:last-child) {
+        margin-right: 10px;
+    }
+</style>

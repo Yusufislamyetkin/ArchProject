@@ -4,6 +4,7 @@ using Arch.EntityLayer.Entities;
 using Arch.UI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using static Arch.EntityLayer.Entities.Auth.Authorization;
 
@@ -33,22 +34,13 @@ namespace Arch.UI.Controllers
 
 
         //Anasayfa
-        public async Task<IActionResult> AllCompetitions(int page = 1)
+        public async Task<IActionResult> AllCompetitions()
         {
-            var allCompetitions = await _competitonService.GetAllAsync();
-            var totalCompetitions = allCompetitions.Count();
-            var totalPages = (int)Math.Ceiling(totalCompetitions / (double)CompetitionsPerPage);
+            var myvalue = await _competitonService.Where(x => x.Status == 2).Include(x => x.DesignerUsers).ThenInclude(x=> x.Designer).ToListAsync();
+       
+ 
 
-            var competitions = allCompetitions
-                .Skip((page - 1) * CompetitionsPerPage)
-                .Take(CompetitionsPerPage)
-                .ToList();
-
-            ViewBag.TotalPages = totalPages;
-            ViewBag.CurrentPage = page;
-            ViewBag.Competitions = competitions;
-
-            return View();
+            return View(myvalue);
         }
 
         // Benim yarışmalarım
@@ -56,10 +48,14 @@ namespace Arch.UI.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var myvalue = _competitonService.Where(x => x.CustomerId == user.Id).ToList();
+           
             myvalue.Reverse();
             // var value2 = await _competitonService.GetAllAsync();
             return View(myvalue);
         }
+
+
+
 
         // Bir tane yarışmam 
         //[HttpGet]
