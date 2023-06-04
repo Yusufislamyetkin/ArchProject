@@ -94,26 +94,36 @@
                         </a>
                     </li>
 
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <li class="menu-item">
+                            <a href="/Competition/Create" class="menu-link">
+                                @* <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
+                                <div data-i18n="Analytics">Yarışma Oluştur</div>
+                            </a>
+                        </li>
 
-                    <li class="menu-item">
-                        <a href="/Competition/Create" class="menu-link">
-                            @* <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
-                            <div data-i18n="Analytics">Yarışma Oluştur</div>
-                        </a>
-                    </li>
+                        <li class="menu-item">
+                            <a href="/Competition/MyAllCompetitions/" class="menu-link">
+                                @*     <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
+                                <div data-i18n="Analytics">Yarışmalarım</div>
+                            </a>
+                        </li>
 
-
-                    <li class="menu-item">
-                        <a href="/Competition/MyAllCompetitions/" class="menu-link">
-                            @*     <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
-                            <div data-i18n="Analytics">Yarışmalarım</div>
-                        </a>
-                    </li>
+                    }
 
                     <li class="menu-item">
                         <a href="/Competition/AllCompetitions/" class="menu-link">
                             @*     <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
                             <div data-i18n="Analytics">Yarışmalar</div>
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item">
+                        <a href="/Account/Profile/" class="menu-link">
+                            @*     <i class="menu-icon tf-icons bx bx-home-circle"></i>*@
+                            <div data-i18n="Analytics">Profil</div>
                         </a>
                     </li>
 

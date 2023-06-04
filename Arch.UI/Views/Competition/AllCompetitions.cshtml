@@ -24,6 +24,11 @@
     <link rel="stylesheet" href="/AdminLTE-3.0.4/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+@*  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">*@
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
     <section class="content-header">
@@ -35,15 +40,42 @@
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-body text-center">
-                            <h2>Devam Eden Yarışmalar</h2>
+                         <div class="card-body text-center">
+                            <br />
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-center">
+                                <div class="dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" id="ongoingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Devam Eden Yarışmalar
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="ongoingDropdown">
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=0&status=2">Tümü</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=1&status=2">Peyzaj Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=2&status=2">Tadilat Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=3&status=2">İç Mimari Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=4&status=2">Yeni Konut Projesi</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" id="completedDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Biten Yarışmalar
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="completedDropdown">
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=0&status=4">Tümü</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=1&status=4">Peyzaj Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=2&status=4">Tadilat Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=3&status=4">İç Mimari Projesi</a>
+                                        <a class="dropdown-item" href="/Competition/AllCompetitions?type=4&status=4">Yeni Konut Projesi</a>
+                                    </div>
+                                </div>
+                            </nav>
                         </div>
                     </div>
                 </div>
 
 
                 <br />
-                <hr />
+       
 
                 <br />
                 @foreach (var item in Model)

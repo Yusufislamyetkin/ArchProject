@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static Arch.EntityLayer.Entities.Auth.Authorization;
 
@@ -24,6 +25,7 @@ namespace Arch.EntityLayer.Entities
         public AppUser Customer { get; set; } // Customer referansı
 
         public int? DesignerId { get; set; } // Customer referansı için CustomerId
+        [JsonIgnore]
         public ICollection<DesignerUser> DesignerUsers { get; set; } // Customer referansı
 
         public string FilePath { get; set; }

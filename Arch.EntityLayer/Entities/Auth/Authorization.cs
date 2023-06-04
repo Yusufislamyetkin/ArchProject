@@ -6,6 +6,8 @@ namespace Arch.EntityLayer.Entities.Auth
     {
         public class AppUser : IdentityUser<string>
         {
+            public string ProfilPhoto { get; set; }
+            public string City { get; set; }
             public ICollection<IdentityUserRole<string>> UserRoles { get; set; } = new List<IdentityUserRole<string>>();
         }
 

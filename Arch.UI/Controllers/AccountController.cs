@@ -1,11 +1,15 @@
-﻿using Arch.UI.Models.ViewModels;
+﻿using Arch.UI.Helper;
+using Arch.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
+using System.IO;
 using static Arch.EntityLayer.Entities.Auth.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Arch.UI.Controllers
 {
@@ -14,11 +18,14 @@ namespace Arch.UI.Controllers
         readonly UserManager<AppUser> _userManager;
         readonly SignInManager<AppUser> _signInManager;
         readonly RoleManager<AppRole> _roleManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager)
+        private readonly IWebHostEnvironment _env;
+
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _env = env;
         }
         public async Task Logout()
         {
@@ -26,6 +33,11 @@ namespace Arch.UI.Controllers
         }
         public async Task<IActionResult> Profile()
         {
+            string filePath = Path.Combine(_env.ContentRootPath, "city.json");
+            string json = System.IO.File.ReadAllText(filePath);
+            Dictionary<string, string> cityData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            ViewBag.CityData = new SelectList(cityData, "Key", "Value");
             var value = await _userManager.FindByNameAsync(User.Identity.Name);
             return View(value);
         }
@@ -61,23 +73,50 @@ namespace Arch.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProfile(UserDetailViewModel model)
+        public async Task<IActionResult> EditProfile(UserDetailViewModel model, IFormFile file)
         {
             if (ModelState.IsValid)
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
                 user.PhoneNumber = model.PhoneNumber;
+
+                if (file != null && file.Length > 0)
+                {
+                    var webRootPath = _env.WebRootPath;
+                    var uploadsFolder = Path.Combine(webRootPath, "UserFiles");
+
+                    // Eğer UserFiles klasörü yoksa oluşturun
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    user.ProfilPhoto = filePath;
+                }
+
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
                     result.Errors.ToList().ForEach(e => ModelState.AddModelError(e.Code, e.Description));
-                    return View(model);
+                    return Json(false); // İşlem başarısız olduğunda false döndür
                 }
+
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, true);
+
+                return Json(true); // İşlem başarılı olduğunda true döndür
             }
-            return RedirectToAction("Index");
+
+            return Json(false); // ModelState geçerli değilse veya hata varsa false döndür
         }
         [HttpGet]
         public IActionResult UpdatePassword(string userId, string token)

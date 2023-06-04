@@ -16,7 +16,7 @@ namespace Arch.UI.Controllers
         private readonly IBlogService _blogService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private const int CompetitionsPerPage = 12;
+
 
         public CompetitionController(ICompetitonService competitonService, UserManager<AppUser> userManager, IWebHostEnvironment hostingEnvironment, IBlogService blogService)
         {
@@ -34,13 +34,29 @@ namespace Arch.UI.Controllers
 
 
         //Anasayfa
-        public async Task<IActionResult> AllCompetitions()
+        public async Task<IActionResult> AllCompetitions(int type, int? status)
         {
-            var myvalue = await _competitonService.Where(x => x.Status == 2).Include(x => x.DesignerUsers).ThenInclude(x=> x.Designer).ToListAsync();
-       
- 
+            List<Competition> competitionsValue = new List<Competition>();
 
-            return View(myvalue);
+            if (status == null)
+            {
+                status = 2;
+            }
+            if (type == 0)
+            {
+                competitionsValue = await _competitonService.Where(x => x.Status == status).Include(x => x.DesignerUsers).ThenInclude(x => x.Designer).ToListAsync();
+                return View(competitionsValue);
+            }
+
+            competitionsValue = await _competitonService.Where(x => x.Status == status && x.ProjectType == type).Include(x => x.DesignerUsers).ThenInclude(x => x.Designer).ToListAsync();
+            return View(competitionsValue);
+        }
+
+        // Tipe Göre Filtreleme
+        public async Task<IActionResult> FilterCompetitionsWithType(int Type)
+        {
+            var myvalue = await _competitonService.Where(x => x.Status == 2 && x.ProjectType == Type).Include(x => x.DesignerUsers).ThenInclude(x => x.Designer).ToListAsync();
+            return Json(myvalue);
         }
 
         // Benim yarışmalarım
@@ -48,7 +64,7 @@ namespace Arch.UI.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var myvalue = _competitonService.Where(x => x.CustomerId == user.Id).ToList();
-           
+
             myvalue.Reverse();
             // var value2 = await _competitonService.GetAllAsync();
             return View(myvalue);
@@ -109,6 +125,26 @@ namespace Arch.UI.Controllers
         }
 
 
+        // Devam eden yarışmaların listelendiği sayfa
+        public async Task<IActionResult> ContinueCompetitions()
+        {
+            var activeCompetitions = await _competitonService.Where(x => x.Status == 2).Include(x => x.DesignerUsers).ThenInclude(x => x.Designer).ToListAsync();
+            var viewModel = new CompetitionViewModel
+            {
+                ActiveCompetitions = activeCompetitions
+            };
+            return View(viewModel);
+        }
 
+        // Biten yarışmaların listelendiği sayfa
+        public async Task<IActionResult> FinishedCompetitions()
+        {
+            var finishedCompetitions = await _competitonService.Where(x => x.Status == 4).Include(x => x.DesignerUsers).ThenInclude(x => x.Designer).ToListAsync();
+            var viewModel = new CompetitionViewModel
+            {
+                FinishedCompetitions = finishedCompetitions
+            };
+            return View(viewModel);
+        }
     }
 }

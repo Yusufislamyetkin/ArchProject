@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model Arch.UI.Models.CompetitionViewModel
+
+@section Styles {
+    <!-- Gerekli CSS stillemelerini burada ekleyebilirsiniz -->
+}
+
+    @section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Biten Yarışmaları yükleme işlemi
+            $("#loadFinishedCompetitionsBtn").click(function() {
+                $.ajax({
+                    url: "@Url.Action("LoadFinishedCompetitions")",
+                    type: "GET",
+                    success: function(data) {
+                        $("#finishedCompetitions").html(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Devam Eden Yarışmalar</h3>
+            <div id="ongoingCompetitions">
+                @foreach (var item in Model.ActiveCompetitions)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @if (item.ProjectType == 1)
+                        {
+                            <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Peyzaj Projesi / @item.Name</h5>
+                        }
+                        else if (item.ProjectType == 2)
+                        {
+                            <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Tadilat Projesi / @item.Name</h5>
+                        }
+                        else if (item.ProjectType == 3)
+                        {
+                            <h5 class="card-title" style="font-weight: bold; font-size: 18px;">İç Mimari Projesi / @item.Name</h5>
+                        }
+                        else if (item.ProjectType == 4)
+                        {
+                            <h5 class="card-title" style="font-weight: bold; font-size: 18px;">Yeni Konut Projesi / @item.Name</h5>
+                        }
+                        <h6>Katılımcı Sayısı: <span id="participantCount-@item.Id">@item.DesignerUsers.Count()</span></h6>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h3>Biten Yarışmalar</h3>
+        <button id="loadFinishedCompetitionsBtn" class="btn btn-primary">Biten Yarışmaları Yükle</button>
+        <div id="finishedCompetitions">
+            @Html.Partial("_FinishedCompetitions", Model.FinishedCompetitions)
+        </div>
+    </div>
+</div>
