@@ -6,8 +6,8 @@ namespace Arch.BussinessLayer.Abstract
 {
     public interface ICompetitonService : IService<Competition>
     {
-        void CreateCompetition(CompetitonCreateDto competitionCreateDto);
+        Task<Competition> CreateCompetition(CompetitonCreateDto competitionCreateDto);
         void AddContestant(AppUser contestant);
-        void UnitOfWork();
+        Task UnitOfWorkAsync();
     }
 }

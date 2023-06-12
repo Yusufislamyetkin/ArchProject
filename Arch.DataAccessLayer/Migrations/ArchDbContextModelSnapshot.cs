@@ -185,15 +185,14 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Property<int>("Field")
                         .HasColumnType("int");
 
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectFilePathID")
                         .HasColumnType("int");
 
                     b.Property<int>("ProjectType")
@@ -231,6 +230,28 @@ namespace Arch.DataAccessLayer.Migrations
                     b.HasIndex("DesignerId");
 
                     b.ToTable("DesignerUsers");
+                });
+
+            modelBuilder.Entity("Arch.EntityLayer.Entities.ProjectFilePath", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompetitionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetitionId");
+
+                    b.ToTable("ProjectFilePaths");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -393,6 +414,17 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Navigation("Designer");
                 });
 
+            modelBuilder.Entity("Arch.EntityLayer.Entities.ProjectFilePath", b =>
+                {
+                    b.HasOne("Arch.EntityLayer.Entities.Competition", "Competition")
+                        .WithMany("ProjectFilePaths")
+                        .HasForeignKey("CompetitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competition");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppRole", null)
@@ -458,6 +490,8 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Navigation("BlogPosts");
 
                     b.Navigation("DesignerUsers");
+
+                    b.Navigation("ProjectFilePaths");
                 });
 #pragma warning restore 612, 618
         }

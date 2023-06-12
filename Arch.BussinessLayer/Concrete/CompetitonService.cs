@@ -12,8 +12,11 @@ namespace Arch.BussinessLayer.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IRepository<Competition> _repository;
+
         public ICollection<AppUser> Contestants { get; set; } // Yarışmacılar koleksiyonu
-        public CompetitonService(IRepository<Competition> repository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork)
+
+        public CompetitonService(IRepository<Competition> repository, IUnitOfWork unitOfWork, IMapper mapper)
+            : base(repository, unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -21,19 +24,17 @@ namespace Arch.BussinessLayer.Concrete
             Contestants = new List<AppUser>();
         }
 
-        public void CreateCompetition(CompetitonCreateDto competitionCreateDto)
+        public async Task<Competition> CreateCompetition(CompetitonCreateDto competitionCreateDto)
         {
-            // Competition oluşturma işlemlerini gerçekleştirin
-            // Örneğin, repository üzerinden kaydetme işlemi yapabilirsiniz
             var competition = _mapper.Map<Competition>(competitionCreateDto);
-            _repository.AddAsync(competition);
-            _unitOfWork.Commit();
+            await _repository.AddAsync(competition);
+            await _unitOfWork.CommitAsync();
+            return competition;
         }
 
-        public void UnitOfWork()
+        public async Task UnitOfWorkAsync()
         {
-
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public void AddContestant(AppUser contestant)

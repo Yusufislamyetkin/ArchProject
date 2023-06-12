@@ -24,130 +24,127 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <!-- Navbar -->
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
-        <!-- Content Wrapper. Contains page content -->
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                    </div>
-                    <div class="col-sm-6">
-                    </div>
-                </div>
-            </div><!-- /.container-fluid -->
-        </section>
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3">
+<br />
+<br />
 
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
 
-                        <!-- Profile Image -->
-                        <div class="card card-primary">
-                            <div class="card-body box-profile text-center">
-                                <br />
+                <!-- Profile Image -->
+                <div class="card card-outline">
+                    <div class="card-body box-profile">
 
-                                <strong class="text-muted"><span style="color:black; font-weight: bold;"><span class="countdown-label">Yarışmanın Bitmesi İçin Kalan Süre</span></span></strong>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-
-                                <div class="container2">
-                                    <div>Gün<span class="days"></span></div>
-                                    <div>Saat<span class="hours"></span></div>
-                                    <div>Dak<span class="minutes"></span></div>
-                                    <div>San<span class="seconds"></span></div>
-                                </div>
-
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-
-                                @if (User.IsInRole("Designer"))
-                                {
-                                    <button class="btn btn-warning">Katıl</button>
-                                }
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-
-                        <!-- /.card -->
-                        <!-- About Me Box -->
                         <br />
-                        <div class="card card-primary" >
-                            <div class="card-header">
-                                <h3 class="card-title">Yarışma Bilgi Alanı</h3>
+                        <br />
+                        <br />
+                        <section class="content">
+                            <div class="container2">
+                                <div>Gün<span class="days"></span></div>
+                                <div>Saat<span class="hours"></span></div>
+                                <div>Dak<span class="minutes"></span></div>
+                                <div>San<span class="seconds"></span></div>
                             </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <br />
-
-                                <strong><i class="fas fa-book mr-1"></i> İçerikler</strong>
-                                <br />
-
-                                <br />
-                                @{
-                                    var description = ViewBag.competition.Description as string;
-                                    var truncatedDescription = description?.Substring(0, Math.Min(description.Length, 100));
-                                }
-
-                                <p>@truncatedDescription ... </p>
-
-
-                                <br />
+                        </section>
+                        <br />
+                        <br />
+                        <br />
 
 
 
-                                <strong><i class="fas fa-book mr-1"></i> Bitiş Tarihi</strong>
-                                <br />
-
-                                <br />
-
-                                <p>@ViewBag.competition.EndDate</p>
-
-
-
-                                <br />
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
                     </div>
-                    <!-- /.col -->
-                    <div class="col-md-9">
-                        <div class="card">
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- About Me Box -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Yarışma Bilgi Alanı</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <br />
+                        <strong><i class="fas fa-book mr-1"></i> Bitiş Tarihi</strong>
 
+                        <p class="text-muted">@ViewBag.competition.EndDate.ToString("dd.MM.yyyy")</p>
+                        <hr>
+                        <strong><i class="fas fa-book mr-1"></i> Açıklanma Tarihi</strong>
 
-                            <div class="card-body">
+                        <p class="text-muted">@(((DateTime)ViewBag.competition.EndDate).AddDays(7).ToString("dd.MM.yyyy"))</p>
 
+                        <hr>
+                        <strong><i class="fas fa-book mr-1"></i> Katılımcı Sayısı</strong>
 
+                        <p class="text-muted">
+                           @ViewBag.UserCount
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Kategori</strong>
+
+                        <p class="text-muted">Yeni Konut</p>
+
+                        <hr>
+
+                        <strong><i class="fas fa-pencil-alt mr-1"></i> Alan Ölçüsü </strong>
+
+                        <p class="text-muted">
+                            <span class="tag tag-danger">360 M2 - 1020 M2</span>
+                 
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="far fa-file-alt mr-1"></i> Müşteri Notları</strong>
+
+                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+
+                        <br />
+                    </div>
+
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
                                 <div class="container mt-5 mb-5">
                                     <div class="row height d-flex justify-content-center align-items-center">
 
                                         <div class="col-md-10">
 
                                             <br />
-                                            <br />
+
 
                                             <div class="card p-3 text-center shadow" style="border-radius: 10px;">
-                                                <h6 class="font-weight-bold display-4" style="color:#0066CC">Yarışma Ödülü</h6>
-                                                <h1>@ViewBag.competition.Price &#x1f451; TL</h1>
+                                                <h4>Yarışma Ödülü</h4>
+                                                <h6 class="font-weight-bold display-4" style="color:#2ECC71"> @ViewBag.competition.Price.ToString("N0", new System.Globalization.CultureInfo("tr-TR")) TL</h6>
+                                                <br />
+
+
                                             </div>
+
+
+
 
                                             <div class="wrapper">
                                                 <br />
                                                 <div class="product-img">
-                                                    <img src="/images/mimari.jpg" height="420" width="327">
+                                                    <img src="@ViewBag.mainImage" height="420" width="327">
                                                 </div>
                                                 <br />
                                                 <div class="product-info">
@@ -158,69 +155,156 @@
                                                         <p>@ViewBag.competition.Description </p>
                                                     </div>
                                                     <br />
-                                                    <div class="product-price-btn">
 
-                                                        <button type="button"> Dosyaları İndir</button>
+                                                    <br />
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tab">
+                                                <button class="tablinks" onclick="openCity(event, 'London')">Yorumlar</button>
+                                                <button class="tablinks" onclick="openCity(event, 'Paris')">Dökümanlar</button>
+
+                                            </div>
+
+                                            <div id="London" class="tabcontent">
+
+                                                <div class="card">
+                                                    <br />
+                                                    <div class="card p-3 text-center">
+                                                        <h6 class="font-weight-bold display-4" style="color:black">@ViewBag.competition.Name Projesi Yorumları</h6>
+                                                    </div>
+
+                                                    <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
+                                                        <img src="https://i.imgur.com/zQZSWrt.jpg" width="50" class="rounded-circle mr-2">
+                                                        <form id="commentForm" class="d-flex flex-grow-1">
+                                                            <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
+                                                            <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
+                                                            <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color:black;">Gönder</button>
+                                                        </form>
+                                                    </div>
+
+                                                    <div id="commentSection">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            <div class="d-flex flex-row p-3">
+                                                                <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                                <div class="w-100">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex flex-row align-items-center">
+                                                                            <span class="mr-2">@item.Author.UserName</span>
+                                                                            <small class="c-badge">Top Comment</small>
+                                                                        </div>
+                                                                        <small> @item.TimeAgo</small>
+                                                                    </div>
+                                                                    <p class="text-justify comment-text mb-0"> @item.Content</p>
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
                                                     <br />
                                                 </div>
                                             </div>
 
-                                            <br />
-                                            <br />
+                                            <div id="Paris" class="tabcontent">
 
 
-                                            <div class="card">
 
-                                                <div class="card p-3 text-center">
-                                                    <h6 class="font-weight-bold display-4" style="color:black">@ViewBag.competition.Name Projesi Yorumları</h6>
-                                                </div>
-
-                                                <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
-                                                    <img src="https://i.imgur.com/zQZSWrt.jpg" width="50" class="rounded-circle mr-2">
-                                                    <form id="commentForm" class="d-flex flex-grow-1">
-                                                        <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
-                                                        <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
-                                                        <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color:black;">Gönder</button>
-                                                    </form>
-                                                </div>
-
-                                                <div id="commentSection">
-                                                    @foreach (var item in Model)
+                                                <h3 class="mt-5 text-muted" style="font-size: 18px;">Proje Dökümantasyonu</h3>
+                                                <br />
+                                                <ul class="list-unstyled">
+                                                    @foreach (var item in @ViewBag.files)
                                                     {
-                                                        <div class="d-flex flex-row p-3">
-                                                            <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
-                                                            <div class="w-100">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <div class="d-flex flex-row align-items-center">
-                                                                        <span class="mr-2">@item.Author.UserName</span>
-                                                                        <small class="c-badge">Top Comment</small>
-                                                                    </div>
-                                                                    <small> @item.TimeAgo</small>
-                                                                </div>
-                                                                <p class="text-justify comment-text mb-0"> @item.Content</p>
-                                                            </div>
-                                                        </div>
+                                                        <li style="margin-bottom: 5px;">
+                                                            @if (item.FileType == "image")
+                                                            {
+                                                                <a href="@item.Address" class="btn-link text-secondary" style="font-size: 16px;" download><i class="far fa-fw fa-image"></i> @item.FileName</a>
+                                                            }
+                                                            else if (item.FileType == "word")
+                                                            {
+                                                                <a href="@item.Address" class="btn-link text-secondary" style="font-size: 16px;" download><i class="far fa-fw fa-file-word"></i> @item.FileName</a>
+                                                            }
+                                                            else if (item.FileType == "pdf")
+                                                            {
+                                                                <a href="@item.Address" class="btn-link text-secondary" style="font-size: 16px;" download><i class="far fa-fw fa-file-pdf"></i> @item.FileName</a>
+                                                            }
+                                                            else if (item.FileType == "email")
+                                                            {
+                                                                <a href="@item.Address" class="btn-link text-secondary" style="font-size: 16px;" download><i class="far fa-fw fa-envelope"></i> @item.FileName</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="@item.Address" class="btn-link text-secondary" style="font-size: 16px;" download>@item.FileName</a>
+                                                            }
+                                                        </li>
                                                     }
-                                                </div>
+                                                </ul>
+
                                             </div>
+
+
+
+
+                                            <br />
                                             <br />
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
-                        </div><!-- /.container-fluid -->
-                    </div>
-        </section>
-        <!-- /.content -->
-    </div>
 
-</body>
+                                        <!-- /.tab-pane -->
+                                    </div>
+                                    <!-- /.tab-content -->
+                                </div><!-- /.card-body -->
+                            </div>
+                            <!-- /.nav-tabs-custom -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+</section>
+
 </html>
 
 <style>
+
+
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
     body {
         background-color: #eee;
     }
@@ -399,8 +483,13 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
+
+
+
     let endDate = new Date("@ViewBag.EndDate").getTime();
 
     let counter = setInterval(() => {
@@ -445,16 +534,48 @@
                         var commentHtml = '<div class="d-flex flex-row p-3"><img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3"><div class="w-100"><div class="d-flex justify-content-between align-items-center"><div class="d-flex flex-row align-items-center"><span class="mr-2">' + response.userName + '</span><small class="c-badge">Top Comment</small></div><small>' + response.timeAgo + '</small></div><p class="text-justify comment-text mb-0">' + response.commentText + '</p></div></div>';
                         $('#commentSection').prepend(commentHtml);
                         $('#commentInput').val(''); // Yorum giriş alanını temizle
-                        alert('Yorumunuz gönderildi.'); // Kullanıcıya bildirim göster
+
+                        // SweetAlert kullanarak bildirim göster
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Yorumunuz gönderildi.',
+                        });
                     } else {
-                        alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+                        });
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
-                    alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+                    });
                 }
             });
         });
     });
+</script>
+
+<script>
+
+    // İlk başta "London" içeriğini ve ilgili butonu görünür yapma
+    document.getElementById("London").style.display = "block";
+    document.getElementsByClassName("tablinks")[0].classList.add("active");
+
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+    }
 </script>

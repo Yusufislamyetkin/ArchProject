@@ -1,0 +1,139 @@
+﻿@model Arch.EntityLayer.Entities.Auth.Authorization.AppUser
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+<br />
+
+<div class="card mb-4">
+
+    <!-- Account -->
+    @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "profileForm" }))
+    {
+        <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                @if (@Model.ProfilPhoto == null)
+                {
+                    <img src="/UserFiles/defaultPhoto.png"
+                 alt="user-avatar"
+                 class="d-block rounded"
+                 height="180"
+                 width="180"
+                 id="uploadedAvatar" />
+                }
+                <img src="@Model.ProfilPhoto"
+                 alt="user-avatar"
+                 class="d-block rounded"
+                 height="180"
+                 width="180"
+                 id="uploadedAvatar" />
+                <div class="button-wrapper">
+                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                        <span class="d-none d-sm-block">Fotoğraf Yükle</span>
+                        <i class="bx bx-upload d-block d-sm-none"></i>
+                        <input type="file"
+                           id="upload"
+                           name="File"
+                           class="account-file-input"
+                           hidden
+                           accept="image/png, image/jpeg"
+                           value="@Model.ProfilPhoto" />
+
+                    </label>
+
+
+                    <p class="text-muted mb-0">Yalnızca Jpg ve Png formatında yükleme yapınız. </p>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0" />
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="phoneNumber">Phone Number</label>       
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">TR (+90)</span>
+                        <input type="text" id="phoneNumber" name="PhoneNumber" class="form-control"  value="@Model.PhoneNumber" readonly >
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="city" class="form-label">Şehir</label>
+                    @Html.DropDownList("City", ViewBag.CityData as SelectList, "Şehir Seçin", new { @class = "form-control", @value = Model.City })
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="UserName" class="form-label">Kullanıcı Adı</label>
+                    <input class="form-control" type="text" id="UserName" name="UserName" value="@Model.UserName" readonly>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input class="form-control" type="text" id="email" name="email" value="@Model.Email" readonly>
+                </div>
+
+
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary me-2">Değişiklikleri Kaydet</button>
+                <button type="reset" class="btn btn-outline-secondary">Vazgeç</button>
+            </div>
+        </div>
+    }
+</div>
+<!-- /Account -->
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+
+
+    document.getElementById('upload').addEventListener('change', function(event) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function() {
+            var img = document.getElementById('uploadedAvatar');
+            img.src = reader.result;
+        };
+
+        // Seçilen fotoğrafı oku
+        if (input.files && input.files[0]) {
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+    // Form submit event
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Formun otomatik olarak gönderilmesini engelle
+
+        // AJAX veya diğer bir yöntemle formu sunucuya gönderin
+        // Başarı durumuna bağlı olarak aşağıdaki kodu güncelleyin veya tamamlayın
+
+        // AJAX kullanarak formu sunucuya gönderin
+        // Örnek olarak Fetch API kullanarak AJAX isteği gönderiyoruz
+        fetch('@Url.Action("EditProfile", "Account")', {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // İşlem başarılı ise SweetAlert bildirimini göster
+                    swal("Güncellendi", "Profil başarıyla güncellendi!", "success");
+                } else {
+                    // İşlem başarısız ise SweetAlert bildirimini göster
+                    swal("Hata", "İşlem başarısız oldu.", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
+    });
+</script>

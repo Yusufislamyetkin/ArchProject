@@ -15,7 +15,6 @@ namespace Arch.BussinessLayer.Dtos
         public string Description { get; set; }
         public int Price { get; set; }
         public DateTime EndDate { get; set; }
-        public string? FilePath { get; set; }
         public string? CustomerId { get; set; } // Customer referansı için CustomerId
     }
 }

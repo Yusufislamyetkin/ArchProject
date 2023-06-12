@@ -13,17 +13,19 @@ namespace Arch.UI.Controllers
     public class CompetitionController : Controller
     {
         private readonly ICompetitonService _competitonService;
+        private readonly IFileService _fileService;
         private readonly IBlogService _blogService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
 
-        public CompetitionController(ICompetitonService competitonService, UserManager<AppUser> userManager, IWebHostEnvironment hostingEnvironment, IBlogService blogService)
+        public CompetitionController(ICompetitonService competitonService, UserManager<AppUser> userManager, IWebHostEnvironment hostingEnvironment, IBlogService blogService, IFileService fileService)
         {
             _competitonService = competitonService;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _blogService = blogService;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -87,43 +89,54 @@ namespace Arch.UI.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create(CompetitonCreateDto createDto, IFormFile file)
+        public async Task<IActionResult> Create(CompetitonCreateDto createDto, List<IFormFile> files)
         {
+            var value = await _userManager.FindByNameAsync(User.Identity.Name);
+            createDto.CustomerId = value.Id;
+
+        
+
             if (ModelState.IsValid)
             {
-                if (file != null && file.Length > 0)
+                var competition = await _competitonService.CreateCompetition(createDto);
+                foreach (var file in files)
                 {
-                    var webRootPath = _hostingEnvironment.WebRootPath;
-                    var uploadsFolder = Path.Combine(webRootPath, "UserFiles");
-
-                    // Eğer UserFiles klasörü yoksa oluşturun
-                    if (!Directory.Exists(uploadsFolder))
+                    if (file.Length > 0)
                     {
-                        Directory.CreateDirectory(uploadsFolder);
+                        var webRootPath = _hostingEnvironment.WebRootPath;
+                        var uploadsFolder = Path.Combine(webRootPath, "UserFiles"); // UserFiles klasörünün yolunu belirtin
+
+                        // Eğer UserFiles klasörü yoksa oluşturun
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        var fileName = Path.GetFileName(file.FileName);
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        // Dosyanın yolunu createDto'ya ekleyin
+                        ProjectFilePath projectFilePath = new ProjectFilePath();
+                        projectFilePath.CompetitionId = competition.Id;
+                        projectFilePath.Address = "/" + Path.Combine("UserFiles", fileName).Replace("\\", "/");
+
+                       await  _fileService.CreateFile(projectFilePath);
+
                     }
-
-                    var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    createDto.FilePath = filePath;
                 }
-
-                var value = await _userManager.FindByNameAsync(User.Identity.Name);
-                createDto.CustomerId = value.Id;
-                _competitonService.CreateCompetition(createDto);
 
                 return RedirectToAction("Index");
             }
 
             return View(createDto);
         }
-
 
         // Devam eden yarışmaların listelendiği sayfa
         public async Task<IActionResult> ContinueCompetitions()

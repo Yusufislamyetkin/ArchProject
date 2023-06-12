@@ -53,9 +53,8 @@
 
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.FilePath, new { @class = "form-label" })
-                    <input type="file" name="File" class="form-control" />
-                    @Html.ValidationMessageFor(x => x.FilePath)
+                    
+                    <input type="file" name="files" class="form-control" multiple />
                 </div>
             </div>
             <br />

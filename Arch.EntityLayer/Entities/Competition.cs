@@ -28,13 +28,13 @@ namespace Arch.EntityLayer.Entities
         [JsonIgnore]
         public ICollection<DesignerUser> DesignerUsers { get; set; } // Customer referansı
 
-        public string FilePath { get; set; }
-
         public int? BlogPostId { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; }
 
-        //public int? ContestEntryId { get; set; }
-        //public ICollection<ContestEntry> ContestEntries { get; set; }
+        public int? ProjectFilePathID { get; set; }
+        public ICollection<ProjectFilePath>   ProjectFilePaths { get; set; }
+
+
 
 
     }

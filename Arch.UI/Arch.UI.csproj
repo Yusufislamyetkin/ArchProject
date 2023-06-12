@@ -19,6 +19,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="2.11.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+    <PackageReference Include="Twilio" Version="6.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -297,10 +298,6 @@
     <None Include="wwwroot\Extra\MakebyYy.css" />
     <None Include="wwwroot\Extra\seedquesscs.css" />
     <None Include="wwwroot\Extra\studenttt.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\UserFiles\" />
   </ItemGroup>
 
 </Project>

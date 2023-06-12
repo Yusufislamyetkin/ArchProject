@@ -21,6 +21,7 @@ builder.Services.AddAutoMapper(typeof(DtoMapper));
 builder.Services.AddScoped<ICompetitonService, CompetitonService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IDesignerUserService, DesignerUserService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));

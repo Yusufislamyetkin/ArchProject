@@ -44,7 +44,7 @@ namespace Arch.UI.Controllers
                     competition.DesignerUsers.Add(designerUser);
                 }
 
-                _competitonService.UnitOfWork();
+                await _competitonService.UnitOfWorkAsync();
                 //await _competitonService.UpdateAsync(competition);
 
                 return Json(new { success = true });

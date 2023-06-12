@@ -10,6 +10,8 @@ using System.Web;
 using System.IO;
 using static Arch.EntityLayer.Entities.Auth.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Twilio;
+using Twilio.Rest.Verify.V2.Service;
 
 namespace Arch.UI.Controllers
 {
@@ -19,6 +21,11 @@ namespace Arch.UI.Controllers
         readonly SignInManager<AppUser> _signInManager;
         readonly RoleManager<AppRole> _roleManager;
         private readonly IWebHostEnvironment _env;
+
+        private readonly string accountSid = "AC02f3abd692f633421bc425d73c5aaed8";
+        private readonly string authToken = "b1feb5625afd5f94a4e92dc285e50fce";
+        private readonly string verifySid = "VA2040f7dd63f10bb0e0eb6b708639fd56";
+        private readonly string verifiedNumber = "+905389351189";
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IWebHostEnvironment env)
         {
@@ -31,16 +38,7 @@ namespace Arch.UI.Controllers
         {
             await _signInManager.SignOutAsync();
         }
-        public async Task<IActionResult> Profile()
-        {
-            string filePath = Path.Combine(_env.ContentRootPath, "city.json");
-            string json = System.IO.File.ReadAllText(filePath);
-            Dictionary<string, string> cityData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 
-            ViewBag.CityData = new SelectList(cityData, "Key", "Value");
-            var value = await _userManager.FindByNameAsync(User.Identity.Name);
-            return View(value);
-        }
         public IActionResult EditPassword()
         {
             return View();
@@ -66,24 +64,36 @@ namespace Arch.UI.Controllers
             }
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> EditProfile()
         {
-            var userDetail = await _userManager.FindByNameAsync(User.Identity.Name);
-            return View(userDetail);
-        }
+            string filePath = Path.Combine(_env.ContentRootPath, "city.json");
+            string json = System.IO.File.ReadAllText(filePath);
+            Dictionary<string, string> cityData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 
+            ViewBag.CityData = new SelectList(cityData, "Key", "Value");
+            var value = await _userManager.FindByNameAsync(User.Identity.Name);
+            return View(value);
+        }
         [HttpPost]
-        public async Task<IActionResult> EditProfile(UserDetailViewModel model, IFormFile file)
+        public async Task<IActionResult> EditProfile(UserDetailViewModel model, IFormFile? file)
         {
+            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            // Telefon numarası doğrulanmamışsa doğrulama kodu modalını göster
+            //if (!user.PhoneNumberConfirmed)
+            //{
+            //    return RedirectToAction("SendVerificationCode");
+            //}
+
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+               
                 user.PhoneNumber = model.PhoneNumber;
-
+                user.City = model.City;
                 if (file != null && file.Length > 0)
                 {
                     var webRootPath = _env.WebRootPath;
-                    var uploadsFolder = Path.Combine(webRootPath, "UserFiles");
+                    var uploadsFolder = Path.Combine(webRootPath, "UserFiles"); // UserFiles klasörünün yolunu belirtin
 
                     // Eğer UserFiles klasörü yoksa oluşturun
                     if (!Directory.Exists(uploadsFolder))
@@ -99,7 +109,7 @@ namespace Arch.UI.Controllers
                         await file.CopyToAsync(stream);
                     }
 
-                    user.ProfilPhoto = filePath;
+                    user.ProfilPhoto = "/" + Path.Combine("UserFiles", fileName).Replace("\\", "/"); // Dosya yolunu /UserFiles/fileName şeklinde belirtin
                 }
 
                 IdentityResult result = await _userManager.UpdateAsync(user);
@@ -262,17 +272,20 @@ namespace Arch.UI.Controllers
         {
             return View();
         }
-
-
         [HttpPost]
         public async Task<IActionResult> SignIn(AppUserViewModel appUserViewModel)
         {
             if (ModelState.IsValid)
             {
+
                 var appUser = new AppUser
                 {
                     UserName = appUserViewModel.UserName,
-                    Email = appUserViewModel.Email
+                    Email = appUserViewModel.Email,
+                    PhoneNumber = appUserViewModel.PhoneNumber,
+                    City = "0",
+                    ProfilPhoto = "/UserFiles/defaultPhoto.png"
+
                 };
 
                 appUser.Id = Guid.NewGuid().ToString();
@@ -295,7 +308,9 @@ namespace Arch.UI.Controllers
                         await _userManager.AddToRoleAsync(appUser, AppRole.Customer);
                     }
 
-                    return RedirectToAction("Login");
+                   return  RedirectToAction("Index");
+
+
                 }
                 else
                 {
@@ -305,5 +320,45 @@ namespace Arch.UI.Controllers
 
             return View();
         }
+
+        //[HttpGet]
+        //public IActionResult VerifyCode()
+        //{
+        //    TwilioClient.Init(accountSid, authToken);
+
+        //    var verification = VerificationResource.Create(
+        //        to: verifiedNumber,
+        //        channel: "sms",
+        //        pathServiceSid: verifySid
+        //    );
+
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> VerifyCode(string otpCode)
+        //{
+        //    TwilioClient.Init(accountSid, authToken);
+
+        //    var verificationCheck = VerificationCheckResource.Create(
+        //        to: verifiedNumber,
+        //        code: otpCode,
+        //        pathServiceSid: verifySid
+        //    );
+      
+        //    if (verificationCheck.Status == "approved")
+        //    {
+        //        AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+        //        user.PhoneNumberConfirmed = true;
+        //        await _userManager.UpdateAsync(user);
+        //        return Json(true);
+        //    }
+
+
+        //    return Json(false);
+        //}
+
+
+
     }
 }

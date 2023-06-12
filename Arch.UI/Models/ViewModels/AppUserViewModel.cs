@@ -21,5 +21,6 @@ namespace Arch.UI.Models.ViewModels
         [Display(Name = "Şifre")]
         public string Sifre { get; set; }
         public string Role { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

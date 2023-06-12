@@ -26,8 +26,6 @@ namespace Arch.EntityLayer.Entities
             get { return Arch.EntityLayer.StaticClass.TimeAgo.GetTimeAgo(CreatedDate); }
         }
 
-
-
     }
 
 }
