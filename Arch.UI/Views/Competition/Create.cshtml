@@ -13,7 +13,8 @@
         <h4 class="mb-2">Şimdi Yarışmanı Başlat </h4>
         <p class="mb-4">Yarışmanızı başlatın! Tasarımcıların sizin için ürettiği mimari çizimlere yarışma sonunda ulaşın.</p>
 
-        @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data" }))
+       @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data", id = "competitionForm" }))
+
         {
             <div class="card mb-3">
                 <div class="form-group">
@@ -53,7 +54,7 @@
 
             <div class="card mb-3">
                 <div class="form-group">
-                    
+
                     <input type="file" name="files" class="form-control" multiple />
                 </div>
             </div>
@@ -62,7 +63,7 @@
             <div class="card mb-3">
                 <div class="form-group">
                     @Html.LabelFor(x => x.Description, new { @class = "form-label" })
-                       @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8" })
+                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8" })
                     @Html.ValidationMessageFor(x => x.Description)
                 </div>
             </div>
@@ -86,7 +87,7 @@
             <div class="card mb-3">
                 <div class="form-group">
                     @Html.LabelFor(x => x.Price, new { @class = "form-label" })
-                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz" })
+                   @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz", id = "Price" })
                     @Html.ValidationMessageFor(x => x.Price)
                 </div>
             </div>
@@ -99,44 +100,52 @@
         <br />
         <br />
 
-        @if (TempData["AlertMessage"] != null)
-        {
-            <div class="alert alert-success">
-                <strong style="margin-left: 750px"> *Başarılı ! </strong>@TempData["AlertMessage"]
-                <br />
-            </div>
-        }
-
-        @if (TempData["AlertMessage2"] != null)
-        {
-            <div class="alert alert-danger">
-                <strong style="margin-left: 750px"> *Başarısız ! </strong>@TempData["AlertMessage2"]
-                <br />
-            </div>
-        }
     </div>
+    
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+<style>
 
-    <style>
-        .card {
-            width: 100%;
-            margin: 0 auto;
+    .field-validation-error {
+        color: red;
+    }
+    .card {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+        .card.mb-3 {
+            margin-bottom: 30px; /* Boşluk ayarı */
+            height: 80px; /* Yükseklik ayarı */
         }
 
-            .card.mb-3 {
-                margin-bottom: 30px; /* Boşluk ayarı */
-                height: 80px; /* Yükseklik ayarı */
-            }
+    .form-group {
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+    }
 
-        .form-group {
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            margin-bottom: 10px;
+        .form-group label {
+            font-weight: bold;
         }
 
-            .form-group label {
-                font-weight: bold;
-            }
-
-    </style>
+</style>
+<script>
+    $(function () {
+        $('#Price').on('input', function () {
+            var value = $(this).val().replace(/\./g, '');
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            $(this).val(value);
+        });
+        
+        $('form').on('submit', function () {
+            var value = $('#Price').val().replace(/\./g, '');
+            $('#Price').val(value);
+        });
+    });
+</script>

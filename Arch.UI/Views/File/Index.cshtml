@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css" />
+    <style>
+        /* Stil sayfanıza aşağıdaki CSS kurallarını ekleyin */
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #fileInput {
+            margin-bottom: 10px;
+        }
+
+        #uploadButton {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+        }
+
+            .file-item span {
+                margin-right: 10px;
+            }
+
+            .file-item button {
+                padding: 5px 10px;
+                background-color: #e74c3c;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var competitionId = 4; // Competition ID değerini burada belirleyin
+
+            // Dosyaların yüklenmesi
+            $('#uploadButton').on('click', function() {
+                var files = $('#fileInput')[0].files;
+                if (files.length === 0) {
+                    Swal.fire('Error', 'Lütfen yüklenmesi için bir dosya seçin.', 'error');
+                    return;
+                }
+
+                var formData = new FormData();
+                formData.append('competitionId', competitionId);
+
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('files', files[i]);
+                }
+
+                $.ajax({
+                    url: '/File/Upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        showFileList(result);
+                        Swal.fire('Success', 'Dosya başarı ile yüklendi.', 'success');
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire('Error', 'Dosya yüklenirken bir hata oluştu.', 'error');
+                        console.error(error);
+                    }
+                });
+            });
+
+            // Dosyaların listelenmesi
+            function showFileList(files) {
+                var fileList = $('#fileList');
+                fileList.empty();
+
+                if (files.length === 0) {
+                    fileList.text('Hiç dosya yüklenmedi.');
+                    return;
+                }
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+
+                    var fileItem = $('<div>').addClass('file-item'); // Dosya öğesine bir sınıf ekleyin
+                    var fileName = $('<span>').text(file.address).addClass('file-name'); // Dosya adı öğesine bir sınıf ekleyin
+                    var removeButton = $('<button>').text('Kaldır').attr('data-file-id', file.id).addClass('remove-button'); // Kaldır düğmesine bir sınıf ekleyin ve "Kaldır" yazısını kullanın
+
+                    removeButton.on('click', function() {
+                        var fileId = $(this).attr('data-file-id');
+                        removeFile(fileId);
+                    });
+
+                    fileItem.append(fileName);
+                    fileItem.append(removeButton);
+                    fileList.append(fileItem);
+
+                    if (i !== files.length - 1) {
+                        fileList.append($('<div>').addClass('spacer')); // Aralarında boşluk eklemek için boş bir öğe ekleyin
+                    }
+                }
+            }
+
+            // Dosyanın kaldırılması
+            function removeFile(fileId) {
+                Swal.fire({
+                    title: 'Confirmation',
+                    text: 'Bu dosyayı kaldırmak istediğinize emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Kaldır',
+                    cancelButtonText: 'Vazgeç'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/File/Remove',
+                            type: 'POST',
+                            data: { fileId: fileId },
+                            success: function() {
+                                Swal.fire('Success', 'Dosya başarı ile kaldırıldı.', 'success');
+                                getFileList(); // Dosya listesini güncelle
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire('Error', 'Dosya kaldırılırken bir hata oluştu.', 'error');
+                                console.error(error);
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Dosya listesini getirme
+            function getFileList() {
+                $.ajax({
+                    url: '/File/Get',
+                    type: 'GET',
+                    data: { competitionId: competitionId },
+                    success: function(result) {
+                        showFileList(result);
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire('Error', 'An error occurred while getting the file list.', 'error');
+                        console.error(error);
+                    }
+                });
+            }
+
+            // Sayfa yüklendiğinde dosya listesini getir
+            getFileList();
+        });
+    </script>
+</head>
+<body>
+    <h1>File Upload Example</h1>
+
+    <input type="file" id="fileInput" multiple />
+    <button id="uploadButton">Upload</button>
+
+    <div id="fileList"></div>
+</body>
+</html>
+
+

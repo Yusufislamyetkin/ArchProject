@@ -29,8 +29,10 @@ namespace Arch.UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int paymentStatus)
         {
+            ViewData["PaymentStatus"] = paymentStatus;
+
             return View();
         }
 
@@ -62,13 +64,15 @@ namespace Arch.UI.Controllers
         }
 
         // Benim yarışmalarım
-        public async Task<IActionResult> MyAllCompetitions()
+        public async Task<IActionResult> MyAllCompetitions(bool CreateStatus)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var myvalue = _competitonService.Where(x => x.CustomerId == user.Id).ToList();
 
             myvalue.Reverse();
-            // var value2 = await _competitonService.GetAllAsync();
+
+            ViewData["CreateStatus"] = CreateStatus;
+
             return View(myvalue);
         }
 
@@ -91,6 +95,8 @@ namespace Arch.UI.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit,
+        RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
         public async Task<IActionResult> Create(CompetitonCreateDto createDto, List<IFormFile> files)
         {
             var value = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -106,15 +112,16 @@ namespace Arch.UI.Controllers
                     if (file.Length > 0)
                     {
                         var webRootPath = _hostingEnvironment.WebRootPath;
-                        var uploadsFolder = Path.Combine(webRootPath, "UserFiles"); // UserFiles klasörünün yolunu belirtin
+                        var uploadsFolder = Path.Combine(webRootPath, "UserFiles");
 
-                        // Eğer UserFiles klasörü yoksa oluşturun
                         if (!Directory.Exists(uploadsFolder))
                         {
                             Directory.CreateDirectory(uploadsFolder);
                         }
 
-                        var fileName = Path.GetFileName(file.FileName);
+                        var uniqueFileName = Guid.NewGuid().ToString();
+                        var fileExtension = Path.GetExtension(file.FileName);
+                        var fileName = uniqueFileName + fileExtension;
                         var filePath = Path.Combine(uploadsFolder, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -122,17 +129,15 @@ namespace Arch.UI.Controllers
                             await file.CopyToAsync(stream);
                         }
 
-                        // Dosyanın yolunu createDto'ya ekleyin
                         ProjectFilePath projectFilePath = new ProjectFilePath();
                         projectFilePath.CompetitionId = competition.Id;
                         projectFilePath.Address = "/" + Path.Combine("UserFiles", fileName).Replace("\\", "/");
 
-                       await  _fileService.CreateFile(projectFilePath);
-
+                        await _fileService.CreateFile(projectFilePath);
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("MyAllCompetitions", new { CreateStatus = true });
             }
 
             return View(createDto);
