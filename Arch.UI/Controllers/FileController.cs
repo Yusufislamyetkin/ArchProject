@@ -30,7 +30,6 @@ namespace Arch.UI.Controllers
         public async Task<IActionResult> Upload(List<IFormFile> files, int competitionId)
         {
             List<ProjectFilePath> projectFileList = new List<ProjectFilePath>();
-            competitionId = 4;
 
             foreach (var file in files)
             {

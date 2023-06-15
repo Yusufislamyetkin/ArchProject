@@ -159,10 +159,10 @@
                                                     <br />
                                                     <br />
                                                 </div>
-                                         @*       <div style="text-align: center;">
-                                                    <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); border-radius: 4px; padding: 10px; display: inline-block;">
-                                                        <img src="@ViewBag.mainImage" height="400" width="400">
-                                                    </div>
+                                                @*       <div style="text-align: center;">
+                                                <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); border-radius: 4px; padding: 10px; display: inline-block;">
+                                                <img src="@ViewBag.mainImage" height="400" width="400">
+                                                </div>
                                                 </div>*@
 
                                                 <br />
@@ -268,18 +268,15 @@
 
 
                             <div class="tab-pane" id="ProjeDosyaları">
-
                                 <br />
-                                @if (x == 0)
-                                {
-                                    <h2>Yarışma için hiç dosya yüklemediniz, yarışmaya katılmak için dosya yükleyin.</h2>
-                                }
-                                <h2> N tane Proje Dosyası yüklediniz. Yarışmaya katılımınız başarılı, sonucu bekleyebilirsiniz. </h2>
+                                <br />
+                                <h4 id="fileStatus">Yarışma için hiç dosya yüklemediniz, yarışmaya katılmak için dosya yükleyin.</h4>
+                                <br />
+                                <br />
                                 <input type="file" id="fileInput" multiple />
                                 <button id="uploadButton">Upload</button>
 
                                 <div id="fileList"></div>
-
                             </div>
                             <!-- /.nav-tabs-custom -->
                         </div>
@@ -552,13 +549,13 @@
 
 <script>
     $(document).ready(function() {
-        var competitionId = 4; // Competition ID değerini burada belirleyin
+        var competitionId = @ViewBag.competition.CompetitionId; // Competition ID değerini burada belirleyin
 
         // Dosyaların yüklenmesi
         $('#uploadButton').on('click', function() {
             var files = $('#fileInput')[0].files;
             if (files.length === 0) {
-                Swal.fire('Error', 'Lütfen yüklenmesi için bir dosya seçin.', 'error');
+                Swal.fire('Hata', 'Lütfen yüklenmesi için bir dosya seçin.', 'error');
                 return;
             }
 
@@ -577,10 +574,10 @@
                 contentType: false,
                 success: function(result) {
                     showFileList(result);
-                    Swal.fire('Success', 'Dosya başarı ile yüklendi.', 'success');
+                    Swal.fire('Başarılı', 'Dosya başarı ile yüklendi.', 'success');
                 },
                 error: function(xhr, status, error) {
-                    Swal.fire('Error', 'Dosya yüklenirken bir hata oluştu.', 'error');
+                    Swal.fire('Hata', 'Dosya yüklenirken bir hata oluştu.', 'error');
                     console.error(error);
                 }
             });
@@ -592,16 +589,18 @@
             fileList.empty();
 
             if (files.length === 0) {
-                fileList.text('Hiç dosya yüklenmedi.');
+                $('#fileStatus').text('Yarışma için hiç dosya yüklemediniz, yarışmaya katılmak için dosya yükleyin.');
                 return;
             }
+
+            $('#fileStatus').text(files.length + ' tane Proje Dosyası yüklediniz. Yarışmaya katılımınız başarılı, sonucu bekleyebilirsiniz.');
 
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
 
-                var fileItem = $('<div>').addClass('file-item'); // Dosya öğesine bir sınıf ekleyin
-                var fileName = $('<span>').text(file.address).addClass('file-name'); // Dosya adı öğesine bir sınıf ekleyin
-                var removeButton = $('<button>').text('Kaldır').attr('data-file-id', file.id).addClass('remove-button'); // Kaldır düğmesine bir sınıf ekleyin ve "Kaldır" yazısını kullanın
+                var fileItem = $('<div>').addClass('file-item');
+                var fileName = $('<span>').text(file.address).addClass('file-name');
+                var removeButton = $('<button>').text('Kaldır').attr('data-file-id', file.id).addClass('remove-button');
 
                 removeButton.on('click', function() {
                     var fileId = $(this).attr('data-file-id');
@@ -613,7 +612,7 @@
                 fileList.append(fileItem);
 
                 if (i !== files.length - 1) {
-                    fileList.append($('<div>').addClass('spacer')); // Aralarında boşluk eklemek için boş bir öğe ekleyin
+                    fileList.append($('<div>').addClass('spacer'));
                 }
             }
         }
@@ -621,7 +620,7 @@
         // Dosyanın kaldırılması
         function removeFile(fileId) {
             Swal.fire({
-                title: 'Confirmation',
+                title: 'Uyarı',
                 text: 'Bu dosyayı kaldırmak istediğinize emin misiniz?',
                 icon: 'warning',
                 showCancelButton: true,
@@ -634,7 +633,7 @@
                         type: 'POST',
                         data: { fileId: fileId },
                         success: function() {
-                            Swal.fire('Success', 'Dosya başarı ile kaldırıldı.', 'success');
+                            Swal.fire('Başarılı', 'Dosya başarı ile kaldırıldı.', 'success');
                             getFileList(); // Dosya listesini güncelle
                         },
                         error: function(xhr, status, error) {
