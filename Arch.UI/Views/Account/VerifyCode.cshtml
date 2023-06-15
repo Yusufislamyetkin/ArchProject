@@ -1,90 +1,170 @@
-﻿<!DOCTYPE html>
-<html>
+﻿
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Telefon Numarası Doğrulama</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-            button:hover {
-                background-color: #0056b3;
-            }
-    </style>
+    <meta charset="UTF-8">
+    <title>Phone Verification with OTP</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Telefon Numarası Doğrulama</h1>
-        <form id="verificationForm">
-            <label for="otpCode">Doğrulama Kodu</label>
-            <input type="text" id="otpCode" name="otpCode" required>
-            <button type="submit">Doğrula</button>
+        <h3 class="title">OTP Verification</h3>
+
+        <p class="sub-title">
+            Enter the OTP you received to
+            <span class="phone-number">+90 @ViewBag.phone</span>
+        </p>
+
+        <form id="verificationForm" action="/Account/VerifyCodeAuth" method="post">
+            <div class="wrapper">
+                <input type="text" name="digit1" class="field 1" maxlength="1">
+                <input type="text" name="digit2" class="field 2" maxlength="1">
+                <input type="text" name="digit3" class="field 3" maxlength="1">
+                <input type="text" name="digit4" class="field 4" maxlength="1">
+                <input type="text" name="digit5" class="field 5" maxlength="1">
+                <input type="text" name="digit6" class="field 6" maxlength="1">
+                <input type="hidden" name="userId" value="@ViewBag.appUser">
+            </div>
+
+            <button type="submit" class="resend">
+                Gönder
+                <i class="fa fa-caret-right"></i>
+            </button>
         </form>
     </div>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        $('#verificationForm').submit(function(event) {
 
+        const inputFields = document.querySelectorAll("input.field");
 
-            // AJAX ile formu sunucuya gönder
-            $.ajax({
-                url: '@Url.Action("VerifyCode", "Account")',
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(data) {
-                    if (data) {
-                        // İşlem başarılı ise SweetAlert bildirimini göster
-                        swal("Güncellendi", "Kayıt başarı ile tamamlandı!", "success");
-                    } else {
-                        // İşlem başarısız ise SweetAlert bildirimini göster
-                        swal("Hata", "Kayıt tamamlanmadı, doğrulama kodu hatalı", "error");
-                    }
-                },
-                error: function(error) {
-                    console.error('Hata:', error);
-                }
-            });
+        inputFields.forEach((field) => {
+            field.addEventListener("input", handleInput);
         });
+
+        function handleInput(e) {
+            let inputField = e.target;
+            if (inputField.value.length >= 1) {
+                let nextField = inputField.nextElementSibling;
+                return nextField && nextField.focus();
+            }
+        }
+
+
+        const verificationForm = document.getElementById("verificationForm");
+        verificationForm.addEventListener("submit", verifyCode);
+
+        function verifyCode(e) {
+            e.preventDefault(); // Formun otomatik olarak submit olmasını engeller
+
+            // AJAX kullanarak formu post edin
+            const formData = new FormData(verificationForm);
+            fetch("/Account/VerifyCodeAuth", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Doğrulama başarılıysa yapılacak işlemler
+                        window.location.href = "/Account/Login?status=1";
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Doğrulama Kodu Doğrulanamadı',
+                            text: 'Lütfen doğru bir doğrulama kodu girin.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Hata:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Bir Hata Oluştu',
+                        text: 'Doğrulama işlemi sırasında bir hata oluştu.',
+                    });
+                });
+        }
     </script>
 </body>
 </html>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    html,
+    body {
+        height: 100%;
+        display: grid;
+        place-items: center;
+        background-color: #EAF5F6;
+    }
+
+    .container {
+        width: 400px;
+        padding: 50px;
+        background-color: #ffffff;
+        border-radius: 25px;
+    }
+
+    h3.title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #093030;
+        margin-bottom: 25px;
+    }
+
+    p.sub-title {
+        color: #B5BAB8;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    p span.phone-number {
+        display: block;
+        color: #093030;
+        font-weight: 600;
+    }
+
+    .wrapper {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        justify-items: space-between;
+    }
+
+        .wrapper input.field {
+            width: 50px;
+            line-height: 75px;
+            font-size: 32px;
+            border: none;
+            background-color: #EAF5F6;
+            border-radius: 5px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #093030;
+            margin-bottom: 25px;
+        }
+
+            .wrapper input.field:focus {
+                outline: none;
+            }
+
+    button.resend {
+        background-color: transparent;
+        border: none;
+        font-weight: 600;
+        color: #3DAFE1;
+        cursor: pointer;
+    }
+
+        button.resend i {
+            margin-left: 5px;
+        }
+</style>

@@ -13,12 +13,13 @@ namespace Arch.EntityLayer.Entities
 
         public int Id { get; set; }
 
-        public string DesignerId { get; set; }
+        public string? DesignerId { get; set; }
         [JsonIgnore]
         public AppUser Designer { get; set; }
 
 
-        public int CompetitionId { get; set; }
+        public int? CompetitionId { get; set; }
         public Competition Competition { get; set; }
+
     }
 }

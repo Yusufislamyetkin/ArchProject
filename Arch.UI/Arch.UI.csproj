@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DesignersProjectFiles\**" />
+    <Content Remove="DesignersProjectFiles\**" />
+    <EmbeddedResource Remove="DesignersProjectFiles\**" />
+    <None Remove="DesignersProjectFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>
@@ -25,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Arch.BussinessLayer\Arch.BussinessLayer.csproj" />
     <ProjectReference Include="..\Arch.DataAccessLayer\Arch.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Arch.EntityLayer\Arch.EntityLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -298,6 +306,10 @@
     <None Include="wwwroot\Extra\MakebyYy.css" />
     <None Include="wwwroot\Extra\seedquesscs.css" />
     <None Include="wwwroot\Extra\studenttt.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\DesignersFiles\" />
   </ItemGroup>
 
 </Project>

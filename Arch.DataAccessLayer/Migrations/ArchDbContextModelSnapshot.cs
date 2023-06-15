@@ -216,11 +216,11 @@ namespace Arch.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CompetitionId")
+                    b.Property<int?>("CompetitionId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("DesignerId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -247,9 +247,17 @@ namespace Arch.DataAccessLayer.Migrations
                     b.Property<int>("CompetitionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DesignerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompetitionId");
+
+                    b.HasIndex("DesignerId");
 
                     b.ToTable("ProjectFilePaths");
                 });
@@ -405,9 +413,7 @@ namespace Arch.DataAccessLayer.Migrations
 
                     b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Designer")
                         .WithMany()
-                        .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DesignerId");
 
                     b.Navigation("Competition");
 
@@ -422,7 +428,13 @@ namespace Arch.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Arch.EntityLayer.Entities.Auth.Authorization+AppUser", "Designer")
+                        .WithMany()
+                        .HasForeignKey("DesignerId");
+
                     b.Navigation("Competition");
+
+                    b.Navigation("Designer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

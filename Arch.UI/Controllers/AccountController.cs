@@ -87,7 +87,7 @@ namespace Arch.UI.Controllers
 
             if (ModelState.IsValid)
             {
-               
+
                 user.PhoneNumber = model.PhoneNumber;
                 user.City = model.City;
                 if (file != null && file.Length > 0)
@@ -185,7 +185,7 @@ namespace Arch.UI.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(int? status)
         {
             //var role = new AppRole { Name = "Customer" }; // AppRole kullanarak rol oluşturun
             //role.Id = "1";
@@ -199,6 +199,13 @@ namespace Arch.UI.Controllers
             //var role3 = new AppRole { Name = "Admin" }; // AppRole kullanarak rol oluşturun
             //role3.Id = "3";
             //var result3 = await _roleManager.CreateAsync(role3);
+
+            if (status == 1)
+            {
+                ViewBag.Status = 1;
+                ViewBag.Message = "Kayıt işlemi tamamlandı";
+            }
+
             return View();
         }
         [HttpPost]
@@ -308,7 +315,18 @@ namespace Arch.UI.Controllers
                         await _userManager.AddToRoleAsync(appUser, AppRole.Customer);
                     }
 
-                   return  RedirectToAction("Index");
+
+                    TwilioClient.Init(accountSid, authToken);
+
+                    var verification = VerificationResource.Create(
+                        to: verifiedNumber,
+                        channel: "sms",
+                        pathServiceSid: verifySid
+                    );
+
+
+
+                    return RedirectToAction("VerifyCode", appUser);
 
 
                 }
@@ -321,42 +339,35 @@ namespace Arch.UI.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public IActionResult VerifyCode()
-        //{
-        //    TwilioClient.Init(accountSid, authToken);
+        [HttpGet]
+        public IActionResult VerifyCode(AppUser? appUser)
+        {
+            ViewBag.appUser = appUser.Id;
+            ViewBag.phone =appUser.PhoneNumber;
+            return View();
+        }
 
-        //    var verification = VerificationResource.Create(
-        //        to: verifiedNumber,
-        //        channel: "sms",
-        //        pathServiceSid: verifySid
-        //    );
+        [HttpPost]
+        public async Task<IActionResult> VerifyCodeAuth(string digit1, string digit2, string digit3, string digit4, string digit5, string digit6, string userId)
+        {
+            TwilioClient.Init(accountSid, authToken);
 
-        //    return View();
-        //}
+            var verificationCheck = VerificationCheckResource.Create(
+                to: verifiedNumber,
+                code: digit1 + digit2 + digit3 + digit4 + digit5 + digit6,
+                pathServiceSid: verifySid
+            );
 
-        //[HttpPost]
-        //public async Task<IActionResult> VerifyCode(string otpCode)
-        //{
-        //    TwilioClient.Init(accountSid, authToken);
+            if (verificationCheck.Status == "approved")
+            {
+                AppUser user = await _userManager.FindByIdAsync(userId);
+                user.PhoneNumberConfirmed = true;
+                await _userManager.UpdateAsync(user);
 
-        //    var verificationCheck = VerificationCheckResource.Create(
-        //        to: verifiedNumber,
-        //        code: otpCode,
-        //        pathServiceSid: verifySid
-        //    );
-      
-        //    if (verificationCheck.Status == "approved")
-        //    {
-        //        AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
-        //        user.PhoneNumberConfirmed = true;
-        //        await _userManager.UpdateAsync(user);
-        //        return Json(true);
-        //    }
+            }
 
-
-        //    return Json(false);
-        //}
+            return Json(false);
+        }
 
 
 
