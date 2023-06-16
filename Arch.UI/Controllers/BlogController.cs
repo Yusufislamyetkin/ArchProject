@@ -54,15 +54,19 @@ namespace Arch.UI.Controllers
             }
 
             var fileFormats = ff.ToList();
+       
             var mainImage = fileFormats.Where(x => x.FileType == "image").FirstOrDefault().Address;
+
+            if (mainImage == null)
+            {
+                mainImage = "/UserFiles/mimari.jpg";
+            }
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.ProfilPhoto = user.ProfilPhoto;
 
             ViewBag.mainImage = mainImage;
             ViewBag.files = fileFormats;
-
-
 
             return View(blogComments);
         }

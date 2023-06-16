@@ -12,6 +12,7 @@ using static Arch.EntityLayer.Entities.Auth.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Twilio;
 using Twilio.Rest.Verify.V2.Service;
+using Twilio.Types;
 
 namespace Arch.UI.Controllers
 {
@@ -25,7 +26,7 @@ namespace Arch.UI.Controllers
         private readonly string accountSid = "AC02f3abd692f633421bc425d73c5aaed8";
         private readonly string authToken = "b1feb5625afd5f94a4e92dc285e50fce";
         private readonly string verifySid = "VA2040f7dd63f10bb0e0eb6b708639fd56";
-        private readonly string verifiedNumber = "+905389351189";
+        //private readonly string verifiedNumber = "+905389351189";
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IWebHostEnvironment env)
         {
@@ -301,7 +302,7 @@ namespace Arch.UI.Controllers
 
                 if (result.Succeeded)
                 {
-
+                    // Rol atama
                     if (appUserViewModel.Role == "Designer")
                     {
                         await _userManager.AddToRoleAsync(appUser, AppRole.Designer);
@@ -316,19 +317,16 @@ namespace Arch.UI.Controllers
                     }
 
 
+                    // Sms Gönderme
                     TwilioClient.Init(accountSid, authToken);
 
                     var verification = VerificationResource.Create(
-                        to: verifiedNumber,
+                        to: FormatHelper.FormatPhoneNumber(appUser.PhoneNumber),
                         channel: "sms",
                         pathServiceSid: verifySid
                     );
 
-
-
                     return RedirectToAction("VerifyCode", appUser);
-
-
                 }
                 else
                 {
@@ -343,27 +341,27 @@ namespace Arch.UI.Controllers
         public IActionResult VerifyCode(AppUser? appUser)
         {
             ViewBag.appUser = appUser.Id;
-            ViewBag.phone =appUser.PhoneNumber;
+            ViewBag.phone = appUser.PhoneNumber;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> VerifyCodeAuth(string digit1, string digit2, string digit3, string digit4, string digit5, string digit6, string userId)
         {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+
             TwilioClient.Init(accountSid, authToken);
 
             var verificationCheck = VerificationCheckResource.Create(
-                to: verifiedNumber,
+                to: FormatHelper.FormatPhoneNumber(user.PhoneNumber),
                 code: digit1 + digit2 + digit3 + digit4 + digit5 + digit6,
                 pathServiceSid: verifySid
             );
 
             if (verificationCheck.Status == "approved")
             {
-                AppUser user = await _userManager.FindByIdAsync(userId);
                 user.PhoneNumberConfirmed = true;
                 await _userManager.UpdateAsync(user);
-
             }
 
             return Json(false);

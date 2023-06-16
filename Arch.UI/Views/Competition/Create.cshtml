@@ -18,7 +18,7 @@
         {
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.Name, new { @class = "form-label" })
+                    <label class="form-label">Proje İsmi</label>
                     @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Proje İsmi Giriniz" })
                     @Html.ValidationMessageFor(x => x.Name)
                 </div>
@@ -26,7 +26,7 @@
             <br />
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.ProjectType, new { @class = "form-label" })
+                    <label class="form-label">Proje Tipi</label>
                     @Html.DropDownListFor(x => x.ProjectType, new List<SelectListItem>
                 {
                 new SelectListItem { Text = "Peyzaj", Value = "1" },
@@ -40,7 +40,7 @@
             <br />
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.Field, new { @class = "form-label" })
+                    <label class="form-label">Proje Alanı</label>
                     @Html.DropDownListFor(x => x.Field, new List<SelectListItem>
                 {
                 new SelectListItem { Text = "0-60 m2", Value = "1" },
@@ -59,14 +59,16 @@
                 </div>
             </div>
             <br />
-
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.Description, new { @class = "form-label" })
-                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8" })
+                    <label class="form-label">Açıklama</label>
+                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8", oninput = "countWords(this)" })
                     @Html.ValidationMessageFor(x => x.Description)
+                    <div id="wordCountMessage"></div>
                 </div>
             </div>
+
+           
             <br />
             <br />
             <br />
@@ -78,15 +80,18 @@
 
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.EndDate, new { @class = "form-label" })
-                    <input type="date" name="EndDate" class="form-control" />
-                    @Html.ValidationMessageFor(x => x.EndDate)
+                    <label class="form-label">Açıklama</label>
+                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama Girin", rows = "8", oninput = "countWords(this)" })
+                    @Html.ValidationMessageFor(x => x.Description)
+                    <div id="wordCountMessage">En az 50 kelime girmelisiniz.</div>
                 </div>
             </div>
             <br />
+            <br />
+            <br />
             <div class="card mb-3">
                 <div class="form-group">
-                    @Html.LabelFor(x => x.Price, new { @class = "form-label" })
+                    <label class="form-label">Fiyat</label>
                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz", id = "Price" })
                     @Html.ValidationMessageFor(x => x.Price)
                 </div>
@@ -148,4 +153,20 @@
             $('#Price').val(value);
         });
     });
+</script>
+
+<script>
+    function countWords(textArea) {
+        var description = textArea.value;
+        var words = description.split(/\s+/).filter(function (word) {
+            return word.length > 0;
+        });
+
+        var wordCount = words.length;
+        var remainingWords = 50 - wordCount;
+        remainingWords = Math.max(0, remainingWords);
+
+        var wordCountMessage = document.getElementById("wordCountMessage");
+        wordCountMessage.textContent = "En az " + remainingWords + " kelime girmelisiniz.";
+    }
 </script>

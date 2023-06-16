@@ -76,18 +76,6 @@ namespace Arch.UI.Controllers
             return View(myvalue);
         }
 
-
-
-
-        // Bir tane yarışmam 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(int id)
-        //{
-        //    Competition compatition = await _competitonService.GetByIdAsync(id);
-        //    return View(compatition);
-        //}
-
-        // Yarışma oluştur.
         [HttpGet]
         public IActionResult Create()
         {

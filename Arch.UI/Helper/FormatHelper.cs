@@ -37,5 +37,20 @@ namespace Arch.UI.Helper
                     return "other";
             }
         }
+
+        // Telefon Formatı
+        public static string FormatPhoneNumber(string phoneNumber)
+        {
+            if (phoneNumber.Length == 10)
+            {
+                phoneNumber = "+90" + phoneNumber;
+            }
+            else if (phoneNumber.Length == 11)
+            {
+                phoneNumber = "+9" + phoneNumber;
+            }
+
+            return phoneNumber;
+        }
     }
 }
