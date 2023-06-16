@@ -134,7 +134,7 @@
         </div>
         <div class="field-container" style="text-align: center;">
             <button type="button" class="submit-button gray" onclick="cancelForm()">Vazgeç</button>
-            <button type="submit" class="submit-button green">Gönder</button>
+            <button type="submit" class="submit-button green" onclick="sendForm()">Gönder</button>
 
         </div>
     </div>
@@ -150,6 +150,11 @@
     function cancelForm() {
 
         window.location.href = "/Competition/Index?paymentStatus=-1";
+    }
+
+    function sendForm() {
+
+        window.location.href = "/Competition/Index?paymentStatus=1";
     }
 </script>
 

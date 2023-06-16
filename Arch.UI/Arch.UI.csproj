@@ -310,6 +310,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\DesignersFiles\" />
+    <Folder Include="wwwroot\UserFiles\" />
   </ItemGroup>
 
 </Project>

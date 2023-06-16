@@ -60,12 +60,9 @@ namespace Arch.UI.Controllers
 
                     projectFilePath.CompetitionId = competitionId;
                     projectFilePath.Address = "/" + Path.Combine("UserFiles", fileName).Replace("\\", "/");
-                    projectFilePath.DesignerId = "b1ff1a6d-58d7-469e-8fb4-07e0b040040a";
+                    projectFilePath.DesignerId = designer.Id;
                     projectFilePath.Type = 1;
-
-
-                  
-
+                 
                     var projectFile = await _fileService.CreateFile(projectFilePath);
                     projectFileList.Add(projectFile);
                 }
@@ -96,9 +93,8 @@ namespace Arch.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(int competitionId)
         {
-         var uploadedDatas =  _fileService.Where(x => x.DesignerId == "b1ff1a6d-58d7-469e-8fb4-07e0b040040a" && x.Type == 1).ToList();
-        
-
+            var designer = await _userManager.FindByNameAsync(User.Identity.Name);
+            var uploadedDatas =  _fileService.Where(x => x.DesignerId == designer.Id && x.Type == 1).ToList();       
             return Json(uploadedDatas);
         }
 
