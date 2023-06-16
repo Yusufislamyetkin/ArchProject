@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,6 +24,10 @@ namespace Arch.BussinessLayer.Dtos
         public int Price { get; set; }
         [Required(ErrorMessage = "Lütfen Proje Bitiş Tarihini boş geçmeyiniz...")]
         public DateTime EndDate { get; set; }
+
+        [RequiredFile(ErrorMessage = "Dosya yüklenmedi. Lütfen dosya seçiniz.")]
+        public IFormFile[] files { get; set; }
+
         public string? CustomerId { get; set; } // Customer referansı için CustomerId
     }
 
@@ -49,6 +54,25 @@ namespace Arch.BussinessLayer.Dtos
             }
 
             return ValidationResult.Success;
+        }
+    }
+
+    public class RequiredFileAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            if (value is IFormFile[] files)
+            {
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
