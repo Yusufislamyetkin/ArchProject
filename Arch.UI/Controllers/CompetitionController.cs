@@ -29,10 +29,8 @@ namespace Arch.UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int paymentStatus)
+        public async Task<IActionResult> Index()
         {
-            ViewData["PaymentStatus"] = paymentStatus;
-
             return View();
         }
 
@@ -64,7 +62,7 @@ namespace Arch.UI.Controllers
         }
 
         // Benim yarışmalarım
-        public async Task<IActionResult> MyAllCompetitions(bool CreateStatus)
+        public async Task<IActionResult> MyAllCompetitions(bool CreateStatus, int paymentStatus)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var myvalue = _competitonService.Where(x => x.CustomerId == user.Id).ToList();
@@ -72,6 +70,7 @@ namespace Arch.UI.Controllers
             myvalue.Reverse();
 
             ViewData["CreateStatus"] = CreateStatus;
+            ViewData["PaymentStatus"] = paymentStatus;
 
             return View(myvalue);
         }

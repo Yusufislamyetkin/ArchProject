@@ -8,7 +8,7 @@ namespace Arch.UI.Controllers
         [HttpGet]
         public IActionResult FillCard(int id)
         {
-            
+            ViewBag.compId = id;
             return View();
         }
 
