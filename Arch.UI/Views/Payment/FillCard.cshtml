@@ -149,12 +149,12 @@
 
     function cancelForm() {
 
-        window.location.href = "/Competition/Index?paymentStatus=-1";
+        window.location.href = "/Competition/MyAllCompetitions?paymentStatus=-1";
     }
 
     function sendForm() {
 
-        window.location.href = "/Competition/Index?paymentStatus=1";
+        window.location.href = "/Blog/GetBlogWithCompetitionId?paymentStatus=1&id=@ViewBag.compId";
     }
 </script>
 

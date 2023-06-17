@@ -549,7 +549,7 @@
 
 <script>
     $(document).ready(function() {
-        var competitionId = @ViewBag.competition.CompetitionId; // Competition ID değerini burada belirleyin
+        var competitionId = @ViewBag.competition.Id; // Competition ID değerini burada belirleyin
 
         // Dosyaların yüklenmesi
         $('#uploadButton').on('click', function() {
@@ -781,3 +781,20 @@
         evt.currentTarget.classList.add("active");
     }
 </script>
+
+
+
+@if ((int)ViewData["PaymentStatus"] == 1)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css" />
+
+    <script>
+        Swal.fire({
+            title: "Ödeme İşlemi Tamamlandı!",
+            text: "Yarışmanız yayınlanmaya başlamıştır.",
+            icon: "success",
+            confirmButtonText: "Tamam"
+        });
+    </script>
+}

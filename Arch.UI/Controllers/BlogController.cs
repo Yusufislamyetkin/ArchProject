@@ -28,16 +28,19 @@ namespace Arch.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBlogWithCompetitionId(int id)
+        public async Task<IActionResult> GetBlogWithCompetitionId(int id, int paymentStatus)
         {
-
+            #region Veri Çekme
             var blogComments = await _blogService.Where(x => x.CompetitionId == id).Include(x => x.Author).ToListAsync();
-
             blogComments.Reverse();
             var DataComp = await _competitonService.GetByIdAsync(id);
             ViewBag.UserCount = _designerUserService.Where(x => x.CompetitionId == id).Count();
             ViewBag.competition = DataComp;
             ViewBag.EndDate = DataComp.EndDate.ToString("yyyy-MM-dd HH:mm:ss");
+            #endregion
+
+            #region Dosyaları Ekleme 
+
             var files = await _fileService.GetByCompId(id);
 
             List<FileFormat> ff = new List<FileFormat>();
@@ -54,19 +57,34 @@ namespace Arch.UI.Controllers
             }
 
             var fileFormats = ff.ToList();
-       
-            var mainImage = fileFormats.Where(x => x.FileType == "image").FirstOrDefault().Address;
 
-            if (mainImage == null)
+            FileFormat mainImage = fileFormats.FirstOrDefault(x => x.FileType == "image");
+
+            if (mainImage == null || mainImage.Address == null)
             {
-                mainImage = "/UserFiles/mimari.jpg";
+                mainImage = new FileFormat();
+                mainImage.Address = "/UserFiles/mimari.jpg";
             }
-
+            else
+            {
+                ViewBag.mainImage = mainImage.Address;
+            }
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.ProfilPhoto = user.ProfilPhoto;
 
-            ViewBag.mainImage = mainImage;
+           
             ViewBag.files = fileFormats;
+            #endregion
+
+            ViewData["PaymentStatus"] = paymentStatus;
+            #region Ödeme Bildirimi
+            if (paymentStatus == 1)
+            {        
+                DataComp.Status = 2;
+                await _competitonService.UpdateAsync(DataComp);
+                await _competitonService.UnitOfWorkAsync();
+            }
+            #endregion
 
             return View(blogComments);
         }
