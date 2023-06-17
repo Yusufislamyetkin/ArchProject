@@ -75,9 +75,8 @@ namespace Arch.UI.Controllers
            
             ViewBag.files = fileFormats;
             #endregion
-
-            ViewData["PaymentStatus"] = paymentStatus;
             #region Ödeme Bildirimi
+            ViewData["PaymentStatus"] = paymentStatus;
             if (paymentStatus == 1)
             {        
                 DataComp.Status = 2;

@@ -290,43 +290,43 @@
 
 <style>
 
-            #fileInput {
-            margin-bottom: 10px;
+    #fileInput {
+        margin-bottom: 10px;
+    }
+
+    #uploadButton {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    #fileList {
+        margin-top: 20px;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+    }
+
+        .file-item span {
+            margin-right: 10px;
         }
 
-        #uploadButton {
-            padding: 10px 20px;
-            background-color: #4caf50;
+        .file-item button {
+            padding: 5px 10px;
+            background-color: #e74c3c;
             color: #fff;
             border: none;
             cursor: pointer;
         }
-
-        #fileList {
-            margin-top: 20px;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-        }
-
-            .file-item span {
-                margin-right: 10px;
-            }
-
-            .file-item button {
-                padding: 5px 10px;
-                background-color: #e74c3c;
-                color: #fff;
-                border: none;
-                cursor: pointer;
-            }
 
     /* Style the tab */
     .tab {
@@ -548,11 +548,11 @@
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var competitionId = @ViewBag.competition.Id; // Competition ID değerini burada belirleyin
 
         // Dosyaların yüklenmesi
-        $('#uploadButton').on('click', function() {
+        $('#uploadButton').on('click', function () {
             var files = $('#fileInput')[0].files;
             if (files.length === 0) {
                 Swal.fire('Hata', 'Lütfen yüklenmesi için bir dosya seçin.', 'error');
@@ -572,11 +572,11 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(result) {
+                success: function (result) {
                     showFileList(result);
                     Swal.fire('Başarılı', 'Dosya başarı ile yüklendi.', 'success');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.fire('Hata', 'Dosya yüklenirken bir hata oluştu.', 'error');
                     console.error(error);
                 }
@@ -602,7 +602,7 @@
                 var fileName = $('<span>').text(file.address).addClass('file-name');
                 var removeButton = $('<button>').text('Kaldır').attr('data-file-id', file.id).addClass('remove-button');
 
-                removeButton.on('click', function() {
+                removeButton.on('click', function () {
                     var fileId = $(this).attr('data-file-id');
                     removeFile(fileId);
                 });
@@ -626,17 +626,17 @@
                 showCancelButton: true,
                 confirmButtonText: 'Kaldır',
                 cancelButtonText: 'Vazgeç'
-            }).then(function(result) {
+            }).then(function (result) {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: '/File/Remove',
                         type: 'POST',
                         data: { fileId: fileId },
-                        success: function() {
+                        success: function () {
                             Swal.fire('Başarılı', 'Dosya başarı ile kaldırıldı.', 'success');
                             getFileList(); // Dosya listesini güncelle
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             Swal.fire('Error', 'Dosya kaldırılırken bir hata oluştu.', 'error');
                             console.error(error);
                         }
@@ -651,10 +651,10 @@
                 url: '/File/Get',
                 type: 'GET',
                 data: { competitionId: competitionId },
-                success: function(result) {
+                success: function (result) {
                     showFileList(result);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.fire('Error', 'An error occurred while getting the file list.', 'error');
                     console.error(error);
                 }
@@ -692,25 +692,29 @@
             let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
-            document.querySelector(".days").innerHTML =
-                days < 100 && days > 10 ? `0${days}` : days < 10 ? `00${days}` : days;
-            document.querySelector(".hours").innerHTML = hours < 10 ? `0${hours}` : hours;
-            document.querySelector(".minutes").innerHTML =
-                minutes < 10 ? `0${minutes}` : minutes;
-            document.querySelector(".seconds").innerHTML =
-                seconds < 10 ? `0${seconds}` : seconds;
+
+            // Baştaki tüm sıfırları sil
+            days = days.toString().replace(/^0+/, '');
+            hours = hours.toString().replace(/^0+/, '');
+            minutes = minutes.toString().replace(/^0+/, '');
+            seconds = seconds.toString().replace(/^0+/, '');
+
+            document.querySelector(".days").innerHTML = days;
+            document.querySelector(".hours").innerHTML = hours;
+            document.querySelector(".minutes").innerHTML = minutes;
+            document.querySelector(".seconds").innerHTML = seconds;
         }
     }, 1000);
 
-    $(function() {
-        $('#commentForm').submit(function(e) {
+    $(function () {
+        $('#commentForm').submit(function (e) {
             e.preventDefault();
             var commentText = $('#commentInput').val();
             $.ajax({
                 url: '/Blog/Add',
                 method: 'POST',
                 data: { CompetitionId: $('[name="CompetitionId"]').val(), Content: commentText },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         var commentHtml = '<div class="d-flex flex-row p-3"><img src="@ViewBag.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3"><div class="w-100"><div class="d-flex justify-content-between align-items-center"><div class="d-flex flex-row align-items-center"><span class="mr-2">' + response.userName + '</span><small class="c-badge">Top Comment</small></div><small>' + response.timeAgo + '</small></div><p class="text-justify comment-text mb-0">' + response.commentText + '</p></div></div>';
                         $('#commentSection').prepend(commentHtml);
@@ -728,7 +732,7 @@
                         });
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(error);
                     Swal.fire({
                         icon: 'error',
