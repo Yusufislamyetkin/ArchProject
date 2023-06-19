@@ -93,7 +93,7 @@
             <div class="card mb-3">
                 <div class="form-group">
                     <label class="form-label">Bitiş Tarihi</label>
-                    <input type="date" name="EndDate" class="form-control" min="@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")" required />
+                    <input type="date" name="EndDate" class="form-control" required />
                     <span class="text-danger" id="endDateValidation"></span>
                 </div>
             </div>
@@ -203,16 +203,20 @@
         var endDateInput = document.querySelector("input[name='EndDate']");
         var endDateValidation = document.getElementById("endDateValidation");
 
+        var today = new Date();
+        today.setDate(today.getDate() + 1);
+        var minDate = today.toISOString().split("T")[0];
+        endDateInput.setAttribute("min", minDate);
+
         endDateInput.addEventListener("input", function () {
             var selectedDate = new Date(this.value);
             var minimumDate = new Date();
-            minimumDate.setDate(minimumDate.getDate() + 7);
+            minimumDate.setDate(minimumDate.getDate() + 1);
 
             if (selectedDate < minimumDate) {
-                endDateValidation.textContent = "Proje bitiş tarihi en erken 1 hafta sonra olabilir.";
-                endDateInput.setCustomValidity("Proje bitiş tarihi en erken 1 hafta sonra olabilir.");
-            } else {
                 endDateValidation.textContent = "";
+                endDateInput.setCustomValidity("Proje bitiş tarihi en erken 1 gün sonra olabilir.");
+            } else {
                 endDateInput.setCustomValidity("");
             }
         });

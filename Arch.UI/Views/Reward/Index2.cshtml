@@ -1,0 +1,90 @@
+﻿@model List<Arch.EntityLayer.Entities.ProjectFilePath>
+
+<h2>Tasarımcılar ve Dosyaları</h2>
+
+<table class="ranking-table">
+    <thead>
+        <tr>
+            <th>Tasarımcı</th>
+            <th>Seçim</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var designer in Model.Select(d => d.Designer.UserName).Distinct())
+        {
+            var miniCount = Model.Count(d => d.Designer.UserName == designer && d.Type == 7);
+            var miniDisabled = miniCount >= 7; // Mini ödül seçeneği pasif mi?
+
+            <tr>
+                <td>@designer</td>
+                <td>
+                    <select class="ranking-select" onchange="disableSelection(this)">
+                        <option value="">Seçim Yap</option>
+                        @for (int i = 1; i <= 3; i++)
+                        {
+                            <option value="@i">@i. Seçim</option>
+                        }
+                    </select>
+                    <input type="hidden" name="CompetitionId" value="@Model.FirstOrDefault(d => d.Designer.UserName == designer)?.CompetitionId" />
+                    <input type="hidden" name="DesignerId" value="@Model.FirstOrDefault(d => d.Designer.UserName == designer)?.DesignerId" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" onclick="saveSelections()">Seçimleri Kaydet</button>
+
+
+<script>
+    function disableSelection(selectElement) {
+        // Diğer <select> öğelerini devre dışı bırak
+        var selectElements = document.getElementsByClassName('ranking-select');
+        for (var i = 0; i < selectElements.length; i++) {
+            var currentSelect = selectElements[i];
+
+            if (currentSelect !== selectElement) {
+                var selectedValue = selectElement.value;
+                var selectedIndex = selectElement.selectedIndex;
+
+                // Seçilen seçeneği diğer <select> öğelerinden kaldır
+                for (var j = 0; j < currentSelect.options.length; j++) {
+                    if (j === selectedIndex || currentSelect.options[j].value === selectedValue) {
+                        currentSelect.options[j].disabled = true;
+                    } else {
+                        currentSelect.options[j].disabled = false;
+                    }
+                }
+            }
+        }
+    } function saveSelections() {
+        var selections = [];
+
+        var selectElements = document.getElementsByClassName('ranking-select');
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            var competitionId = selectElement.parentNode.querySelector('input[name="CompetitionId"]').value;
+            var designerId = selectElement.parentNode.querySelector('input[name="DesignerId"]').value;
+            var selectedRanking = selectElement.value;
+
+            selections.push({
+                CompetitionId: parseInt(competitionId),
+                DesignerId: designerId,
+                SelectedRanking: parseInt(selectedRanking)
+            });
+        }
+
+        // Seçimleri Controller methoduna gönder
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Reward/SaveSelections', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log(JSON.stringify(selections));
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Başarıyla kaydedildiğinde yapılacak işlemler
+                console.log('Seçimler başarıyla kaydedildi.');
+            }
+        };
+        xhr.send(JSON.stringify(selections));
+    }
+</script>

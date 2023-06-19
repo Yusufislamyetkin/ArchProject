@@ -186,7 +186,7 @@
                                                     </div>
 
                                                     <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
-                                                        <img src="@ViewBag.ProfilPhoto" width="50" class="rounded-circle mr-2">
+                                                        <img src="@ViewBag.ProfilPhoto" width="50" height="50" class="rounded-circle mr-3">
                                                         <form id="commentForm" class="d-flex flex-grow-1">
                                                             <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
                                                             <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
@@ -198,7 +198,7 @@
                                                         @foreach (var item in Model)
                                                         {
                                                             <div class="d-flex flex-row p-3">
-                                                                <img src="@ViewBag.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3">
+                                                                <img src="@item.Author.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3">
                                                                 <div class="w-100">
                                                                     <div class="d-flex justify-content-between align-items-center">
                                                                         <div class="d-flex flex-row align-items-center">
@@ -266,18 +266,76 @@
                             </div>
 
 
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <div class="tab-pane" id="ProjeDosyaları">
+                                    <br>
+                                    <h1 style="color:slateblue" class="text-center">Tasarımcıların Yüklediği Projeler</h1>
+                                    <a href="@Url.Action("DownloadCompetitionFiles", new { competitionId = @ViewBag.competition.Id })">Tüm Projeleri İndir</a>
+                                    <br>
+                                    <br>
+                                    <table id="designers">
+                                        <thead>
+                                            <tr>
+                                                <th>Tasarımcı</th>
+                                                <th>İndir</th>
+                                                <th>Tasarımcı Seç</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var designerFiles in ViewBag.groupedFiles)
+                                            {
+                                                <tr>
+                                                    <td>@designerFiles.Name</td>
+                                                    <td>
+                                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-abc123" crossorigin="anonymous" />
+                                                        <a href="@Url.Action("DownloadDesignerFiles", new { designerName = designerFiles.Name })" download>
+                                                            <i class="fas fa-download"></i>
+                                                        </a>
+                                                    </td>
 
-                            <div class="tab-pane" id="ProjeDosyaları">
-                                <br />
-                                <br />
-                                <h4 id="fileStatus">Yarışma için hiç dosya yüklemediniz, yarışmaya katılmak için dosya yükleyin.</h4>
-                                <br />
-                                <br />
-                                <input type="file" id="fileInput" multiple />
-                                <button id="uploadButton">Upload</button>
+                                                    <td>
+                                                        <form method="post" action="@Url.Action("SaveSelection", "ControllerName")">
+                                                            <input type="hidden" name="designerId" value="@ViewBag.DesignerId" />
+                                                            <input type="hidden" name="compId" value="@ViewBag.CompId" />
+                                                            <select class="ranking-select" name="selectedOption" onchange="disableSelection(this)">
+                                                                <option value="">Seçim Yap</option>
+                                                                @for (int i = 1; i <= 3; i++)
+                                                                {
+                                                                    <option value="@i">@i. olarak seç</option>
+                                                                }
+                                                            </select>
+                                                            <input style="background-color: slateblue; color: white; margin-left: 10px;" type="submit" value="Ödül Ver" />
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                              
 
-                                <div id="fileList"></div>
-                            </div>
+
+
+                                </div>
+
+                            }
+
+                            @if (User.IsInRole("Designer"))
+                            {
+                                <div class="tab-pane" id="ProjeDosyaları">
+                                    <br />
+                                    <br />
+                                    <h4 id="fileStatus">Yarışma için hiç dosya yüklemediniz, yarışmaya katılmak için dosya yükleyin.</h4>
+                                    <br />
+                                    <br />
+                                    <input type="file" id="fileInput" multiple />
+                                    <button id="uploadButton">Upload</button>
+
+                                    <div id="fileList"></div>
+                                </div>
+
+                            }
+
                             <!-- /.nav-tabs-custom -->
                         </div>
                         <!-- /.col -->
@@ -290,43 +348,83 @@
 
 <style>
 
-            #fileInput {
-            margin-bottom: 10px;
+    #designers {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        #designers td,
+        #designers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
 
-        #uploadButton {
-            padding: 10px 20px;
-            background-color: #4caf50;
+        #designers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #designers tr:hover {
+            background-color: #ddd;
+        }
+
+        #designers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #6A5ACD;
+            color: white;
+        }
+
+    .ranking-select {
+        cursor: pointer;
+    }
+
+        .ranking-select option:hover {
+            background-color: #6A5ACD;
+            color: white;
+        }
+
+    #fileInput {
+        margin-bottom: 10px;
+    }
+
+    #uploadButton {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    #fileList {
+        margin-top: 20px;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+    }
+
+        .file-item span {
+            margin-right: 10px;
+        }
+
+        .file-item button {
+            padding: 5px 10px;
+            background-color: #e74c3c;
             color: #fff;
             border: none;
             cursor: pointer;
         }
-
-        #fileList {
-            margin-top: 20px;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-        }
-
-            .file-item span {
-                margin-right: 10px;
-            }
-
-            .file-item button {
-                padding: 5px 10px;
-                background-color: #e74c3c;
-                color: #fff;
-                border: none;
-                cursor: pointer;
-            }
 
     /* Style the tab */
     .tab {
@@ -548,11 +646,11 @@
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var competitionId = @ViewBag.competition.Id; // Competition ID değerini burada belirleyin
 
         // Dosyaların yüklenmesi
-        $('#uploadButton').on('click', function() {
+        $('#uploadButton').on('click', function () {
             var files = $('#fileInput')[0].files;
             if (files.length === 0) {
                 Swal.fire('Hata', 'Lütfen yüklenmesi için bir dosya seçin.', 'error');
@@ -572,11 +670,11 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(result) {
+                success: function (result) {
                     showFileList(result);
                     Swal.fire('Başarılı', 'Dosya başarı ile yüklendi.', 'success');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.fire('Hata', 'Dosya yüklenirken bir hata oluştu.', 'error');
                     console.error(error);
                 }
@@ -602,7 +700,7 @@
                 var fileName = $('<span>').text(file.address).addClass('file-name');
                 var removeButton = $('<button>').text('Kaldır').attr('data-file-id', file.id).addClass('remove-button');
 
-                removeButton.on('click', function() {
+                removeButton.on('click', function () {
                     var fileId = $(this).attr('data-file-id');
                     removeFile(fileId);
                 });
@@ -626,17 +724,17 @@
                 showCancelButton: true,
                 confirmButtonText: 'Kaldır',
                 cancelButtonText: 'Vazgeç'
-            }).then(function(result) {
+            }).then(function (result) {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: '/File/Remove',
                         type: 'POST',
                         data: { fileId: fileId },
-                        success: function() {
+                        success: function () {
                             Swal.fire('Başarılı', 'Dosya başarı ile kaldırıldı.', 'success');
                             getFileList(); // Dosya listesini güncelle
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             Swal.fire('Error', 'Dosya kaldırılırken bir hata oluştu.', 'error');
                             console.error(error);
                         }
@@ -651,10 +749,10 @@
                 url: '/File/Get',
                 type: 'GET',
                 data: { competitionId: competitionId },
-                success: function(result) {
+                success: function (result) {
                     showFileList(result);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.fire('Error', 'An error occurred while getting the file list.', 'error');
                     console.error(error);
                 }
@@ -692,25 +790,29 @@
             let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
-            document.querySelector(".days").innerHTML =
-                days < 100 && days > 10 ? `0${days}` : days < 10 ? `00${days}` : days;
-            document.querySelector(".hours").innerHTML = hours < 10 ? `0${hours}` : hours;
-            document.querySelector(".minutes").innerHTML =
-                minutes < 10 ? `0${minutes}` : minutes;
-            document.querySelector(".seconds").innerHTML =
-                seconds < 10 ? `0${seconds}` : seconds;
+
+            // Sadece tek bir sıfır varsa göster
+            days = days === 0 ? '0' : days.toString();
+            hours = hours === 0 ? '0' : hours.toString().padStart(2, '0');
+            minutes = minutes === 0 ? '0' : minutes.toString().padStart(2, '0');
+            seconds = seconds === 0 ? '0' : seconds.toString().padStart(2, '0');
+
+            document.querySelector(".days").innerHTML = days;
+            document.querySelector(".hours").innerHTML = hours;
+            document.querySelector(".minutes").innerHTML = minutes;
+            document.querySelector(".seconds").innerHTML = seconds;
         }
     }, 1000);
 
-    $(function() {
-        $('#commentForm').submit(function(e) {
+    $(function () {
+        $('#commentForm').submit(function (e) {
             e.preventDefault();
             var commentText = $('#commentInput').val();
             $.ajax({
                 url: '/Blog/Add',
                 method: 'POST',
                 data: { CompetitionId: $('[name="CompetitionId"]').val(), Content: commentText },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         var commentHtml = '<div class="d-flex flex-row p-3"><img src="@ViewBag.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3"><div class="w-100"><div class="d-flex justify-content-between align-items-center"><div class="d-flex flex-row align-items-center"><span class="mr-2">' + response.userName + '</span><small class="c-badge">Top Comment</small></div><small>' + response.timeAgo + '</small></div><p class="text-justify comment-text mb-0">' + response.commentText + '</p></div></div>';
                         $('#commentSection').prepend(commentHtml);
@@ -728,7 +830,7 @@
                         });
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(error);
                     Swal.fire({
                         icon: 'error',
@@ -798,3 +900,27 @@
         });
     </script>
 }
+
+<script>
+    function disableSelection(selectElement) {
+        // Diğer <select> öğelerini devre dışı bırak
+        var selectElements = document.getElementsByClassName('ranking-select');
+        for (var i = 0; i < selectElements.length; i++) {
+            var currentSelect = selectElements[i];
+
+            if (currentSelect !== selectElement) {
+                var selectedValue = selectElement.value;
+                var selectedIndex = selectElement.selectedIndex;
+
+                // Seçilen seçeneği diğer <select> öğelerinden kaldır
+                for (var j = 0; j < currentSelect.options.length; j++) {
+                    if (j === selectedIndex || currentSelect.options[j].value === selectedValue) {
+                        currentSelect.options[j].disabled = true;
+                    } else {
+                        currentSelect.options[j].disabled = false;
+                    }
+                }
+            }
+        }
+    }
+</script>

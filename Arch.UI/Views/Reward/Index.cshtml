@@ -1,0 +1,87 @@
+﻿@model List<Arch.EntityLayer.Entities.ProjectFilePath>
+
+<h2>Tasarımcılar ve Dosyaları</h2>
+
+<table class="ranking-table">
+    <thead>
+        <tr>
+            <th>Tasarımcı</th>
+            <th>Seçim</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var designer in Model.Select(d => d.Designer.UserName).Distinct())
+        {
+            <tr>
+                <td>@designer</td>
+                <td>
+                    <select class="ranking-select" onchange="disableSelection(this)">
+                        <option value="">Seçim Yap</option>
+                        @for (int i = 1; i <= 3; i++)
+                        {
+                            <option value="@i">@i. Seçim</option>
+                        }
+                        <option value="mini">Mini Ödül</option>
+                    </select>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function disableSelection(selectElement) {
+        // Diğer <select> öğelerini devre dışı bırak
+        var selectElements = document.getElementsByClassName('ranking-select');
+        for (var i = 0; i < selectElements.length; i++) {
+            var currentSelect = selectElements[i];
+
+            if (currentSelect !== selectElement) {
+                var selectedValue = selectElement.value;
+                var selectedIndex = selectElement.selectedIndex;
+
+                // Seçilen seçeneği diğer <select> öğelerinden kaldır
+                for (var j = 0; j < currentSelect.options.length; j++) {
+                    if (j === selectedIndex || currentSelect.options[j].value === selectedValue) {
+                        currentSelect.options[j].disabled = true;
+                    } else {
+                        currentSelect.options[j].disabled = false;
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    .ranking-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .ranking-table th,
+        .ranking-table td {
+            padding: 8px;
+            text-align: center;
+        }
+
+    .ranking-select {
+        width: 100%;
+        padding: 4px;
+        font-size: 14px;
+    }
+
+    .submit-button {
+        margin-top: 10px;
+        padding: 8px 16px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+</style>

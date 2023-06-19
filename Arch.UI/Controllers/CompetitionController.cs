@@ -1,6 +1,7 @@
 ﻿using Arch.BussinessLayer.Abstract;
 using Arch.BussinessLayer.Dtos;
 using Arch.EntityLayer.Entities;
+using Arch.UI.Common;
 using Arch.UI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -119,7 +120,7 @@ namespace Arch.UI.Controllers
                         ProjectFilePath projectFilePath = new ProjectFilePath();
                         projectFilePath.CompetitionId = competition.Id;
                         projectFilePath.Address = "/" + Path.Combine("UserFiles", fileName).Replace("\\", "/");
-
+                        projectFilePath.Type = (int)CompetitionType.CompCreate;
                         await _fileService.CreateFile(projectFilePath);
                     }
                 }
