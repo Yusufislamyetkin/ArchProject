@@ -10,6 +10,7 @@ namespace Arch.BussinessLayer.Abstract
     public interface IFileService : IService<ProjectFilePath>
     {
         Task<ProjectFilePath> CreateFile(ProjectFilePath projectFilePath);
-        Task<List<ProjectFilePath>> GetByCompId(int Id);
+        Task<List<ProjectFilePath>> GetByCompIdForView(int Id);
+        Task<List<ProjectFilePath>> GetByCompIdForTable(int Id);
     }
 }

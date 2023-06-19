@@ -27,10 +27,18 @@ namespace Arch.BussinessLayer.Concrete
             return projectFilePath;
         }
 
-        public async Task<List<ProjectFilePath>> GetByCompId(int Id)
+        // Yarışma bilgilerinde yer alan dosyalar için
+        public async Task<List<ProjectFilePath>> GetByCompIdForView(int Id)
         {
-            return await _repository.Where(x => x.CompetitionId == Id).ToListAsync();
+            return await _repository.Where(x => x.CompetitionId == Id && x.Type == 0).ToListAsync();
         }
+
+        // Yarışmaya katılan tasarımcıların yüklediği dosyalara erişmek için
+        public async Task<List<ProjectFilePath>> GetByCompIdForTable(int Id)
+        {
+            return await _repository.Where(x => x.CompetitionId == Id && x.Type == 1).Include(x=> x.Designer).ToListAsync();
+        }
+
 
 
 
