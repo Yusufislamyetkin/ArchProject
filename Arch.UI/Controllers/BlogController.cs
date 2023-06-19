@@ -54,8 +54,8 @@ namespace Arch.UI.Controllers
                 {
                     Address = record.Address,
                     FileName = FormatHelper.GetFileName(record.Address),
-                    FileType = FormatHelper.GetFileType(record.Address),CompId = record.CompetitionId,
-                    
+                    FileType = FormatHelper.GetFileType(record.Address)
+
                 };
 
                 ff.Add(file);
@@ -86,18 +86,20 @@ namespace Arch.UI.Controllers
             #region UploadDosyalarıYükleme
 
             var filesForTable = await _fileService.GetByCompIdForTable(id);
-            
-            var groupedFiles = filesForTable.GroupBy(file => file.Designer)
-                                 .Select(group => new DesignerFiles
-                                 {
-                                     Name = group.Key.ToString(),
-                                     Files = group.ToList()
-                                 })
-                                 .ToList();
+
+            var groupedFiles = filesForTable.GroupBy(file => new { file.DesignerId, file.Designer })
+                 .Select(group => new DesignerFiles
+                 {
+                     DesignerId = group.Key.DesignerId,
+                     Name = group.Key.Designer.ToString(),
+                     Files = group.ToList(),
+                 })
+                 .ToList();
 
             ViewBag.groupedFiles = groupedFiles;
 
-       
+
+
 
 
 
@@ -180,7 +182,7 @@ namespace Arch.UI.Controllers
 
         public async Task<IActionResult> DownloadCompetitionFiles(int competitionId)
         {
-            var competition =  await _competitonService.GetByIdAsync(competitionId);
+            var competition = await _competitonService.GetByIdAsync(competitionId);
             if (competition == null)
             {
                 return NotFound();

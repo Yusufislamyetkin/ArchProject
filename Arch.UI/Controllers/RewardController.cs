@@ -37,13 +37,25 @@ namespace Arch.UI.Controllers
             return View(filesForTable);
         }
 
+        // POST: /Reward/SaveSelections
         [HttpPost]
-        public IActionResult SaveSelections([FromBody] List<SelectionModel> selections)
+        public ActionResult SaveSelections(List<SelectionViewModel> selections)
         {
-            // selections verisini işleme
-            // ... burada yapılacak işlemler ...
+            var response = new { success = true };
+            return Json(response);
+            // selections listesini işle ve yarışma statülerini kaydet
 
-            return Ok(); // İşlem başarılı olduğunda 200 OK yanıtı döndürülür
+            foreach (var selection in selections)
+            {
+                string designerId = selection.DesignerId;
+                int selectedOption = selection.SelectedOption;
+
+                // Yarışma statüsünü kaydetmek için ilgili işlemleri yapın
+                // Örneğin, veritabanına kaydedebilirsiniz
+            }
+
+            // Başarılı bir şekilde kaydedildikten sonra bir sayfaya yönlendirin veya başka bir işlem yapın
+            return RedirectToAction("Index");
         }
     }
 }
