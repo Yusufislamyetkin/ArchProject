@@ -35,6 +35,11 @@ namespace Arch.EntityLayer.Entities
         public ICollection<ProjectFilePath>   ProjectFilePaths { get; set; }
 
 
+        public int? RewardId { get; set; } // Customer referansı için CustomerId
+        [JsonIgnore]
+        public ICollection<Reward>  Rewards { get; set; } // Customer referansı
+
+
 
 
     }

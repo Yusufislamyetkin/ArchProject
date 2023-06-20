@@ -1,4 +1,5 @@
 ﻿using Arch.BussinessLayer.Abstract;
+using Arch.BussinessLayer.Dtos;
 using Arch.EntityLayer.Entities;
 using Arch.UI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,41 +10,36 @@ namespace Arch.UI.Controllers
     public class RewardController : Controller
     {
         private readonly IFileService _fileService;
+        private readonly IRewardService  _rewardService;
 
-        public RewardController(IFileService fileService)
+        public RewardController(IFileService fileService, IRewardService rewardService)
         {
             _fileService = fileService;
+            _rewardService = rewardService;
         }
 
-        public async Task<IActionResult> Index(int id)
-        {
-            id = 12;
-            List<ProjectFilePath> filesForTable = await _fileService.GetByCompIdForTable(id);
 
-            var designers = filesForTable.Select(file => file.Designer).Distinct().ToList();
-            ViewBag.Designers = designers;
-
-            return View(filesForTable);
-        }
-
-        public async Task<IActionResult> Index2(int id)
-        {
-            id = 12;
-            List<ProjectFilePath> filesForTable = await _fileService.GetByCompIdForTable(id);
-
-            var designers = filesForTable.Select(file => file.Designer).Distinct().ToList();
-            ViewBag.Designers = designers;
-
-            return View(filesForTable);
-        }
-
+        // POST: /Reward/SaveSelections
         [HttpPost]
-        public IActionResult SaveSelections([FromBody] List<SelectionModel> selections)
+        public async Task<ActionResult> SaveSelections(List<SelectionViewModel> selections)
         {
-            // selections verisini işleme
-            // ... burada yapılacak işlemler ...
-
-            return Ok(); // İşlem başarılı olduğunda 200 OK yanıtı döndürülür
+            if (selections.Count != 0 )
+            {
+              var value =  await _rewardService.CreateRewardAddRange(selections);
+                if (value)
+                {
+                    var responseT = new { success = true };
+                    return Json(responseT);
+                }
+                else
+                {
+                    var responseF = new { success = false };
+                    return Json(responseF);
+                }
+              
+            }
+            var response = new { success = false };
+            return Json(response);
         }
     }
 }

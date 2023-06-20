@@ -1,4 +1,5 @@
-﻿@model List<Arch.EntityLayer.Entities.BlogPost>
+﻿@using Arch.UI.Models;
+@model List<Arch.EntityLayer.Entities.BlogPost>
 
 @{
     ViewBag.Title = "ContentArena";
@@ -274,45 +275,56 @@
                                     <a href="@Url.Action("DownloadCompetitionFiles", new { competitionId = @ViewBag.competition.Id })">Tüm Projeleri İndir</a>
                                     <br>
                                     <br>
-                                    <table id="designers">
-                                        <thead>
-                                            <tr>
-                                                <th>Tasarımcı</th>
-                                                <th>İndir</th>
-                                                <th>Tasarımcı Seç</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var designerFiles in ViewBag.groupedFiles)
-                                            {
+                                    <form id="rewardForm" method="post" action="@Url.Action("SaveSelections", "Reward")">
+                                        <table id="designers">
+                                            <thead>
                                                 <tr>
-                                                    <td>@designerFiles.Name</td>
-                                                    <td>
-                                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-abc123" crossorigin="anonymous" />
-                                                        <a href="@Url.Action("DownloadDesignerFiles", new { designerName = designerFiles.Name })" download>
-                                                            <i class="fas fa-download"></i>
-                                                        </a>
-                                                    </td>
-
-                                                    <td>
-                                                        <form method="post" action="@Url.Action("SaveSelection", "ControllerName")">
-                                                            <input type="hidden" name="designerId" value="@ViewBag.DesignerId" />
-                                                            <input type="hidden" name="compId" value="@ViewBag.CompId" />
-                                                            <select class="ranking-select" name="selectedOption" onchange="disableSelection(this)">
+                                                    <th>Tasarımcı</th>
+                                                    <th>İndir</th>
+                                                    <th>Tasarımcı Seç</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int Count = 0;
+                                                }
+                                                @foreach (var designer in ViewBag.groupedFiles as List<DesignerFiles>)
+                                                {
+                                                    <tr>
+                                                        <td>@designer.Name</td>
+                                                        <td>
+                                                            <a href="DownloadLink" download>
+                                                                <i class="fas fa-download"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" name="selections[@Count].DesignerId" value="@designer.DesignerId" />
+                                                            <input type="hidden" name="selections[@Count].DesignerName" value="@designer.Name" />
+                                                            <input type="hidden" name="selections[@Count].CompetitionId" value="@ViewBag.compId" />
+                                                            <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
                                                                 <option value="">Seçim Yap</option>
-                                                                @for (int i = 1; i <= 3; i++)
+                                                                @for (int j = 1; j <= 3; j++)
                                                                 {
-                                                                    <option value="@i">@i. olarak seç</option>
+                                                                    <option value="@j">@j. olarak seç</option>
                                                                 }
                                                             </select>
-                                                            <input style="background-color: slateblue; color: white; margin-left: 10px;" type="submit" value="Ödül Ver" />
-                                                        </form>
+                                                        </td>
+                                                    </tr>
+                                                    Count++;
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödül Ver" onclick="showConfirmationDialog()" />
+                                                        <!-- Form içerisine ekleyeceğiniz buton -->
+                                                        <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödülleri Yeniden Seç" onclick="resetSelections()" />
                                                     </td>
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                              
+                                            </tfoot>
+                                        </table>
+                                    </form>
+
 
 
 
@@ -901,26 +913,143 @@
     </script>
 }
 
+
+
+
 <script>
-    function disableSelection(selectElement) {
-        // Diğer <select> öğelerini devre dışı bırak
+    function resetSelections() {
         var selectElements = document.getElementsByClassName('ranking-select');
+
+        // Tüm seçim kutularını dolaş
         for (var i = 0; i < selectElements.length; i++) {
-            var currentSelect = selectElements[i];
+            var selectElement = selectElements[i];
 
-            if (currentSelect !== selectElement) {
-                var selectedValue = selectElement.value;
-                var selectedIndex = selectElement.selectedIndex;
+            // Seçili öğeyi temizle
+            selectElement.selectedIndex = 0;
 
-                // Seçilen seçeneği diğer <select> öğelerinden kaldır
-                for (var j = 0; j < currentSelect.options.length; j++) {
-                    if (j === selectedIndex || currentSelect.options[j].value === selectedValue) {
-                        currentSelect.options[j].disabled = true;
-                    } else {
-                        currentSelect.options[j].disabled = false;
-                    }
-                }
+            // Tüm seçenekleri aktif hale getir
+            for (var j = 0; j < selectElement.options.length; j++) {
+                selectElement.options[j].disabled = false;
             }
         }
+    }
+
+    function disableSelection(selectedOption) {
+        var selectElements = document.getElementsByClassName('ranking-select');
+
+        // Seçilen ödül
+        var selectedValue = selectedOption.value;
+
+        // Diğer seçim kutularını dolaş
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+
+            // Seçilen ödülü pasif yapma
+            selectElement.options[selectedValue].disabled = true;
+
+            // Seçilen ödülü içeren başka bir seçenek seçiliyse, pasif olanı aktif yapma
+            if (selectElement.selectedIndex !== -1 && selectElement.options[selectElement.selectedIndex].value === selectedValue) {
+                selectElement.options[selectedValue].disabled = false;
+            }
+        }
+    }
+</script>
+
+<script>
+    function showConfirmationDialog() {
+        var selections = document.querySelectorAll('.ranking-select');
+        var confirmationText = '';
+
+        var anySelectionMade = false; // Herhangi bir seçim yapıldı mı?
+
+        for (var i = 0; i < selections.length; i++) {
+            var selectedOption = selections[i].value;
+            var designerName = selections[i].closest('tr').querySelector('td:first-child').textContent.trim();
+
+            if (selectedOption !== '') {
+                anySelectionMade = true;
+                confirmationText += "<strong>" + designerName + "</strong> adlı kişiye " + selectedOption + ". lik ödülü verilecektir.<br>";
+            }
+        }
+
+        if (!anySelectionMade) {
+            Swal.fire({
+                title: 'Uyarı',
+                text: 'Hiçbir seçim yapmadınız.',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Onaylıyor musunuz?',
+            html: confirmationText,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Evet, onaylıyorum',
+            cancelButtonText: 'Hayır',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Form gönderme işlemi
+                handleFormSubmit();
+            }
+        });
+    }
+
+    function handleFormSubmit() {
+        // AJAX isteğiyle form verilerini gönder
+        var form = document.getElementById('rewardForm');
+        var formData = new FormData(form);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open(form.method, form.action, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Başarılı',
+                            text: 'Ödüller başarıyla dağıtılmıştır.',
+                            icon: 'success'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Hata',
+                            text: 'Ödüller dağıtılırken bir hata oluştu.',
+                            icon: 'error'
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Hata',
+                        text: 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.',
+                        icon: 'error'
+                    });
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+
+    function disableSelectedOptions(selectedOptions) {
+        for (var i = 0; i < selectedOptions.length; i++) {
+            var designerName = selectedOptions[i].designer;
+            var selectElement = getSelectElementByDesignerName(designerName);
+            if (selectElement) {
+                selectElement.disabled = true;
+            }
+        }
+    }
+
+    function getSelectElementByDesignerName(designerName) {
+        var options = document.querySelectorAll('.ranking-select');
+        for (var i = 0; i < options.length; i++) {
+            var currentDesignerName = options[i].closest('tr').querySelector('td:first-child').textContent.trim();
+            if (currentDesignerName === designerName) {
+                return options[i];
+            }
+        }
+        return null;
     }
 </script>
