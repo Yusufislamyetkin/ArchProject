@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/AdminLTE-3.0.4/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.jqueryui.min.css" rel="stylesheet" />
 </head>
 
 <br />
@@ -271,12 +272,19 @@
                             {
                                 <div class="tab-pane" id="ProjeDosyaları">
                                     <br>
-                                    <h1 style="color:slateblue" class="text-center">Tasarımcıların Yüklediği Projeler</h1>
-                                    <a href="@Url.Action("DownloadCompetitionFiles", new { competitionId = @ViewBag.competition.Id })">Tüm Projeleri İndir</a>
+                                    <h1 style="color:slateblue" class="text-center">Tasarımcıların Yüklediği Projeler / <a href="@Url.Action("DownloadCompetitionFiles", new { competitionId = @ViewBag.competition.Id })">Tüm Projeleri İndir</a></h1>
+                                    
+                                   
+                                    <br>
+                                    <div style="text-align: center;">
+                                        <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödül Ver" onclick="showConfirmationDialog()" />
+                                        <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödülleri Yeniden Seç" onclick="resetSelections()" />
+                                    </div>
+                                    <br>
                                     <br>
                                     <br>
                                     <form id="rewardForm" method="post" action="@Url.Action("SaveSelections", "Reward")">
-                                        <table id="designers">
+                                        <table id="designers" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Tasarımcı</th>
@@ -293,7 +301,7 @@
                                                     <tr>
                                                         <td>@designer.Name</td>
                                                         <td>
-                                                            <a href="DownloadLink" download>
+                                                            <a href="@Url.Action("DownloadCompetitionFiles", new { designerName = @ViewBag.competition.Name })" download>
                                                                 <i class="fas fa-download"></i>
                                                             </a>
                                                         </td>
@@ -313,15 +321,14 @@
                                                     Count++;
                                                 }
                                             </tbody>
-                                            <tfoot>
+                                       @*     <tfoot>
                                                 <tr>
                                                     <td colspan="3">
                                                         <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödül Ver" onclick="showConfirmationDialog()" />
-                                                        <!-- Form içerisine ekleyeceğiniz buton -->
                                                         <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödülleri Yeniden Seç" onclick="resetSelections()" />
                                                     </td>
                                                 </tr>
-                                            </tfoot>
+                                            </tfoot>*@
                                         </table>
                                     </form>
 
@@ -652,13 +659,23 @@
 
 
 
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.jqueryui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
 <script>
     $(document).ready(function () {
+
+        $('#designers').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+            }
+        });
+
         var competitionId = @ViewBag.competition.Id; // Competition ID değerini burada belirleyin
 
         // Dosyaların yüklenmesi
@@ -912,9 +929,6 @@
         });
     </script>
 }
-
-
-
 
 <script>
     function resetSelections() {

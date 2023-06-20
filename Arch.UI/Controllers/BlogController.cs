@@ -122,6 +122,7 @@ namespace Arch.UI.Controllers
             return View(blogComments);
         }
 
+        public IActionResult JqueryTest() { return View(); }
 
 
         [HttpPost]
