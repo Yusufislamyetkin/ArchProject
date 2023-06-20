@@ -22,12 +22,13 @@ builder.Services.AddScoped<ICompetitonService, CompetitonService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IDesignerUserService, DesignerUserService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IRewardService, RewardService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 
 
-
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
 builder.Services.AddIdentity<AppUser, AppRole>(_ =>

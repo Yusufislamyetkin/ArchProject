@@ -300,8 +300,9 @@
                                                         <td>
                                                             <input type="hidden" name="selections[@Count].DesignerId" value="@designer.DesignerId" />
                                                             <input type="hidden" name="selections[@Count].DesignerName" value="@designer.Name" />
+                                                            <input type="hidden" name="selections[@Count].CompetitionId" value="@ViewBag.compId" />
                                                             <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
-                                                                <option value="1">Seçim Yap</option>
+                                                                <option value="">Seçim Yap</option>
                                                                 @for (int j = 1; j <= 3; j++)
                                                                 {
                                                                     <option value="@j">@j. olarak seç</option>
@@ -316,6 +317,8 @@
                                                 <tr>
                                                     <td colspan="3">
                                                         <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödül Ver" onclick="showConfirmationDialog()" />
+                                                        <!-- Form içerisine ekleyeceğiniz buton -->
+                                                        <input style="background-color: slateblue; color: white; margin-left: 10px;" type="button" value="Ödülleri Yeniden Seç" onclick="resetSelections()" />
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -910,21 +913,46 @@
     </script>
 }
 
+
+
+
 <script>
-    function disableSelection(selectElement) {
+    function resetSelections() {
         var selectElements = document.getElementsByClassName('ranking-select');
+
+        // Tüm seçim kutularını dolaş
         for (var i = 0; i < selectElements.length; i++) {
-            var currentSelect = selectElements[i];
-            if (currentSelect !== selectElement) {
-                var selectedIndex = selectElement.selectedIndex;
-                for (var j = 0; j < currentSelect.options.length; j++) {
-                    currentSelect.options[j].disabled = (j === selectedIndex);
-                }
+            var selectElement = selectElements[i];
+
+            // Seçili öğeyi temizle
+            selectElement.selectedIndex = 0;
+
+            // Tüm seçenekleri aktif hale getir
+            for (var j = 0; j < selectElement.options.length; j++) {
+                selectElement.options[j].disabled = false;
             }
         }
     }
 
+    function disableSelection(selectedOption) {
+        var selectElements = document.getElementsByClassName('ranking-select');
 
+        // Seçilen ödül
+        var selectedValue = selectedOption.value;
+
+        // Diğer seçim kutularını dolaş
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+
+            // Seçilen ödülü pasif yapma
+            selectElement.options[selectedValue].disabled = true;
+
+            // Seçilen ödülü içeren başka bir seçenek seçiliyse, pasif olanı aktif yapma
+            if (selectElement.selectedIndex !== -1 && selectElement.options[selectElement.selectedIndex].value === selectedValue) {
+                selectElement.options[selectedValue].disabled = false;
+            }
+        }
+    }
 </script>
 
 <script>

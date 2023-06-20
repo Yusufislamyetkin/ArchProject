@@ -15,13 +15,14 @@ namespace Arch.UI.Controllers
     public class BlogController : Controller
     {
         private readonly IBlogService _blogService;
+        private readonly IRewardService  _rewardService;
         private readonly ICompetitonService _competitonService;
         private readonly IFileService _fileService;
         private readonly IDesignerUserService _designerUserService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BlogController(IBlogService blogService, ICompetitonService competitonService, UserManager<AppUser> userManager, IFileService fileService, IDesignerUserService designerUserService, IWebHostEnvironment webHostEnvironment)
+        public BlogController(IBlogService blogService, ICompetitonService competitonService, UserManager<AppUser> userManager, IFileService fileService, IDesignerUserService designerUserService, IWebHostEnvironment webHostEnvironment, IRewardService rewardService)
         {
             _blogService = blogService;
             _competitonService = competitonService;
@@ -29,6 +30,7 @@ namespace Arch.UI.Controllers
             _fileService = fileService;
             _designerUserService = designerUserService;
             _webHostEnvironment = webHostEnvironment;
+            _rewardService = rewardService;
         }
 
         [HttpGet]
@@ -80,9 +82,7 @@ namespace Arch.UI.Controllers
 
             ViewBag.files = fileFormats;
             #endregion
-
-
-
+         
             #region UploadDosyalarıYükleme
 
             var filesForTable = await _fileService.GetByCompIdForTable(id);
@@ -115,6 +115,10 @@ namespace Arch.UI.Controllers
             }
             #endregion
 
+            var optionList = await _rewardService.Where(x => x.CompetitionId == id).ToListAsync();
+            ViewBag.optionList = optionList;
+
+            ViewBag.compId = id;
             return View(blogComments);
         }
 

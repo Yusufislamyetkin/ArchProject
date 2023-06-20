@@ -14,6 +14,7 @@ namespace Arch.BussinessLayer.Mapper
         public DtoMapper()
         {
             CreateMap<Competition, CompetitonCreateDto>().ReverseMap();
+            CreateMap<Reward, SelectionViewModel>().ReverseMap();
         }
     }
 }

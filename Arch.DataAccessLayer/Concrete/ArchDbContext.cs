@@ -19,6 +19,7 @@ namespace Arch.DataAccessLayer.Concrete.Repositories
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<DesignerUser> DesignerUsers { get; set; }
         public DbSet<ProjectFilePath> ProjectFilePaths { get; set; }
+        public DbSet<Reward>  Rewards { get; set; }
 
 
 
