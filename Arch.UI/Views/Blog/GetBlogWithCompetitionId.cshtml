@@ -296,7 +296,7 @@
                                                 @{
                                                     int Count = 0;
                                                 }
-                                                @foreach (var designer in ViewBag.groupedFiles as List<DesignerFiles>)
+                                                @foreach (var designer in ViewBag.groupedData as List<DesignerFiles>)
                                                 {
                                                     <tr>
                                                         <td>@designer.Name</td>
@@ -306,20 +306,33 @@
                                                             </a>
                                                         </td>
                                                         <td>
+                                                            @{
+                                                                int selectedOption = designer.SelectedOption;
+                                                                bool hasSelection = selectedOption != 0;
+                                                            }
+                                                            @if (hasSelection)
+                                                            {
+                                                                <p>@selectedOption. olarak seçildi</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
+                                                                    <option value="">Seçim Yap</option>
+                                                                    @for (int j = 1; j <= 3; j++)
+                                                                    {
+                                                                        bool isSelected = j == selectedOption;
+                                                                        <option value="@j" @(isSelected ? "selected" : "")>@j. olarak seç</option>
+                                                                    }
+                                                                </select>
+                                                            }
                                                             <input type="hidden" name="selections[@Count].DesignerId" value="@designer.DesignerId" />
                                                             <input type="hidden" name="selections[@Count].DesignerName" value="@designer.Name" />
                                                             <input type="hidden" name="selections[@Count].CompetitionId" value="@ViewBag.compId" />
-                                                            <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
-                                                                <option value="">Seçim Yap</option>
-                                                                @for (int j = 1; j <= 3; j++)
-                                                                {
-                                                                    <option value="@j">@j. olarak seç</option>
-                                                                }
-                                                            </select>
                                                         </td>
                                                     </tr>
                                                     Count++;
                                                 }
+
                                             </tbody>
                                        @*     <tfoot>
                                                 <tr>

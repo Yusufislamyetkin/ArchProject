@@ -85,20 +85,33 @@ namespace Arch.UI.Controllers
          
             #region UploadDosyalarıYükleme
 
+
             var filesForTable = await _fileService.GetByCompIdForTable(id);
 
             var groupedFiles = filesForTable.GroupBy(file => new { file.DesignerId, file.Designer })
-                 .Select(group => new DesignerFiles
-                 {
-                     DesignerId = group.Key.DesignerId,
-                     Name = group.Key.Designer.ToString(),
-                     Files = group.ToList(),
-                 })
-                 .ToList();
+                .Select(group => new DesignerFiles
+                {
+                    DesignerId = group.Key.DesignerId,
+                    Name = group.Key.Designer.ToString(),
+                    Files = group.ToList(),
+                })
+                .ToList();
 
             ViewBag.groupedFiles = groupedFiles;
 
+            var optionList = await _rewardService.Where(x => x.CompetitionId == id).ToListAsync();
+            ViewBag.optionList = optionList;
 
+            // Tek bir gruplama yapısı oluşturma
+            var groupedData = groupedFiles.Select(designer => new DesignerFiles
+            {
+                DesignerId = designer.DesignerId,
+                Name = designer.Name,
+                Files = designer.Files,
+                SelectedOption = optionList.FirstOrDefault(option => option.DesignerId == designer.DesignerId)?.SelectedOption ?? 0,
+            }).ToList();
+
+            ViewBag.groupedData = groupedData;
 
 
 
@@ -115,8 +128,7 @@ namespace Arch.UI.Controllers
             }
             #endregion
 
-            var optionList = await _rewardService.Where(x => x.CompetitionId == id).ToListAsync();
-            ViewBag.optionList = optionList;
+
 
             ViewBag.compId = id;
             return View(blogComments);
