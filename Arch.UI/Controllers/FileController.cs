@@ -94,7 +94,7 @@ namespace Arch.UI.Controllers
         public async Task<IActionResult> Get(int competitionId)
         {
             var designer = await _userManager.FindByNameAsync(User.Identity.Name);
-            var uploadedDatas =  _fileService.Where(x => x.DesignerId == designer.Id && x.Type == 1).ToList();       
+            var uploadedDatas =  _fileService.Where(x => x.DesignerId == designer.Id && x.Type == 1 && x.CompetitionId == competitionId).ToList();       
             return Json(uploadedDatas);
         }
 
