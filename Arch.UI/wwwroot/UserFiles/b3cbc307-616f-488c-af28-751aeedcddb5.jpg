@@ -368,6 +368,16 @@
 
                                                 <a class="btn btn-primary" download>İndir</a>
                                             </div>
+                                                   <div id="Istanbul" class="tabcontent">
+                                                <h3>Istanbul</h3>
+                                                <p>Dökümanlar is the capital of France.</p>
+
+                                                <h1>Dosya İndirme</h1>
+
+                                                <p>Dosya Adı: test 1</p>
+
+                                                <a class="btn btn-primary" download>İndir</a>
+                                            </div>
 
 
 
