@@ -13,7 +13,7 @@
         <h4 class="mb-2">Şimdi Yarışmanı Başlat </h4>
         <p class="mb-4">Yarışmanızı başlatın! Tasarımcıların sizin için ürettiği mimari çizimlere yarışma sonunda ulaşın.</p>
 
-       @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data", id = "competitionForm" }))
+        @using (Html.BeginForm("Create", "Competition", FormMethod.Post, new { enctype = "multipart/form-data", id = "competitionForm" }))
 
         {
             <div class="card mb-3">
@@ -23,7 +23,7 @@
                     @Html.ValidationMessageFor(x => x.Name)
                 </div>
             </div>
-            <br />  
+            <br />
             <br />
             <br />
             <div class="card mb-3">
@@ -68,7 +68,7 @@
 
 
             <br />
- 
+
             <div class="card mb-3">
                 <div class="form-group">
                     <label class="form-label">Açıklama</label>
@@ -89,6 +89,24 @@
             <br />
             <br />
             <br />
+            <div class="card mb-3">
+                <div class="form-group">
+                    <label class="form-label">İlham Linki 1</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Tasarımcıların ilham alabileceği site adresini ekleyebilirsiniz." })
+                    @* @Html.ValidationMessageFor(x => x.Name)*@
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="card mb-3">
+                <div class="form-group">
+                    <label class="form-label">İlham Linki 2</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Tasarımcıların ilham alabileceği site adresini ekleyebilirsiniz." })
+                    @* @Html.ValidationMessageFor(x => x.Name)*@
+                </div>
+            </div>
+            <br />
+            <br />
 
             <div class="card mb-3">
                 <div class="form-group">
@@ -99,29 +117,32 @@
             </div>
             <br />
             <br />
-            <br />
-            <br />
-          
+        
+
             <div class="card mb-3">
                 <div class="form-group">
                     <label class="form-label">Fiyat</label>
-                   @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz", id = "Price" })
+                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", placeholder = "Fiyat Giriniz", id = "Price" })
                     @Html.ValidationMessageFor(x => x.Price)
                 </div>
             </div>
             <br />
+  
+            <br />
+            <br />
             <input type="hidden" name="Id" value="0" />
-            <br />
-            <br />
+         
 
             <button class="btn btn-primary d-grid w-100" type="submit">Gönder</button>
+            <br />
+            <br />
         }
 
         <br />
         <br />
 
     </div>
-    
+
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -132,6 +153,7 @@
     .field-validation-error {
         color: red;
     }
+
     .card {
         width: 100%;
         margin: 0 auto;
@@ -162,7 +184,7 @@
             value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             $(this).val(value);
         });
-        
+
         $('form').on('submit', function () {
             var value = $('#Price').val().replace(/\./g, '');
             $('#Price').val(value);

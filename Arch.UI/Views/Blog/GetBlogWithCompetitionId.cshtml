@@ -122,7 +122,8 @@
 
                             <div class="tab">
                                 <button class="tablinksHeader" onclick="openHeader(event, 'Detaylar')">Detaylar</button>
-                                <button class="tablinksHeader" onclick="openHeader(event, 'ProjeDosyaları')">ProjeDosyaları</button>
+                                <button class="tablinksHeader" onclick="openHeader(event, 'ProjeDosyaları')">Proje Dosyaları</button>
+                                <button class="tablinksHeader" onclick="openHeader(event, 'Blog')">Blog</button>
                             </div>
                         </ul>
                     </div><!-- /.card-header -->
@@ -174,49 +175,13 @@
                                             </div>
 
                                             <div class="tab">
-                                                <button class="tablinks" onclick="openCity(event, 'London')">Yorumlar</button>
+                                             
                                                 <button class="tablinks" onclick="openCity(event, 'Paris')">Dökümanlar</button>
+                                                <button class="tablinks" onclick="openCity(event, 'Istanbul')">İlham Linkleri</button>
 
                                             </div>
 
-                                            <div id="London" class="tabcontent">
-
-                                                <div class="card">
-                                                    <br />
-                                                    <div class="card p-3 text-center">
-                                                        <h6 class="font-weight-bold display-4" style="color:black">@ViewBag.competition.Name Projesi Yorumları</h6>
-                                                    </div>
-
-                                                    <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
-                                                        <img src="@ViewBag.ProfilPhoto" width="50" height="50" class="rounded-circle mr-3">
-                                                        <form id="commentForm" class="d-flex flex-grow-1">
-                                                            <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
-                                                            <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
-                                                            <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color:black;">Gönder</button>
-                                                        </form>
-                                                    </div>
-
-                                                    <div id="commentSection">
-                                                        @foreach (var item in Model)
-                                                        {
-                                                            <div class="d-flex flex-row p-3">
-                                                                <img src="@item.Author.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3">
-                                                                <div class="w-100">
-                                                                    <div class="d-flex justify-content-between align-items-center">
-                                                                        <div class="d-flex flex-row align-items-center">
-                                                                            <span class="mr-2">@item.Author.UserName</span>
-                                                                            <small class="c-badge">Onaylanmış yorum</small>
-                                                                        </div>
-                                                                        <small> @item.TimeAgo</small>
-                                                                    </div>
-                                                                    <p class="text-justify comment-text mb-0"> @item.Content</p>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                    <br />
-                                                </div>
-                                            </div>
+                                    
 
                                             <div id="Paris" class="tabcontent">
 
@@ -255,7 +220,19 @@
                                             </div>
 
 
+                                            <div id="Istanbul" class="tabcontent">
+                                           
 
+                                                <h3 class="mt-5 text-muted" style="font-size: 18px;">İlham Linkleri</h3>
+                                                    <br />
+                                              
+                                                    <a href="test.com">test.com</a>
+                                                <br />
+                                                    <a href="test.com">test.com</a>
+                                                <br />
+                                                    <a href="test.com">test.com</a>
+                                               
+                                            </div>
 
                                             <br />
                                             <br />
@@ -289,7 +266,7 @@
                                                 <tr>
                                                     <th>Tasarımcı</th>
                                                     <th>İndir</th>
-                                                    <th>Tasarımcı Seç</th>
+                                                    <th>Sıralama Seç</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -310,21 +287,16 @@
                                                                 int selectedOption = designer.SelectedOption;
                                                                 bool hasSelection = selectedOption != 0;
                                                             }
-                                                            @if (hasSelection)
-                                                            {
-                                                                <p>@selectedOption. olarak seçildi</p>
-                                                            }
-                                                            else
-                                                            {
-                                                                <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
-                                                                    <option value="">Seçim Yap</option>
-                                                                    @for (int j = 1; j <= 3; j++)
-                                                                    {
-                                                                        bool isSelected = j == selectedOption;
-                                                                        <option value="@j" @(isSelected ? "selected" : "")>@j. olarak seç</option>
-                                                                    }
-                                                                </select>
-                                                            }
+
+                                                            <select class="ranking-select" name="selections[@Count].SelectedOption" onchange="disableSelection(this)">
+                                                                <option value="">Seçim Yap</option>
+                                                                @for (int j = 1; j <= 3; j++)
+                                                                {
+                                                                    bool isSelected = j == selectedOption;
+                                                                    <option value="@j" @(isSelected ? "selected" : "")>@j. olarak seç</option>
+                                                                }
+                                                            </select>
+
                                                             <input type="hidden" name="selections[@Count].DesignerId" value="@designer.DesignerId" />
                                                             <input type="hidden" name="selections[@Count].DesignerName" value="@designer.Name" />
                                                             <input type="hidden" name="selections[@Count].CompetitionId" value="@ViewBag.compId" />
@@ -332,7 +304,6 @@
                                                     </tr>
                                                     Count++;
                                                 }
-
                                             </tbody>
                                        @*     <tfoot>
                                                 <tr>
@@ -367,6 +338,50 @@
                                 </div>
 
                             }
+
+
+                             <div class="tab-pane" id="Blog"> 
+                                <br />
+                                <br />
+                          
+
+                                    <div class="card">
+                                        <br />
+                                        <div class="card p-3 text-center">
+                                            <h6 class="font-weight-bold display-4" style="color:black">@ViewBag.competition.Name Projesi Yorumları</h6>
+                                        </div>
+
+                                        <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
+                                            <img src="@ViewBag.ProfilPhoto" width="50" height="50" class="rounded-circle mr-3">
+                                            <form id="commentForm" class="d-flex flex-grow-1">
+                                                <input type="hidden" value="@ViewBag.competition.Id" name="CompetitionId" />
+                                                <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
+                                                <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color:black;">Gönder</button>
+                                            </form>
+                                        </div>
+
+                                        <div id="commentSection">
+                                            @foreach (var item in Model)
+                                            {
+                                                <div class="d-flex flex-row p-3">
+                                                    <img src="@item.Author.ProfilPhoto" width="40" height="40" class="rounded-circle mr-3">
+                                                    <div class="w-100">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <span class="mr-2">@item.Author.UserName</span>
+                                                                <small class="c-badge">Onaylanmış yorum</small>
+                                                            </div>
+                                                            <small> @item.TimeAgo</small>
+                                                        </div>
+                                                        <p class="text-justify comment-text mb-0"> @item.Content</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <br />
+                                    </div>
+                                </div>
+                              
 
                             <!-- /.nav-tabs-custom -->
                         </div>
@@ -683,6 +698,26 @@
 <script>
     $(document).ready(function () {
 
+        function disableSelection(selectedOption) {
+            var selectElements = document.getElementsByClassName('ranking-select');
+
+            // Seçilen ödül
+            var selectedValue = selectedOption.value;
+
+            // Diğer seçim kutularını dolaş
+            for (var i = 0; i < selectElements.length; i++) {
+                var selectElement = selectElements[i];
+
+                // Seçilen ödülü pasif yapma
+                selectElement.options[selectedValue].disabled = true;
+
+                // Seçilen ödülü içeren başka bir seçenek seçiliyse, pasif olanı aktif yapma
+                if (selectElement.selectedIndex !== -1 && selectElement.options[selectElement.selectedIndex].value === selectedValue) {
+                    selectElement.options[selectedValue].disabled = false;
+                }
+            }
+        }
+
         $('#designers').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
@@ -887,7 +922,8 @@
 <script>
 
     // İlk başta "London" içeriğini ve ilgili butonu görünür yapma
-    document.getElementById("London").style.display = "block";
+    document.getElementById("Paris").style.display = "block";
+    //document.getElementById("London").style.display = "block";
     document.getElementsByClassName("tablinks")[0].classList.add("active");
 
     function openCity(evt, cityName) {
@@ -961,25 +997,7 @@
         }
     }
 
-    function disableSelection(selectedOption) {
-        var selectElements = document.getElementsByClassName('ranking-select');
 
-        // Seçilen ödül
-        var selectedValue = selectedOption.value;
-
-        // Diğer seçim kutularını dolaş
-        for (var i = 0; i < selectElements.length; i++) {
-            var selectElement = selectElements[i];
-
-            // Seçilen ödülü pasif yapma
-            selectElement.options[selectedValue].disabled = true;
-
-            // Seçilen ödülü içeren başka bir seçenek seçiliyse, pasif olanı aktif yapma
-            if (selectElement.selectedIndex !== -1 && selectElement.options[selectElement.selectedIndex].value === selectedValue) {
-                selectElement.options[selectedValue].disabled = false;
-            }
-        }
-    }
 </script>
 
 <script>
