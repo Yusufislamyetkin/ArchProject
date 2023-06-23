@@ -161,10 +161,8 @@
                     <div class="card mb-3 ">
                         <div class="form-group">
                             <label class="form-label">Hedefler</label>
-                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Proje Hedeflerini Girin", rows = "5", oninput = "countWords(this)" })
+                            @Html.TextAreaFor(x => x.Goal, new { @class = "form-control", placeholder = "Proje Hedeflerini Girin", rows = "5", oninput = "countWords(this)" })
                             @Html.ValidationMessageFor(x => x.Goal)
-                            <br />
-                            <div id="wordCountMessage">En az 50 kelime girmelisiniz.</div>
                         </div>
                     </div>
                     <br />
@@ -183,9 +181,8 @@
                         <div class="form-group">
                             <label class="form-label">Öncelikler</label>
                             @Html.TextAreaFor(x => x.Priorities, new { @class = "form-control", placeholder = "Proje Önceliklendirmelerini Girin", rows = "5", oninput = "countWords(this)" })
-                            @Html.ValidationMessageFor(x => x.Description)
-                            <br />
-                            <div id="wordCountMessage">En az 50 kelime girmelisiniz.</div>
+                            @Html.ValidationMessageFor(x => x.Priorities)
+                  
                         </div>
                     </div>
                     <br />
