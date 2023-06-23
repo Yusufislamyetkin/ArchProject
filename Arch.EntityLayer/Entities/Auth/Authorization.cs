@@ -8,6 +8,7 @@ namespace Arch.EntityLayer.Entities.Auth
         {
             public string ProfilPhoto { get; set; }
             public string City { get; set; }
+            public int? DocumentConfirmStatus { get; set; }
             public ICollection<IdentityUserRole<string>> UserRoles { get; set; } = new List<IdentityUserRole<string>>();
         }
 

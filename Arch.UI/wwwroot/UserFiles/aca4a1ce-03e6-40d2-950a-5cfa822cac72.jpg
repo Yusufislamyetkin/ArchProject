@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html lang="tr"
+      class="light-style layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="~/Web2/assets/"
+      data-template="vertical-menu-template-free">
+<head>
+    <link rel="icon" href="/logo.png">
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="/Web2/assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/Web2/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/Web2/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="/Web2/assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="/Web2/assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="/Web2/assets/js/config.js"></script>
+</head>
+
+<body>
+
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+                <ul class="menu-inner py-1">
+                    <!-- Dashboard -->
+                    <li class="menu-item">
+                        <a href="/Home/Index/" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Ana Sayfa</div>
+                        </a>
+                    </li>
+
+                        <li class="menu-item">
+                            <a href="/Competition/Create" class="menu-link">
+                                <div data-i18n="Analytics">Yarışma Oluştur</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/Competition/MyAllCompetitions/" class="menu-link">
+                                <div data-i18n="Analytics">Yarışmalarım</div>
+                            </a>
+                        </li>
+
+                    <li class="menu-item">
+                        <a href="/Competition/AllCompetitions/" class="menu-link">
+                            <div data-i18n="Analytics">Yarışmalar</div>
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item">
+                        <a href="/Account/EditProfile/" class="menu-link">
+                            <div data-i18n="Analytics">Profil</div>
+                        </a>
+                    </li>
+
+
+
+
+
+
+
+
+
+                </ul>
+
+
+            </aside>
+            <!-- / Menu -->
+            <!-- Layout container -->
+            <div class="layout-page">
+
+
+
+
+                
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | User Profile</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE-3.0.4/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+
+
+                        <!-- Profile Image -->
+                        <div class="card card-primary">
+                            <div class="card-body box-profile text-center">
+                                <br />
+
+                                <strong class="text-muted"><span style="color:black; font-weight: bold;"><span class="countdown-label">Yarışmanın Bitmesi İçin Kalan Süre</span></span></strong>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+
+                                <div class="container2">
+                                    <div>Gün<span class="days"></span></div>
+                                    <div>Saat<span class="hours"></span></div>
+                                    <div>Dak<span class="minutes"></span></div>
+                                    <div>San<span class="seconds"></span></div>
+                                </div>
+
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                        <!-- /.card -->
+                        <!-- About Me Box -->
+                        <br />
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Yarışma Bilgi Alanı</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <br />
+
+
+
+
+                                <strong><i class="fas fa-book mr-1"></i> Bitiş Tarihi</strong>
+                                <br />
+
+                                <br />
+
+                                <p>15.07.2023</p>
+
+                                <strong><i class="fas fa-book mr-1"></i> Yarışma Açıklama Tarihi</strong>
+                                <br />
+
+                                <br />
+
+                                <p>22.07.2023</p>
+
+
+
+                                <br />
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-9">
+                        <div class="card">
+
+
+                            <div class="card-body">
+
+
+                                <div class="container mt-5 mb-5">
+                                    <div class="row height d-flex justify-content-center align-items-center">
+
+                                        <div class="col-md-10">
+
+                                            <br />
+                                            <br />
+
+                                            <div class="card p-3 text-center shadow" style="border-radius: 10px;">
+                                                <h4>Yarışma Ödülü</h4>
+                                                <h6 class="font-weight-bold display-4" style="color:#2ECC71"> 1.500.000 TL</h6>
+
+
+                                            </div>
+
+                                            <div class="wrapper">
+                                                <br />
+
+
+                                                <br />
+                                                <div class="product-info">
+                                                    <div class="product-text">
+                                                        <h1>Villa Projesi</h1>
+                                                        <br />
+                                                        <p>Say&#x131;n Yar&#x131;&#x15F;ma Organizat&#xF6;rleri,&#xD;&#xA;&#xD;&#xA;&#x130;lgili kurumunuzun d&#xFC;zenlemekte oldu&#x11F;u mimari yar&#x131;&#x15F;ma hakk&#x131;nda bilgi almak ve kat&#x131;l&#x131;m talebimi iletmek amac&#x131;yla bu ba&#x15F;vuruyu yap&#x131;yorum. Mimari yar&#x131;&#x15F;malara olan ilgim ve heyecan&#x131;m&#x131;n beni bu yar&#x131;&#x15F;maya kat&#x131;lmaya motive etti&#x11F;ini belirtmek isterim.&#xD;&#xA;&#xD;&#xA;Yar&#x131;&#x15F;ma konusu hakk&#x131;nda daha fazla ayr&#x131;nt&#x131;ya ihtiyac&#x131;m oldu&#x11F;unu biliyorum, ancak genel olarak &#x15F;unlar&#x131; ifade etmek istiyorum:&#xD;&#xA;&#xD;&#xA;Konu: Yar&#x131;&#x15F;man&#x131;n hangi konu &#xFC;zerine odakland&#x131;&#x11F;&#x131; hakk&#x131;nda bilgi verir misiniz? &#xD6;rne&#x11F;in, bir kamu binas&#x131;, bir konut projesi, bir ticaret merkezi veya bir k&#xFC;lt&#xFC;rel yap&#x131; gibi bir konuyla ilgileniyorsam, l&#xFC;tfen belirtin.&#xD;&#xA;&#xD;&#xA;Ama&#xE7;: Yar&#x131;&#x15F;man&#x131;n amac&#x131; ve beklentileri nelerdir? Yarat&#x131;c&#x131;l&#x131;&#x11F;&#x131;n te&#x15F;vik edildi&#x11F;i, s&#xFC;rd&#xFC;r&#xFC;lebilirlik ve &#xE7;evresel fakt&#xF6;rlerin g&#xF6;z &#xF6;n&#xFC;nde bulunduruldu&#x11F;u bir yar&#x131;&#x15F;ma m&#x131;d&#x131;r?&#xD;&#xA;&#xD;&#xA;Kat&#x131;l&#x131;m &#x15E;artlar&#x131;: Yar&#x131;&#x15F;maya kat&#x131;lmak i&#xE7;in gerekli olan &#x15F;artlar nelerdir? Ba&#x15F;vuru s&#xFC;reci, takvim ve belgeler hakk&#x131;nda bilgi almak isterim. Ayr&#x131;ca, yar&#x131;&#x15F;ma dili ve teslim &#x15F;ekli gibi ayr&#x131;nt&#x131;lar&#x131; da belirtirseniz sevinirim. </p>
+                                                    </div>
+                                                    <br />
+
+
+                                                </div>
+
+
+                                            </div>
+
+                                            <br />
+                                            <br />
+
+
+
+
+                                            <div class="tab">
+                                                <button class="tablinks" onclick="openCity(event, 'London')">Yorumlar</button>
+                                                <button class="tablinks" onclick="openCity(event, 'Paris')">Dökümanlar</button>
+
+                                            </div>
+
+                                            <div id="London" class="tabcontent">
+
+                                                <div class="card">
+                                                    <br />
+                                                    <div class="card p-3 text-center">
+                                                        <h6 class="font-weight-bold display-4" style="color:black">Villa Projesi Projesi Yorumları</h6>
+                                                    </div>
+
+                                                    <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
+                                                        <img src="https://i.imgur.com/zQZSWrt.jpg" width="50" class="rounded-circle mr-2">
+                                                        <form id="commentForm" class="d-flex flex-grow-1">
+                                                            <input type="hidden" value="1" name="CompetitionId" />
+                                                            <textarea id="commentInput" class="form-control mt-2 mr-2" placeholder="Yorumunuzu girin..."></textarea>
+                                                            <button type="submit" class="btn btn-success btn-sm mt-2" style="font-size: 0.8rem; background-color:black;">Gönder</button>
+                                                        </form>
+                                                    </div>
+
+                                                    <div id="commentSection">
+                                                            <div class="d-flex flex-row p-3">
+                                                                <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                                <div class="w-100">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex flex-row align-items-center">
+                                                                            <span class="mr-2">testDesigner</span>
+                                                                            <small class="c-badge">Top Comment</small>
+                                                                        </div>
+                                                                        <small> 4 g&#xFC;n &#xF6;nce</small>
+                                                                    </div>
+                                                                    <p class="text-justify comment-text mb-0"> buras&#x131; bir harika bebe&#x11F;im&#xA;</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-row p-3">
+                                                                <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                                <div class="w-100">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex flex-row align-items-center">
+                                                                            <span class="mr-2">testDesigner</span>
+                                                                            <small class="c-badge">Top Comment</small>
+                                                                        </div>
+                                                                        <small> 4 g&#xFC;n &#xF6;nce</small>
+                                                                    </div>
+                                                                    <p class="text-justify comment-text mb-0"> test</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-row p-3">
+                                                                <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                                <div class="w-100">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex flex-row align-items-center">
+                                                                            <span class="mr-2">testDesigner</span>
+                                                                            <small class="c-badge">Top Comment</small>
+                                                                        </div>
+                                                                        <small> 4 g&#xFC;n &#xF6;nce</small>
+                                                                    </div>
+                                                                    <p class="text-justify comment-text mb-0"> Buras&#x131; harika dostum</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-row p-3">
+                                                                <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
+                                                                <div class="w-100">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex flex-row align-items-center">
+                                                                            <span class="mr-2">testDesigner</span>
+                                                                            <small class="c-badge">Top Comment</small>
+                                                                        </div>
+                                                                        <small> 5 g&#xFC;n &#xF6;nce</small>
+                                                                    </div>
+                                                                    <p class="text-justify comment-text mb-0"> test</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+
+                                            <div id="Paris" class="tabcontent">
+                                                <h3>Dökümanlar</h3>
+                                                <p>Dökümanlar is the capital of France.</p>
+
+                                                <h1>Dosya İndirme</h1>
+
+                                                <p>Dosya Adı: test 1</p>
+
+                                                <a class="btn btn-primary" download>İndir</a>
+                                            </div>
+
+
+
+
+
+
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div><!-- /.container-fluid -->
+                    </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+</body>
+</html>
+
+<style>
+
+
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    body {
+        background-color: #eee;
+    }
+
+    .card {
+        background-color: #fff;
+        border: none;
+    }
+
+    .form-color {
+        background-color: #fafafa;
+    }
+
+    .form-control {
+        height: 48px;
+        border-radius: 25px;
+    }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: black;
+            outline: 0;
+            box-shadow: none;
+            text-indent: 10px;
+        }
+
+    .c-badge {
+        background-color: black;
+        color: white;
+        height: 20px;
+        font-size: 11px;
+        width: 92px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2px;
+    }
+
+    .comment-text {
+        font-size: 13px;
+    }
+
+    .wish {
+        color: #35b69f;
+    }
+
+
+    .user-feed {
+        font-size: 14px;
+        margin-top: 12px;
+    }
+
+    .container2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 30px;
+        color: black;
+        display: flex;
+        justify-content: center;
+    }
+
+        .container2 div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .container2 div:not(:last-child) {
+                margin-right: 15px;
+            }
+
+        .container2 span {
+            border: 2px solid;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+            .container2 span:not(:last-child) {
+                margin-right: 10px;
+            }
+
+
+    .wrapper {
+        height: auto; /* veya içerik boyutuna uygun bir değer */
+        width: auto; /* veya içerik boyutuna uygun bir değer */
+        margin: 50px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 7px;
+        /* VIA CSS MATIC https://goo.gl/cIbnS */
+        -webkit-box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+        -moz-box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 420px;
+        width: 327px;
+        padding: 20px 0; /* Üst ve alt boşluk */
+    }
+
+        .product-img img {
+            max-height: calc(100% - 40px); /* Üst ve alt boşlukları çıkar */
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 7px 0 0 7px;
+        }
+
+    .product-info {
+        flex: 0 0 327px;
+        padding: 20px;
+    }
+
+    .product-text {
+        margin-top: 20px;
+    }
+
+        .product-text h1 {
+            margin: 0;
+            font-size: 34px;
+            color: #474747;
+        }
+
+        .product-text h2 {
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: #d2d2d2;
+            letter-spacing: 0.2em;
+        }
+
+        .product-text p {
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #8d8d8d;
+            line-height: 1.7em;
+            font-weight: lighter;
+        }
+
+    .product-price-btn button {
+        float: right;
+        display: inline-block;
+        height: 50px;
+        width: 176px;
+        margin: 0 16px 0 40px;
+        box-sizing: border-box;
+        border: transparent;
+        border-radius: 60px;
+        font-family: 'Raleway', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #ffffff;
+        background-color: black;
+        cursor: pointer;
+        outline: none;
+    }
+
+        .product-price-btn button:hover {
+            background-color: black;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+</style>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+
+
+
+    let endDate = new Date("2023-07-15 00:00:00").getTime();
+
+    let counter = setInterval(() => {
+        // Get Date Now
+        let dateNow = new Date().getTime();
+        // Find The Difference Between The Time Now And The Countdown Date
+        let dateDiff = endDate - dateNow;
+
+        if (dateDiff <= 0) {
+            clearInterval(counter);
+            document.querySelector(".countdown-label").innerHTML = 'Yarışma Bitti';
+            document.querySelector(".days").innerHTML = '0';
+            document.querySelector(".hours").innerHTML = '0';
+            document.querySelector(".minutes").innerHTML = '0';
+            document.querySelector(".seconds").innerHTML = '0';
+            document.querySelector("button").style.display = "none";
+        } else {
+            let days = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((dateDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((dateDiff % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((dateDiff % (1000 * 60)) / 1000);
+            document.querySelector(".days").innerHTML =
+                days < 100 && days > 10 ? `0${days}` : days < 10 ? `00${days}` : days;
+            document.querySelector(".hours").innerHTML = hours < 10 ? `0${hours}` : hours;
+            document.querySelector(".minutes").innerHTML =
+                minutes < 10 ? `0${minutes}` : minutes;
+            document.querySelector(".seconds").innerHTML =
+                seconds < 10 ? `0${seconds}` : seconds;
+        }
+    }, 1000);
+
+    $(function() {
+        $('#commentForm').submit(function(e) {
+            e.preventDefault();
+            var commentText = $('#commentInput').val();
+            $.ajax({
+                url: '/Blog/Add',
+                method: 'POST',
+                data: { CompetitionId: $('[name="CompetitionId"]').val(), Content: commentText },
+                success: function(response) {
+                    if (response.success) {
+                        var commentHtml = '<div class="d-flex flex-row p-3"><img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3"><div class="w-100"><div class="d-flex justify-content-between align-items-center"><div class="d-flex flex-row align-items-center"><span class="mr-2">' + response.userName + '</span><small class="c-badge">Top Comment</small></div><small>' + response.timeAgo + '</small></div><p class="text-justify comment-text mb-0">' + response.commentText + '</p></div></div>';
+                        $('#commentSection').prepend(commentHtml);
+                        $('#commentInput').val(''); // Yorum giriş alanını temizle
+
+                        // SweetAlert kullanarak bildirim göster
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Yorumunuz gönderildi.',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+
+    // İlk başta "London" içeriğini ve ilgili butonu görünür yapma
+    document.getElementById("London").style.display = "block";
+    document.getElementsByClassName("tablinks")[0].classList.add("active");
+
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+    }
+</script>
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <!-- / Content -->
+                    <!-- Footer -->
+                    <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="mb-2 mb-md-0" style="text-align:center; font-size:14px;">
+                                    ©
+                                    <script>document.write(new Date().getFullYear());</script>
+                                    | ArchUI ❤️
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="/Web2/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/Web2/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/Web2/assets/vendor/js/bootstrap.js"></script>
+    <script src="/Web2/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="/Web2/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="/Web2/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="/Web2/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="/Web2/assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>
+<style>
+
+
+    body {
+        /*  font-weight: bold;*/
+        font-size: 16px; /* Punto boyutu ayarı */
+    }
+</style>

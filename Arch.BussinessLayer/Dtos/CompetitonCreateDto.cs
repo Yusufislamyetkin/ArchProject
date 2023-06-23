@@ -20,6 +20,12 @@ namespace Arch.BussinessLayer.Dtos
         [Required(ErrorMessage = "Lütfen Proje Açıklamasını boş geçmeyiniz...")]
         [MinimumWordCount(50, ErrorMessage = "Proje Açıklaması en az 50 kelime olmalıdır.")]
         public string Description { get; set; }
+        [Required(ErrorMessage = "Lütfen Proje Amacını boş geçmeyiniz...")]
+        public string Goal { get; set; } // Amacı
+        [Required(ErrorMessage = "Lütfen Proje Önceliklendirmelerini boş geçmeyiniz...")]
+        public string Priorities { get; set; } // Proje Öncelikleri
+        public string InspirationAddress1 { get; set; } // Proje İlham Linli 1
+        public string InspirationAddress2 { get; set; } // Proje İlham Linki 2
         [Required(ErrorMessage = "Lütfen Proje Fiyatını boş geçmeyiniz...")]
         public int Price { get; set; }
         [Required(ErrorMessage = "Lütfen Proje Bitiş Tarihini boş geçmeyiniz...")]
